@@ -1,0 +1,2199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>J.A.R.V.I.S PERSONAL — AJ Donofrio</title>
+<style>
+  :root {
+    --cyan: #00d4ff;
+    --cyan-dim: #0099bb;
+    --cyan-glow: rgba(0,212,255,0.3);
+    --bg: #000000;
+    --bg2: #050a0f;
+    --bg3: #0a1520;
+    --text: #00d4ff;
+    --text-dim: #006688;
+    --border: #00d4ff;
+    --border-dim: #003344;
+    --card-bg: rgba(0,212,255,0.04);
+    --modal-bg: rgba(0,0,0,0.95);
+  }
+  .light-mode {
+    --bg: #e8f4f8;
+    --bg2: #d0eaf5;
+    --bg3: #b8dff0;
+    --text: #004466;
+    --text-dim: #0077aa;
+    --border: #0099cc;
+    --border-dim: #88ccdd;
+    --card-bg: rgba(0,150,200,0.08);
+    --modal-bg: rgba(220,240,250,0.97);
+    --cyan: #0088bb;
+    --cyan-dim: #006699;
+    --cyan-glow: rgba(0,150,200,0.3);
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Courier New', Courier, monospace;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── SCAN LINE ── */
+  body::before {
+    content: '';
+    position: fixed;
+    top: -100%;
+    left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(transparent, var(--cyan), transparent);
+    animation: scanline 6s linear infinite;
+    z-index: 9999;
+    pointer-events: none;
+    opacity: 0.5;
+  }
+  @keyframes scanline { to { top: 200%; } }
+
+  /* ── HEADER ── */
+  header {
+    position: relative;
+    padding: 24px 32px 18px;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg2);
+    overflow: hidden;
+  }
+  header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,212,255,0.015) 2px, rgba(0,212,255,0.015) 4px);
+    pointer-events: none;
+  }
+  .header-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .logo-block { display:flex; flex-direction:column; gap:4px; }
+  .logo-title {
+    font-size: clamp(22px, 4vw, 38px);
+    font-weight: 700;
+    letter-spacing: 6px;
+    text-transform: uppercase;
+    color: var(--cyan);
+    text-shadow: 0 0 20px var(--cyan), 0 0 40px var(--cyan-glow), 0 0 80px rgba(0,212,255,0.1);
+    animation: titlePulse 4s ease-in-out infinite;
+  }
+  @keyframes titlePulse {
+    0%,100% { text-shadow: 0 0 20px var(--cyan), 0 0 40px var(--cyan-glow); }
+    50% { text-shadow: 0 0 30px var(--cyan), 0 0 60px var(--cyan-glow), 0 0 100px rgba(0,212,255,0.2); }
+  }
+  .logo-sub {
+    font-size: 11px;
+    letter-spacing: 4px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+  }
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+  .system-status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: var(--cyan);
+  }
+  .pulse-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: #00ff88;
+    box-shadow: 0 0 8px #00ff88;
+    animation: blink 1.5s ease-in-out infinite;
+  }
+  @keyframes blink { 0%,100%{opacity:1;} 50%{opacity:0.2;} }
+  #liveClock {
+    font-size: 13px;
+    letter-spacing: 2px;
+    color: var(--cyan);
+    background: rgba(0,212,255,0.06);
+    border: 1px solid var(--border-dim);
+    padding: 6px 14px;
+    clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+  }
+  .hud-btn {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--cyan);
+    font-family: 'Courier New', monospace;
+    font-size: 11px;
+    letter-spacing: 2px;
+    padding: 7px 16px;
+    cursor: pointer;
+    clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+    transition: all 0.2s;
+    text-decoration: none;
+    display: inline-block;
+  }
+  .hud-btn:hover {
+    background: rgba(0,212,255,0.12);
+    box-shadow: 0 0 12px var(--cyan-glow);
+  }
+  .hud-btn.active { background: var(--cyan); color: #000; }
+
+  /* ── TABS ── */
+  .tab-nav {
+    display: flex;
+    gap: 0;
+    background: var(--bg2);
+    border-bottom: 1px solid var(--border-dim);
+    overflow-x: auto;
+    padding: 0 20px;
+  }
+  .tab-nav::-webkit-scrollbar { height: 3px; background: var(--bg2); }
+  .tab-nav::-webkit-scrollbar-thumb { background: var(--border-dim); }
+  .tab-btn {
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid transparent;
+    color: var(--text-dim);
+    font-family: 'Courier New', monospace;
+    font-size: 12px;
+    letter-spacing: 1.5px;
+    padding: 14px 20px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.2s;
+    text-transform: uppercase;
+  }
+  .tab-btn:hover { color: var(--cyan); }
+  .tab-btn.active {
+    color: var(--cyan);
+    border-bottom-color: var(--cyan);
+    background: rgba(0,212,255,0.06);
+    text-shadow: 0 0 8px var(--cyan-glow);
+  }
+
+  /* ── TAB CONTENT ── */
+  .tab-content { display: none; padding: 28px 32px; min-height: calc(100vh - 220px); }
+  .tab-content.active { display: block; }
+
+  /* ── SECTION HEADER ── */
+  .section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border-dim);
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .section-title {
+    font-size: 13px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--cyan);
+  }
+  .section-title span { color: var(--text-dim); margin-right: 8px; }
+
+  /* ── CARDS GRID ── */
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 18px;
+    margin-bottom: 32px;
+  }
+
+  /* ── GOAL CARD ── */
+  .goal-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border-dim);
+    padding: 18px;
+    clip-path: polygon(12px 0%, 100% 0%, calc(100% - 12px) 100%, 0% 100%);
+    position: relative;
+    transition: all 0.2s;
+  }
+  .goal-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 3px; height: 100%;
+    background: var(--cyan);
+    box-shadow: 0 0 8px var(--cyan-glow);
+  }
+  .goal-card:hover {
+    border-color: var(--cyan);
+    box-shadow: 0 0 16px rgba(0,212,255,0.1);
+  }
+  .goal-card.completed-card { opacity: 0.5; }
+
+  .goal-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 10px;
+    gap: 8px;
+  }
+  .goal-title {
+    font-size: 14px;
+    letter-spacing: 1px;
+    color: var(--cyan);
+    font-weight: 700;
+    flex: 1;
+  }
+  .badge {
+    font-size: 9px;
+    letter-spacing: 1.5px;
+    padding: 3px 10px;
+    border: 1px solid var(--cyan);
+    color: var(--cyan);
+    clip-path: polygon(4px 0%, 100% 0%, calc(100% - 4px) 100%, 0% 100%);
+    white-space: nowrap;
+    text-transform: uppercase;
+    box-shadow: 0 0 6px rgba(0,212,255,0.2);
+  }
+  .badge.FITNESS { border-color: #ff6600; color: #ff6600; box-shadow: 0 0 6px rgba(255,102,0,0.2); }
+  .badge.FINANCIAL { border-color: #00ff88; color: #00ff88; box-shadow: 0 0 6px rgba(0,255,136,0.2); }
+  .badge.LEARNING { border-color: #aa44ff; color: #aa44ff; box-shadow: 0 0 6px rgba(170,68,255,0.2); }
+  .badge.TRAVEL { border-color: #ffcc00; color: #ffcc00; box-shadow: 0 0 6px rgba(255,204,0,0.2); }
+  .badge.FAMILY { border-color: #ff44aa; color: #ff44aa; box-shadow: 0 0 6px rgba(255,68,170,0.2); }
+  .badge.HEALTH { border-color: #44ff88; color: #44ff88; box-shadow: 0 0 6px rgba(68,255,136,0.2); }
+  .badge.OTHER { border-color: #888; color: #888; }
+  .badge.HOME { border-color: #ffaa00; color: #ffaa00; box-shadow: 0 0 6px rgba(255,170,0,0.2); }
+  .badge.ADMIN { border-color: #4488ff; color: #4488ff; box-shadow: 0 0 6px rgba(68,136,255,0.2); }
+  .badge.ERRAND { border-color: #ff8844; color: #ff8844; }
+  .badge.HIGH { border-color: #ff3344; color: #ff3344; box-shadow: 0 0 6px rgba(255,51,68,0.2); }
+  .badge.NORMAL { border-color: var(--cyan); color: var(--cyan); }
+  .badge.LOW { border-color: #555; color: #888; }
+  .badge.Planning { border-color: #ffcc00; color: #ffcc00; }
+  .badge.Booked { border-color: #00ff88; color: #00ff88; }
+  .badge.Completed { border-color: #888; color: #888; }
+
+  .goal-meta {
+    font-size: 10px;
+    color: var(--text-dim);
+    letter-spacing: 1px;
+    margin-bottom: 10px;
+  }
+  .goal-meta span { color: var(--text); }
+
+  /* ── PROGRESS BAR ── */
+  .progress-wrap { margin: 10px 0; }
+  .progress-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 10px;
+    color: var(--text-dim);
+    margin-bottom: 4px;
+    letter-spacing: 1px;
+  }
+  .progress-bar {
+    height: 8px;
+    background: rgba(0,212,255,0.1);
+    border: 1px solid var(--border-dim);
+    clip-path: polygon(4px 0%, 100% 0%, calc(100% - 4px) 100%, 0% 100%);
+    overflow: visible;
+    position: relative;
+  }
+  .progress-fill {
+    height: 100%;
+    background: var(--cyan);
+    box-shadow: 0 0 8px var(--cyan-glow);
+    transition: width 0.4s ease;
+  }
+
+  .goal-notes {
+    font-size: 10px;
+    color: var(--text-dim);
+    margin: 8px 0;
+    padding: 6px 8px;
+    background: rgba(0,212,255,0.03);
+    border-left: 2px solid var(--border-dim);
+    letter-spacing: 0.5px;
+    min-height: 28px;
+  }
+
+  .card-actions {
+    display: flex;
+    gap: 6px;
+    margin-top: 12px;
+    flex-wrap: wrap;
+  }
+  .card-btn {
+    background: transparent;
+    border: 1px solid var(--border-dim);
+    color: var(--text-dim);
+    font-family: 'Courier New', monospace;
+    font-size: 9px;
+    letter-spacing: 1px;
+    padding: 5px 10px;
+    cursor: pointer;
+    clip-path: polygon(4px 0%, 100% 0%, calc(100% - 4px) 100%, 0% 100%);
+    transition: all 0.2s;
+    text-transform: uppercase;
+  }
+  .card-btn:hover { border-color: var(--cyan); color: var(--cyan); box-shadow: 0 0 8px rgba(0,212,255,0.2); }
+  .card-btn.danger:hover { border-color: #ff3344; color: #ff3344; box-shadow: 0 0 8px rgba(255,51,68,0.2); }
+  .card-btn.success:hover { border-color: #00ff88; color: #00ff88; }
+
+  /* ── COLLAPSIBLE ── */
+  .collapsible-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border-dim);
+    margin-bottom: 16px;
+    user-select: none;
+  }
+  .collapsible-header:hover .section-title { color: var(--cyan); }
+  .collapse-arrow {
+    color: var(--text-dim);
+    transition: transform 0.3s;
+    font-size: 14px;
+  }
+  .collapse-arrow.open { transform: rotate(90deg); }
+  .collapsible-body { display: none; }
+  .collapsible-body.open { display: block; }
+
+  /* ── TABLES ── */
+  .hud-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    font-size: 11px;
+  }
+  .hud-table thead tr {
+    background: rgba(0,212,255,0.08);
+  }
+  .hud-table th {
+    padding: 10px 12px;
+    text-align: left;
+    letter-spacing: 2px;
+    color: var(--cyan);
+    font-size: 9px;
+    text-transform: uppercase;
+    border-bottom: 1px solid var(--border);
+    font-weight: 700;
+  }
+  .hud-table td {
+    padding: 9px 12px;
+    border-bottom: 1px solid var(--border-dim);
+    color: var(--text);
+    letter-spacing: 0.5px;
+    vertical-align: middle;
+  }
+  .hud-table tr:hover td { background: rgba(0,212,255,0.04); }
+  .hud-table .del-btn {
+    background: transparent;
+    border: 1px solid #ff3344;
+    color: #ff3344;
+    font-family: 'Courier New', monospace;
+    font-size: 9px;
+    letter-spacing: 1px;
+    padding: 3px 8px;
+    cursor: pointer;
+    clip-path: polygon(3px 0%, 100% 0%, calc(100% - 3px) 100%, 0% 100%);
+  }
+  .hud-table .del-btn:hover { background: rgba(255,51,68,0.12); }
+
+  /* ── BUDGET INPUTS ── */
+  .budget-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 14px;
+    margin-bottom: 20px;
+  }
+  .budget-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 8px 12px;
+    background: var(--card-bg);
+    border: 1px solid var(--border-dim);
+    clip-path: polygon(6px 0%, 100% 0%, calc(100% - 6px) 100%, 0% 100%);
+  }
+  .budget-label {
+    font-size: 10px;
+    letter-spacing: 1px;
+    color: var(--text-dim);
+    white-space: nowrap;
+  }
+  .budget-input {
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid var(--border-dim);
+    color: var(--cyan);
+    font-family: 'Courier New', monospace;
+    font-size: 12px;
+    width: 90px;
+    text-align: right;
+    padding: 2px 4px;
+    outline: none;
+  }
+  .budget-input:focus { border-bottom-color: var(--cyan); box-shadow: 0 2px 6px rgba(0,212,255,0.2); }
+
+  /* ── HUD INPUT ── */
+  .hud-input {
+    background: rgba(0,212,255,0.04);
+    border: 1px solid var(--border-dim);
+    color: var(--text);
+    font-family: 'Courier New', monospace;
+    font-size: 12px;
+    padding: 8px 12px;
+    outline: none;
+    width: 100%;
+    clip-path: polygon(6px 0%, 100% 0%, calc(100% - 6px) 100%, 0% 100%);
+    transition: border-color 0.2s;
+  }
+  .hud-input:focus { border-color: var(--cyan); box-shadow: 0 0 10px rgba(0,212,255,0.15); }
+  .hud-select {
+    background: rgba(0,212,255,0.04);
+    border: 1px solid var(--border-dim);
+    color: var(--text);
+    font-family: 'Courier New', monospace;
+    font-size: 12px;
+    padding: 8px 12px;
+    outline: none;
+    cursor: pointer;
+  }
+  .hud-select:focus { border-color: var(--cyan); }
+  .hud-select option { background: #050a0f; color: var(--text); }
+
+  /* ── FORM ROW ── */
+  .form-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 14px;
+    margin-bottom: 14px;
+  }
+  .form-group { display: flex; flex-direction: column; gap: 6px; }
+  .form-label {
+    font-size: 9px;
+    letter-spacing: 2px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+  }
+
+  /* ── STATS CARDS ── */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 14px;
+    margin-bottom: 24px;
+  }
+  .stat-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border-dim);
+    padding: 14px 16px;
+    clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+    text-align: center;
+  }
+  .stat-value {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--cyan);
+    text-shadow: 0 0 10px var(--cyan-glow);
+    margin-bottom: 4px;
+  }
+  .stat-label {
+    font-size: 9px;
+    letter-spacing: 2px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+  }
+  .stat-green { color: #00ff88; text-shadow: 0 0 10px rgba(0,255,136,0.3); }
+  .stat-red { color: #ff3344; text-shadow: 0 0 10px rgba(255,51,68,0.3); }
+
+  /* ── STARS ── */
+  .star-rating { font-size: 16px; color: var(--border-dim); letter-spacing: 2px; }
+  .star-rating .filled { color: var(--cyan); text-shadow: 0 0 6px var(--cyan-glow); }
+
+  /* ── BOOK CARD ── */
+  .book-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border-dim);
+    padding: 16px;
+    position: relative;
+    transition: all 0.2s;
+  }
+  .book-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 3px; height: 100%;
+    background: var(--cyan);
+  }
+  .book-card:hover { border-color: var(--cyan); box-shadow: 0 0 14px rgba(0,212,255,0.1); }
+  .book-title { font-size: 13px; color: var(--cyan); font-weight: 700; margin-bottom: 4px; letter-spacing: 0.5px; }
+  .book-author { font-size: 10px; color: var(--text-dim); margin-bottom: 8px; letter-spacing: 1px; }
+
+  /* ── TRAVEL CARD ── */
+  .travel-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border-dim);
+    padding: 18px;
+    clip-path: polygon(12px 0%, 100% 0%, calc(100% - 12px) 100%, 0% 100%);
+    position: relative;
+    transition: all 0.2s;
+  }
+  .travel-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 3px; height: 100%;
+    background: #ffcc00;
+    box-shadow: 0 0 8px rgba(255,204,0,0.3);
+  }
+  .travel-card:hover { border-color: var(--cyan); box-shadow: 0 0 16px rgba(0,212,255,0.1); }
+  .travel-dest { font-size: 14px; color: var(--cyan); font-weight: 700; margin-bottom: 6px; letter-spacing: 1px; }
+  .travel-meta { font-size: 10px; color: var(--text-dim); line-height: 1.8; letter-spacing: 0.5px; }
+  .travel-meta span { color: var(--text); }
+
+  /* ── TODO CARD ── */
+  .todo-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border-dim);
+    padding: 16px 18px;
+    margin-bottom: 12px;
+    clip-path: polygon(10px 0%, 100% 0%, calc(100% - 10px) 100%, 0% 100%);
+    position: relative;
+    transition: all 0.2s;
+  }
+  .todo-card.HIGH::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 3px; height: 100%;
+    background: #ff3344;
+    box-shadow: 0 0 8px rgba(255,51,68,0.4);
+  }
+  .todo-card.NORMAL::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 3px; height: 100%;
+    background: var(--cyan);
+  }
+  .todo-card.LOW::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 3px; height: 100%;
+    background: #555;
+  }
+  .todo-card.done { opacity: 0.4; }
+  .todo-card:hover { border-color: var(--border); }
+  .todo-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; margin-bottom: 8px; }
+  .todo-title { font-size: 13px; color: var(--cyan); font-weight: 700; letter-spacing: 0.5px; flex: 1; }
+  .todo-meta { font-size: 10px; color: var(--text-dim); letter-spacing: 1px; display: flex; gap: 14px; flex-wrap: wrap; }
+  .todo-meta span { color: var(--text); }
+
+  /* ── SURPLUS / DEFICIT ── */
+  .surplus { color: #00ff88; font-weight: 700; }
+  .deficit { color: #ff3344; font-weight: 700; }
+
+  /* ── DIVIDER ── */
+  .hud-divider {
+    border: none;
+    border-top: 1px solid var(--border-dim);
+    margin: 28px 0;
+  }
+
+  /* ── MODAL ── */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.85);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(4px);
+  }
+  .modal-overlay.open { display: flex; }
+  .modal {
+    background: var(--bg2);
+    border: 1px solid var(--cyan);
+    padding: 28px 32px;
+    min-width: 360px;
+    max-width: 560px;
+    width: 90%;
+    position: relative;
+    clip-path: polygon(16px 0%, 100% 0%, calc(100% - 16px) 100%, 0% 100%);
+    box-shadow: 0 0 40px rgba(0,212,255,0.2), inset 0 0 40px rgba(0,0,0,0.5);
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+  .modal-title {
+    font-size: 14px;
+    letter-spacing: 3px;
+    color: var(--cyan);
+    text-transform: uppercase;
+    margin-bottom: 22px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border-dim);
+  }
+  .modal-close {
+    position: absolute;
+    top: 16px; right: 20px;
+    background: none;
+    border: none;
+    color: var(--text-dim);
+    font-size: 18px;
+    cursor: pointer;
+    font-family: 'Courier New', monospace;
+  }
+  .modal-close:hover { color: var(--cyan); }
+  .modal-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+    justify-content: flex-end;
+  }
+
+  /* ── FILTER BAR ── */
+  .filter-bar {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 18px;
+    flex-wrap: wrap;
+  }
+  .filter-btn {
+    background: transparent;
+    border: 1px solid var(--border-dim);
+    color: var(--text-dim);
+    font-family: 'Courier New', monospace;
+    font-size: 9px;
+    letter-spacing: 1.5px;
+    padding: 5px 12px;
+    cursor: pointer;
+    clip-path: polygon(4px 0%, 100% 0%, calc(100% - 4px) 100%, 0% 100%);
+    text-transform: uppercase;
+    transition: all 0.2s;
+  }
+  .filter-btn:hover, .filter-btn.active {
+    border-color: var(--cyan);
+    color: var(--cyan);
+    background: rgba(0,212,255,0.06);
+  }
+
+  /* ── STREAK ── */
+  .streak-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(0,212,255,0.08);
+    border: 1px solid var(--border);
+    padding: 8px 16px;
+    clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+    font-size: 12px;
+    letter-spacing: 2px;
+    color: var(--cyan);
+    margin-bottom: 14px;
+  }
+  .streak-fire { font-size: 18px; }
+
+  /* ── BUDGET SUMMARY ── */
+  .budget-summary-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 7px 12px;
+    border-bottom: 1px solid var(--border-dim);
+    font-size: 11px;
+  }
+  .budget-summary-row:last-child { border-bottom: none; }
+  .budget-summary-row .cat-name { color: var(--text-dim); letter-spacing: 1px; }
+  .budget-summary-row .spent { color: var(--text); }
+  .budget-summary-row .budgeted { color: var(--text-dim); }
+
+  /* ── FLOATING ADD ── */
+  .fab {
+    position: fixed;
+    bottom: 32px;
+    right: 32px;
+    background: var(--cyan);
+    color: #000;
+    border: none;
+    font-family: 'Courier New', monospace;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    padding: 14px 22px;
+    cursor: pointer;
+    clip-path: polygon(10px 0%, 100% 0%, calc(100% - 10px) 100%, 0% 100%);
+    box-shadow: 0 0 20px var(--cyan-glow), 0 4px 20px rgba(0,0,0,0.4);
+    z-index: 50;
+    transition: all 0.2s;
+  }
+  .fab:hover { box-shadow: 0 0 30px var(--cyan-glow), 0 4px 30px rgba(0,0,0,0.5); }
+
+  /* ── FOOTER ── */
+  footer {
+    border-top: 1px solid var(--border-dim);
+    padding: 16px 32px;
+    text-align: center;
+    font-size: 10px;
+    letter-spacing: 3px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    background: var(--bg2);
+  }
+
+  /* ── SECTION SPACER ── */
+  .section-gap { margin-bottom: 32px; }
+
+  /* ── COURSE TABLE COMPLETION ── */
+  .completion-bar {
+    display: inline-block;
+    width: 80px;
+    height: 6px;
+    background: rgba(0,212,255,0.1);
+    border: 1px solid var(--border-dim);
+    vertical-align: middle;
+    position: relative;
+    clip-path: polygon(3px 0%, 100% 0%, calc(100% - 3px) 100%, 0% 100%);
+  }
+  .completion-fill {
+    height: 100%;
+    background: var(--cyan);
+    box-shadow: 0 0 4px var(--cyan-glow);
+  }
+
+  @media (max-width: 600px) {
+    header, .tab-content { padding: 16px; }
+    .budget-grid { grid-template-columns: 1fr; }
+    .cards-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════ HEADER ══════════════════════════════ -->
+<header>
+  <div class="header-top">
+    <div class="logo-block">
+      <div class="logo-title">⚡ J.A.R.V.I.S PERSONAL</div>
+      <div class="logo-sub">Personal Command Center | AJ Donofrio</div>
+    </div>
+    <div class="header-right">
+      <div class="system-status">
+        <div class="pulse-dot"></div>
+        SYSTEM ONLINE
+      </div>
+      <div id="liveClock">--:--:-- --</div>
+      <a href="home.html" class="hud-btn">⌂ HOME</a>
+      <button class="hud-btn" id="themeToggle" onclick="toggleTheme()">◑ LIGHT</button>
+    </div>
+  </div>
+</header>
+
+<!-- ══════════════════════════════ TABS ══════════════════════════════ -->
+<nav class="tab-nav">
+  <button class="tab-btn active" onclick="switchTab('goals')">🎯 PERSONAL GOALS</button>
+  <button class="tab-btn" onclick="switchTab('budget')">💰 PERSONAL BUDGET</button>
+  <button class="tab-btn" onclick="switchTab('fitness')">🏋️ FITNESS &amp; HEALTH</button>
+  <button class="tab-btn" onclick="switchTab('learning')">📚 LEARNING</button>
+  <button class="tab-btn" onclick="switchTab('travel')">✈️ TRAVEL</button>
+  <button class="tab-btn" onclick="switchTab('todos')">📋 TO-DO</button>
+</nav>
+
+<!-- ══════════════════════════════ TAB 1: GOALS ══════════════════════════════ -->
+<div id="tab-goals" class="tab-content active">
+  <div class="section-header">
+    <div class="section-title"><span>//</span> ACTIVE GOALS</div>
+    <button class="hud-btn" onclick="openModal('goalModal')">+ ADD GOAL</button>
+  </div>
+  <div class="cards-grid" id="goalsGrid"></div>
+
+  <div class="collapsible-header" onclick="toggleCollapse('completedGoalsBody', this)">
+    <span class="collapse-arrow">▶</span>
+    <div class="section-title"><span>//</span> COMPLETED GOALS</div>
+    <span id="completedGoalsCount" style="font-size:10px;color:var(--text-dim);letter-spacing:1px;"></span>
+  </div>
+  <div class="collapsible-body" id="completedGoalsBody">
+    <div class="cards-grid" id="completedGoalsGrid"></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════ TAB 2: BUDGET ══════════════════════════════ -->
+<div id="tab-budget" class="tab-content">
+  <div class="section-gap">
+    <div class="section-header">
+      <div class="section-title"><span>//</span> MONTHLY BUDGET SETUP</div>
+      <button class="hud-btn" onclick="saveBudget()">💾 SAVE BUDGET</button>
+    </div>
+
+    <div style="font-size:11px;letter-spacing:2px;color:var(--text-dim);margin-bottom:12px;text-transform:uppercase;">INCOME</div>
+    <div class="budget-grid" style="margin-bottom:18px;">
+      <div class="budget-row">
+        <span class="budget-label">Monthly Gross Income</span>
+        <div style="display:flex;align-items:center;gap:4px;">
+          <span style="color:var(--text-dim);font-size:12px;">$</span>
+          <input type="number" class="budget-input" id="b_gross" placeholder="0">
+        </div>
+      </div>
+      <div class="budget-row">
+        <span class="budget-label">Monthly Take-Home</span>
+        <div style="display:flex;align-items:center;gap:4px;">
+          <span style="color:var(--text-dim);font-size:12px;">$</span>
+          <input type="number" class="budget-input" id="b_takehome" placeholder="0">
+        </div>
+      </div>
+    </div>
+
+    <div style="font-size:11px;letter-spacing:2px;color:var(--text-dim);margin-bottom:12px;text-transform:uppercase;">EXPENSE CATEGORIES</div>
+    <div class="budget-grid">
+      <div class="budget-row"><span class="budget-label">Housing/Rent</span><div style="display:flex;align-items:center;gap:4px;"><span style="color:var(--text-dim);font-size:12px;">$</span><input type="number" class="budget-input" id="b_housing" placeholder="0"></div></div>
+      <div class="budget-row"><span class="budget-label">Car/Transportation</span><div style="display:flex;align-items:center;gap:4px;"><span style="color:var(--text-dim);font-size:12px;">$</span><input type="number" class="budget-input" id="b_car" placeholder="0"></div></div>
+      <div class="budget-row"><span class="budget-label">Food/Groceries</span><div style="display:flex;align-items:center;gap:4px;"><span style="color:var(--text-dim);font-size:12px;">$</span><input type="number" class="budget-input" id="b_food" placeholder="0"></div></div>
+      <div class="budget-row"><span class="budget-label">Dining Out</span><div style="display:flex;align-items:center;gap:4px;"><span style="color:var(--text-dim);font-size:12px;">$</span><input type="number" class="budget-input" id="b_dining" placeholder="0"></div></div>
+      <div class="budget-row"><span class="budget-label">Entertainment</span><div style="display:flex;align-items:center;gap:4px;"><span style="color:var(--text-dim);font-size:12px;">$</span><input type="number" class="budget-input" id="b_entertainment" placeholder="0"></div></div>
+      <div class="budget-row"><span class="budget-label">Health/Fitness</span><div style="display:flex;align-items:center;gap:4px;"><span style="color:var(--text-dim);font-size:12px;">$</span><input type="number" class="budget-input" id="b_health" placeholder="0"></div></div>
+      <div class="budget-row"><span class="budget-label">Clothing</span><div style="display:flex;align-items:center;gap:4px;"><span style="color:var(--text-dim);font-size:12px;">$</span><input type="number" class="budget-input" id="b_clothing" placeholder="0"></div></div>
+      <div class="budget-row"><span class="budget-label">Subscriptions</span><div style="display:flex;align-items:center;gap:4px;"><span style="color:var(--text-dim);font-size:12px;">$</span><input type="number" class="budget-input" id="b_subs" placeholder="0"></div></div>
+      <div class="budget-row"><span class="budget-label">Savings</span><div style="display:flex;align-items:center;gap:4px;"><span style="color:var(--text-dim);font-size:12px;">$</span><input type="number" class="budget-input" id="b_savings" placeholder="0"></div></div>
+      <div class="budget-row"><span class="budget-label">Investments</span><div style="display:flex;align-items:center;gap:4px;"><span style="color:var(--text-dim);font-size:12px;">$</span><input type="number" class="budget-input" id="b_invest" placeholder="0"></div></div>
+      <div class="budget-row"><span class="budget-label">Miscellaneous</span><div style="display:flex;align-items:center;gap:4px;"><span style="color:var(--text-dim);font-size:12px;">$</span><input type="number" class="budget-input" id="b_misc" placeholder="0"></div></div>
+    </div>
+  </div>
+
+  <hr class="hud-divider">
+
+  <div class="section-header">
+    <div class="section-title"><span>//</span> MONTHLY EXPENSE TRACKER</div>
+    <button class="hud-btn" onclick="openModal('expenseModal')">+ ADD EXPENSE</button>
+  </div>
+
+  <div class="stats-grid" id="budgetSummaryStats" style="margin-bottom:20px;"></div>
+
+  <div style="background:var(--card-bg);border:1px solid var(--border-dim);padding:16px;margin-bottom:24px;">
+    <div style="font-size:10px;letter-spacing:2px;color:var(--text-dim);margin-bottom:12px;text-transform:uppercase;">CATEGORY TOTALS vs BUDGET</div>
+    <div id="budgetCategoryBars"></div>
+  </div>
+
+  <table class="hud-table">
+    <thead>
+      <tr>
+        <th>DATE</th>
+        <th>CATEGORY</th>
+        <th>DESCRIPTION</th>
+        <th>AMOUNT</th>
+        <th>ACTION</th>
+      </tr>
+    </thead>
+    <tbody id="expenseTableBody"></tbody>
+  </table>
+</div>
+
+<!-- ══════════════════════════════ TAB 3: FITNESS ══════════════════════════════ -->
+<div id="tab-fitness" class="tab-content">
+  <div class="section-gap">
+    <div class="section-header">
+      <div class="section-title"><span>//</span> HEALTH STATS</div>
+      <button class="hud-btn" onclick="saveFitnessStats()">💾 SAVE STATS</button>
+    </div>
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-value" id="displayWeight">—</div>
+        <div class="stat-label">Current Weight (lbs)</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="displayGoalWeight">—</div>
+        <div class="stat-label">Goal Weight (lbs)</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="displayStreak">0</div>
+        <div class="stat-label">Weekly Streak 🔥</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="displayWorkouts">0</div>
+        <div class="stat-label">Workouts (30 days)</div>
+      </div>
+    </div>
+
+    <div style="background:var(--card-bg);border:1px solid var(--border-dim);padding:20px;margin-bottom:20px;clip-path:polygon(10px 0%,100% 0%,calc(100% - 10px) 100%,0% 100%);">
+      <div style="font-size:10px;letter-spacing:2px;color:var(--text-dim);margin-bottom:14px;text-transform:uppercase;">EDIT STATS</div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Current Weight (lbs)</label>
+          <input type="number" class="hud-input" id="f_weight" placeholder="175">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Goal Weight (lbs)</label>
+          <input type="number" class="hud-input" id="f_goalweight" placeholder="165">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Height</label>
+          <input type="text" class="hud-input" id="f_height" placeholder="5'11&quot;">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Daily Step Goal</label>
+          <input type="number" class="hud-input" id="f_steps" placeholder="10000">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Weekly Workout Goal (days)</label>
+          <input type="number" class="hud-input" id="f_weeklygoal" placeholder="4">
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-bottom:8px;">
+      <div class="progress-label">
+        <span>WEIGHT PROGRESS</span>
+        <span id="weightProgressPct">—</span>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" id="weightProgressBar" style="width:0%"></div></div>
+      <div style="display:flex;justify-content:space-between;font-size:9px;color:var(--text-dim);margin-top:4px;letter-spacing:1px;">
+        <span id="weightProgressStart">—</span>
+        <span id="weightProgressEnd">Goal: —</span>
+      </div>
+    </div>
+  </div>
+
+  <hr class="hud-divider">
+
+  <div class="section-header">
+    <div class="section-title"><span>//</span> WORKOUT LOG</div>
+    <button class="hud-btn" onclick="openModal('workoutModal')">+ LOG WORKOUT</button>
+  </div>
+  <div id="streakDisplay" class="streak-badge" style="display:none;">
+    <span class="streak-fire">🔥</span>
+    <span id="streakText">0 WEEK STREAK</span>
+  </div>
+  <table class="hud-table">
+    <thead>
+      <tr>
+        <th>DATE</th>
+        <th>TYPE</th>
+        <th>DURATION</th>
+        <th>NOTES</th>
+        <th>ACTION</th>
+      </tr>
+    </thead>
+    <tbody id="workoutTableBody"></tbody>
+  </table>
+</div>
+
+<!-- ══════════════════════════════ TAB 4: LEARNING ══════════════════════════════ -->
+<div id="tab-learning" class="tab-content">
+  <div class="section-gap">
+    <div class="section-header">
+      <div class="section-title"><span>//</span> READING LIST</div>
+      <button class="hud-btn" onclick="openModal('bookModal')">+ ADD BOOK</button>
+    </div>
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:16px;">
+      <div class="filter-bar" id="bookFilterBar">
+        <button class="filter-btn active" onclick="filterBooks('All', this)">ALL</button>
+        <button class="filter-btn" onclick="filterBooks('Reading', this)">READING</button>
+        <button class="filter-btn" onclick="filterBooks('Want to Read', this)">WANT TO READ</button>
+        <button class="filter-btn" onclick="filterBooks('Completed', this)">COMPLETED</button>
+      </div>
+      <div style="font-size:11px;letter-spacing:2px;color:var(--text-dim);">
+        COMPLETED THIS YEAR: <span id="booksThisYear" style="color:var(--cyan);font-weight:700;">0</span>
+      </div>
+    </div>
+    <div class="cards-grid" id="booksGrid"></div>
+  </div>
+
+  <hr class="hud-divider">
+
+  <div class="section-header">
+    <div class="section-title"><span>//</span> COURSES &amp; SKILLS</div>
+    <button class="hud-btn" onclick="openModal('courseModal')">+ ADD COURSE</button>
+  </div>
+  <table class="hud-table">
+    <thead>
+      <tr>
+        <th>COURSE / SKILL</th>
+        <th>PLATFORM</th>
+        <th>STATUS</th>
+        <th>COMPLETION</th>
+        <th>NOTES</th>
+        <th>ACTION</th>
+      </tr>
+    </thead>
+    <tbody id="courseTableBody"></tbody>
+  </table>
+</div>
+
+<!-- ══════════════════════════════ TAB 5: TRAVEL ══════════════════════════════ -->
+<div id="tab-travel" class="tab-content">
+  <div class="section-header">
+    <div class="section-title"><span>//</span> TRAVEL &amp; EXPERIENCES</div>
+    <button class="hud-btn" onclick="openModal('travelModal')">+ ADD TRIP</button>
+  </div>
+  <div class="filter-bar" id="travelFilterBar">
+    <button class="filter-btn active" onclick="filterTravel('All', this)">ALL</button>
+    <button class="filter-btn" onclick="filterTravel('Planning', this)">PLANNING</button>
+    <button class="filter-btn" onclick="filterTravel('Booked', this)">BOOKED</button>
+    <button class="filter-btn" onclick="filterTravel('Completed', this)">COMPLETED</button>
+  </div>
+  <div class="cards-grid" id="travelGrid"></div>
+</div>
+
+<!-- ══════════════════════════════ TAB 6: TO-DO ══════════════════════════════ -->
+<div id="tab-todos" class="tab-content">
+  <div class="section-header">
+    <div class="section-title"><span>//</span> PERSONAL TO-DO</div>
+    <div style="display:flex;gap:8px;align-items:center;">
+      <div class="filter-bar" style="margin-bottom:0;" id="todoFilterBar">
+        <button class="filter-btn active" onclick="filterTodos('All', this)">ALL</button>
+        <button class="filter-btn" onclick="filterTodos('HIGH', this)">HIGH</button>
+        <button class="filter-btn" onclick="filterTodos('NORMAL', this)">NORMAL</button>
+        <button class="filter-btn" onclick="filterTodos('LOW', this)">LOW</button>
+      </div>
+    </div>
+  </div>
+  <div id="todosContainer"></div>
+  <button class="fab" onclick="openModal('todoModal')">+ ADD TASK</button>
+</div>
+
+<!-- ══════════════════════════════ FOOTER ══════════════════════════════ -->
+<footer>JARVIS PERSONAL | AJ Donofrio | Personal Command Center</footer>
+
+<!-- ══════════════════════════════════ MODALS ══════════════════════════════════ -->
+
+<!-- GOAL MODAL -->
+<div class="modal-overlay" id="goalModal">
+  <div class="modal">
+    <div class="modal-title">◈ ADD NEW GOAL</div>
+    <button class="modal-close" onclick="closeModal('goalModal')">✕</button>
+    <div class="form-row">
+      <div class="form-group" style="grid-column:1/-1;">
+        <label class="form-label">Goal Title</label>
+        <input type="text" class="hud-input" id="g_title" placeholder="Enter goal...">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Category</label>
+        <select class="hud-select hud-input" id="g_cat">
+          <option>FITNESS</option>
+          <option>FINANCIAL</option>
+          <option>LEARNING</option>
+          <option>TRAVEL</option>
+          <option>FAMILY</option>
+          <option>HEALTH</option>
+          <option>OTHER</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Target Date</label>
+        <input type="month" class="hud-input" id="g_target">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Initial Progress (%)</label>
+        <input type="number" class="hud-input" id="g_progress" min="0" max="100" placeholder="0">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Status</label>
+        <select class="hud-select hud-input" id="g_status">
+          <option>In Progress</option>
+          <option>On Track</option>
+          <option>Behind</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group" style="margin-bottom:0;">
+      <label class="form-label">Notes</label>
+      <input type="text" class="hud-input" id="g_notes" placeholder="Optional notes...">
+    </div>
+    <div class="modal-actions">
+      <button class="hud-btn" onclick="closeModal('goalModal')">CANCEL</button>
+      <button class="hud-btn active" onclick="addGoal()">+ ADD GOAL</button>
+    </div>
+  </div>
+</div>
+
+<!-- UPDATE PROGRESS MODAL -->
+<div class="modal-overlay" id="progressModal">
+  <div class="modal">
+    <div class="modal-title">◈ UPDATE PROGRESS</div>
+    <button class="modal-close" onclick="closeModal('progressModal')">✕</button>
+    <input type="hidden" id="prog_id">
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Progress (%)</label>
+        <input type="number" class="hud-input" id="prog_pct" min="0" max="100">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Status</label>
+        <select class="hud-select hud-input" id="prog_status">
+          <option>In Progress</option>
+          <option>On Track</option>
+          <option>Behind</option>
+          <option>Completed</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group" style="margin-bottom:0;">
+      <label class="form-label">Notes</label>
+      <input type="text" class="hud-input" id="prog_notes" placeholder="Update notes...">
+    </div>
+    <div class="modal-actions">
+      <button class="hud-btn" onclick="closeModal('progressModal')">CANCEL</button>
+      <button class="hud-btn active" onclick="saveProgress()">SAVE PROGRESS</button>
+    </div>
+  </div>
+</div>
+
+<!-- EXPENSE MODAL -->
+<div class="modal-overlay" id="expenseModal">
+  <div class="modal">
+    <div class="modal-title">◈ ADD EXPENSE</div>
+    <button class="modal-close" onclick="closeModal('expenseModal')">✕</button>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Date</label>
+        <input type="date" class="hud-input" id="exp_date">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Category</label>
+        <select class="hud-select hud-input" id="exp_cat">
+          <option value="Housing/Rent">Housing/Rent</option>
+          <option value="Car/Transportation">Car/Transportation</option>
+          <option value="Food/Groceries">Food/Groceries</option>
+          <option value="Dining Out">Dining Out</option>
+          <option value="Entertainment">Entertainment</option>
+          <option value="Health/Fitness">Health/Fitness</option>
+          <option value="Clothing">Clothing</option>
+          <option value="Subscriptions">Subscriptions</option>
+          <option value="Savings">Savings</option>
+          <option value="Investments">Investments</option>
+          <option value="Miscellaneous">Miscellaneous</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group" style="grid-column:1/-1;">
+        <label class="form-label">Description</label>
+        <input type="text" class="hud-input" id="exp_desc" placeholder="What was this for?">
+      </div>
+    </div>
+    <div class="form-group" style="margin-bottom:0;">
+      <label class="form-label">Amount ($)</label>
+      <input type="number" class="hud-input" id="exp_amt" placeholder="0.00" step="0.01">
+    </div>
+    <div class="modal-actions">
+      <button class="hud-btn" onclick="closeModal('expenseModal')">CANCEL</button>
+      <button class="hud-btn active" onclick="addExpense()">+ ADD EXPENSE</button>
+    </div>
+  </div>
+</div>
+
+<!-- WORKOUT MODAL -->
+<div class="modal-overlay" id="workoutModal">
+  <div class="modal">
+    <div class="modal-title">◈ LOG WORKOUT</div>
+    <button class="modal-close" onclick="closeModal('workoutModal')">✕</button>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Date</label>
+        <input type="date" class="hud-input" id="wo_date">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Workout Type</label>
+        <select class="hud-select hud-input" id="wo_type">
+          <option>Gym</option>
+          <option>Run</option>
+          <option>Bike</option>
+          <option>Swim</option>
+          <option>Sports</option>
+          <option>Walk</option>
+          <option>Yoga</option>
+          <option>Other</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Duration</label>
+        <input type="text" class="hud-input" id="wo_duration" placeholder="45 min">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Notes</label>
+        <input type="text" class="hud-input" id="wo_notes" placeholder="Optional...">
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="hud-btn" onclick="closeModal('workoutModal')">CANCEL</button>
+      <button class="hud-btn active" onclick="addWorkout()">LOG WORKOUT</button>
+    </div>
+  </div>
+</div>
+
+<!-- BOOK MODAL -->
+<div class="modal-overlay" id="bookModal">
+  <div class="modal">
+    <div class="modal-title">◈ ADD BOOK</div>
+    <button class="modal-close" onclick="closeModal('bookModal')">✕</button>
+    <div class="form-row">
+      <div class="form-group" style="grid-column:1/-1;">
+        <label class="form-label">Book Title</label>
+        <input type="text" class="hud-input" id="bk_title" placeholder="Enter title...">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Author</label>
+        <input type="text" class="hud-input" id="bk_author" placeholder="Author name">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Status</label>
+        <select class="hud-select hud-input" id="bk_status">
+          <option>Want to Read</option>
+          <option>Reading</option>
+          <option>Completed</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Rating (1-5 stars)</label>
+        <input type="number" class="hud-input" id="bk_rating" min="0" max="5" placeholder="0">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Notes</label>
+        <input type="text" class="hud-input" id="bk_notes" placeholder="Optional...">
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="hud-btn" onclick="closeModal('bookModal')">CANCEL</button>
+      <button class="hud-btn active" onclick="addBook()">+ ADD BOOK</button>
+    </div>
+  </div>
+</div>
+
+<!-- COURSE MODAL -->
+<div class="modal-overlay" id="courseModal">
+  <div class="modal">
+    <div class="modal-title">◈ ADD COURSE / SKILL</div>
+    <button class="modal-close" onclick="closeModal('courseModal')">✕</button>
+    <div class="form-row">
+      <div class="form-group" style="grid-column:1/-1;">
+        <label class="form-label">Course / Skill Name</label>
+        <input type="text" class="hud-input" id="co_name" placeholder="Enter name...">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Platform</label>
+        <input type="text" class="hud-input" id="co_platform" placeholder="Udemy, YouTube, etc.">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Status</label>
+        <select class="hud-select hud-input" id="co_status">
+          <option>Not Started</option>
+          <option>In Progress</option>
+          <option>Completed</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Completion %</label>
+        <input type="number" class="hud-input" id="co_pct" min="0" max="100" placeholder="0">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Notes</label>
+        <input type="text" class="hud-input" id="co_notes" placeholder="Optional...">
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="hud-btn" onclick="closeModal('courseModal')">CANCEL</button>
+      <button class="hud-btn active" onclick="addCourse()">+ ADD COURSE</button>
+    </div>
+  </div>
+</div>
+
+<!-- TRAVEL MODAL -->
+<div class="modal-overlay" id="travelModal">
+  <div class="modal">
+    <div class="modal-title">◈ ADD TRIP / EXPERIENCE</div>
+    <button class="modal-close" onclick="closeModal('travelModal')">✕</button>
+    <input type="hidden" id="tr_editId">
+    <div class="form-row">
+      <div class="form-group" style="grid-column:1/-1;">
+        <label class="form-label">Destination / Name</label>
+        <input type="text" class="hud-input" id="tr_dest" placeholder="Where / What?">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Type</label>
+        <select class="hud-select hud-input" id="tr_type">
+          <option>Trip</option>
+          <option>Experience</option>
+          <option>Event</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Date (Month/Year)</label>
+        <input type="text" class="hud-input" id="tr_date" placeholder="Aug 2026 or TBD">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Status</label>
+        <select class="hud-select hud-input" id="tr_status">
+          <option>Planning</option>
+          <option>Booked</option>
+          <option>Completed</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Budget ($)</label>
+        <input type="number" class="hud-input" id="tr_budget" placeholder="0">
+      </div>
+    </div>
+    <div class="form-group" style="margin-bottom:0;">
+      <label class="form-label">Notes</label>
+      <input type="text" class="hud-input" id="tr_notes" placeholder="Optional notes...">
+    </div>
+    <div class="modal-actions">
+      <button class="hud-btn" onclick="closeModal('travelModal')">CANCEL</button>
+      <button class="hud-btn active" onclick="saveTravel()">SAVE TRIP</button>
+    </div>
+  </div>
+</div>
+
+<!-- TODO MODAL -->
+<div class="modal-overlay" id="todoModal">
+  <div class="modal">
+    <div class="modal-title">◈ ADD PERSONAL TASK</div>
+    <button class="modal-close" onclick="closeModal('todoModal')">✕</button>
+    <div class="form-row">
+      <div class="form-group" style="grid-column:1/-1;">
+        <label class="form-label">Task Title</label>
+        <input type="text" class="hud-input" id="td_title" placeholder="What needs to be done?">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Priority</label>
+        <select class="hud-select hud-input" id="td_priority">
+          <option>HIGH</option>
+          <option>NORMAL</option>
+          <option>LOW</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Category</label>
+        <select class="hud-select hud-input" id="td_cat">
+          <option>HOME</option>
+          <option>FAMILY</option>
+          <option>HEALTH</option>
+          <option>ADMIN</option>
+          <option>ERRAND</option>
+          <option>OTHER</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group" style="margin-bottom:0;">
+      <label class="form-label">Due Date</label>
+      <input type="text" class="hud-input" id="td_due" placeholder="Today / This Week / This Month / YYYY-MM-DD">
+    </div>
+    <div class="modal-actions">
+      <button class="hud-btn" onclick="closeModal('todoModal')">CANCEL</button>
+      <button class="hud-btn active" onclick="addTodo()">+ ADD TASK</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════ SCRIPTS ══════════════════════════════ -->
+<script>
+// ─── CLOCK ───
+function updateClock() {
+  const now = new Date();
+  const h = now.getHours() % 12 || 12;
+  const m = String(now.getMinutes()).padStart(2,'0');
+  const s = String(now.getSeconds()).padStart(2,'0');
+  const ampm = now.getHours() >= 12 ? 'PM' : 'AM';
+  document.getElementById('liveClock').textContent = `${h}:${m}:${s} ${ampm}`;
+}
+setInterval(updateClock, 1000);
+updateClock();
+
+// ─── THEME ───
+let lightMode = false;
+function toggleTheme() {
+  lightMode = !lightMode;
+  document.body.classList.toggle('light-mode', lightMode);
+  document.getElementById('themeToggle').textContent = lightMode ? '◑ DARK' : '◑ LIGHT';
+}
+
+// ─── TABS ───
+function switchTab(name) {
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + name).classList.add('active');
+  event.target.classList.add('active');
+}
+
+// ─── MODAL ───
+function openModal(id) {
+  document.getElementById(id).classList.add('open');
+  // Set today's date on date inputs
+  const today = new Date().toISOString().split('T')[0];
+  const d = document.querySelector('#' + id + ' input[type="date"]');
+  if (d && !d.value) d.value = today;
+}
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+document.querySelectorAll('.modal-overlay').forEach(o => {
+  o.addEventListener('click', e => { if (e.target === o) o.classList.remove('open'); });
+});
+
+// ─── COLLAPSIBLE ───
+function toggleCollapse(bodyId, header) {
+  const body = document.getElementById(bodyId);
+  const arrow = header.querySelector('.collapse-arrow');
+  body.classList.toggle('open');
+  arrow.classList.toggle('open');
+}
+
+// ─── UID ───
+function uid() { return Date.now() + Math.random().toString(36).slice(2,7); }
+
+// ═══════════════════════ GOALS ═══════════════════════
+const GOALS_KEY = 'jarvis_personal_goals';
+
+function getGoals() {
+  try { return JSON.parse(localStorage.getItem(GOALS_KEY)) || []; } catch { return []; }
+}
+function saveGoals(goals) { localStorage.setItem(GOALS_KEY, JSON.stringify(goals)); }
+
+const defaultGoals = [
+  { id: 'g1', title: 'Run a 5K', category: 'FITNESS', target: '2026-12', progress: 20, status: 'In Progress', notes: 'Training 3x/week', completed: false },
+  { id: 'g2', title: 'Read 12 Books This Year', category: 'LEARNING', target: '2026-12', progress: 25, status: 'On Track', notes: '3/12 books done', completed: false },
+  { id: 'g3', title: 'Take a Family Vacation', category: 'FAMILY', target: '2026-08', progress: 60, status: 'On Track', notes: 'Beach trip – booking in progress', completed: false }
+];
+
+function initGoals() {
+  if (!localStorage.getItem(GOALS_KEY)) saveGoals(defaultGoals);
+  renderGoals();
+}
+
+function renderGoals() {
+  const goals = getGoals();
+  const active = goals.filter(g => !g.completed);
+  const done = goals.filter(g => g.completed);
+
+  const grid = document.getElementById('goalsGrid');
+  grid.innerHTML = active.length ? active.map(g => goalCard(g, false)).join('') : '<div style="color:var(--text-dim);font-size:11px;letter-spacing:2px;">NO ACTIVE GOALS — ADD ONE ABOVE</div>';
+
+  const cGrid = document.getElementById('completedGoalsGrid');
+  cGrid.innerHTML = done.length ? done.map(g => goalCard(g, true)).join('') : '<div style="color:var(--text-dim);font-size:11px;letter-spacing:2px;">NO COMPLETED GOALS YET</div>';
+
+  document.getElementById('completedGoalsCount').textContent = done.length ? `[${done.length}]` : '';
+}
+
+function goalCard(g, dim) {
+  const pct = Math.min(100, Math.max(0, g.progress || 0));
+  const targetDisplay = g.target ? g.target.replace('-', '/') : '—';
+  const statusColor = g.status === 'On Track' ? '#00ff88' : g.status === 'Behind' ? '#ff3344' : 'var(--cyan)';
+  return `<div class="goal-card${dim ? ' completed-card' : ''}">
+    <div class="goal-card-header">
+      <div class="goal-title">${escHtml(g.title)}</div>
+      <span class="badge ${g.category}">${escHtml(g.category)}</span>
+    </div>
+    <div class="goal-meta">TARGET: <span>${targetDisplay}</span> &nbsp;|&nbsp; STATUS: <span style="color:${statusColor}">${escHtml(g.status)}</span></div>
+    <div class="progress-wrap">
+      <div class="progress-label"><span>PROGRESS</span><span>${pct}%</span></div>
+      <div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>
+    </div>
+    ${g.notes ? `<div class="goal-notes">${escHtml(g.notes)}</div>` : '<div class="goal-notes" style="color:var(--border-dim);">No notes</div>'}
+    <div class="card-actions">
+      ${!dim ? `<button class="card-btn" onclick="openProgressModal('${g.id}')">UPDATE PROGRESS</button>` : ''}
+      ${!dim ? `<button class="card-btn success" onclick="completeGoal('${g.id}')">✓ COMPLETE</button>` : ''}
+      <button class="card-btn danger" onclick="deleteGoal('${g.id}')">✕ DELETE</button>
+    </div>
+  </div>`;
+}
+
+function addGoal() {
+  const title = document.getElementById('g_title').value.trim();
+  if (!title) { alert('Please enter a goal title.'); return; }
+  const goals = getGoals();
+  goals.push({
+    id: uid(),
+    title,
+    category: document.getElementById('g_cat').value,
+    target: document.getElementById('g_target').value,
+    progress: parseInt(document.getElementById('g_progress').value) || 0,
+    status: document.getElementById('g_status').value,
+    notes: document.getElementById('g_notes').value,
+    completed: false
+  });
+  saveGoals(goals);
+  renderGoals();
+  closeModal('goalModal');
+  ['g_title','g_target','g_progress','g_notes'].forEach(id => document.getElementById(id).value = '');
+}
+
+function openProgressModal(id) {
+  const g = getGoals().find(x => x.id === id);
+  if (!g) return;
+  document.getElementById('prog_id').value = id;
+  document.getElementById('prog_pct').value = g.progress;
+  document.getElementById('prog_status').value = g.status;
+  document.getElementById('prog_notes').value = g.notes || '';
+  openModal('progressModal');
+}
+
+function saveProgress() {
+  const id = document.getElementById('prog_id').value;
+  const goals = getGoals();
+  const i = goals.findIndex(x => x.id === id);
+  if (i < 0) return;
+  goals[i].progress = parseInt(document.getElementById('prog_pct').value) || 0;
+  goals[i].status = document.getElementById('prog_status').value;
+  goals[i].notes = document.getElementById('prog_notes').value;
+  if (goals[i].status === 'Completed') goals[i].completed = true;
+  saveGoals(goals);
+  renderGoals();
+  closeModal('progressModal');
+}
+
+function completeGoal(id) {
+  if (!confirm('Mark this goal as completed?')) return;
+  const goals = getGoals();
+  const i = goals.findIndex(x => x.id === id);
+  if (i >= 0) { goals[i].completed = true; goals[i].progress = 100; goals[i].status = 'Completed'; }
+  saveGoals(goals);
+  renderGoals();
+}
+
+function deleteGoal(id) {
+  if (!confirm('Delete this goal?')) return;
+  saveGoals(getGoals().filter(x => x.id !== id));
+  renderGoals();
+}
+
+// ═══════════════════════ BUDGET ═══════════════════════
+const BUDGET_KEY = 'jarvis_personal_budget';
+
+function getBudgetData() {
+  try { return JSON.parse(localStorage.getItem(BUDGET_KEY)) || { budget: {}, expenses: [] }; } catch { return { budget: {}, expenses: [] }; }
+}
+function saveBudgetData(d) { localStorage.setItem(BUDGET_KEY, JSON.stringify(d)); }
+
+const budgetFields = [
+  { id: 'b_gross', key: 'gross', label: 'Gross Income' },
+  { id: 'b_takehome', key: 'takehome', label: 'Take-Home' },
+  { id: 'b_housing', key: 'Housing/Rent', label: 'Housing/Rent' },
+  { id: 'b_car', key: 'Car/Transportation', label: 'Car/Transportation' },
+  { id: 'b_food', key: 'Food/Groceries', label: 'Food/Groceries' },
+  { id: 'b_dining', key: 'Dining Out', label: 'Dining Out' },
+  { id: 'b_entertainment', key: 'Entertainment', label: 'Entertainment' },
+  { id: 'b_health', key: 'Health/Fitness', label: 'Health/Fitness' },
+  { id: 'b_clothing', key: 'Clothing', label: 'Clothing' },
+  { id: 'b_subs', key: 'Subscriptions', label: 'Subscriptions' },
+  { id: 'b_savings', key: 'Savings', label: 'Savings' },
+  { id: 'b_invest', key: 'Investments', label: 'Investments' },
+  { id: 'b_misc', key: 'Miscellaneous', label: 'Miscellaneous' }
+];
+const expenseCategories = ['Housing/Rent','Car/Transportation','Food/Groceries','Dining Out','Entertainment','Health/Fitness','Clothing','Subscriptions','Savings','Investments','Miscellaneous'];
+
+function initBudget() {
+  const d = getBudgetData();
+  budgetFields.forEach(f => {
+    const el = document.getElementById(f.id);
+    if (el && d.budget[f.key]) el.value = d.budget[f.key];
+  });
+  renderBudget();
+}
+
+function saveBudget() {
+  const d = getBudgetData();
+  budgetFields.forEach(f => {
+    const el = document.getElementById(f.id);
+    if (el) d.budget[f.key] = parseFloat(el.value) || 0;
+  });
+  saveBudgetData(d);
+  renderBudget();
+  showFlash('BUDGET SAVED');
+}
+
+function addExpense() {
+  const d = getBudgetData();
+  const amt = parseFloat(document.getElementById('exp_amt').value);
+  if (!amt) { alert('Please enter an amount.'); return; }
+  d.expenses.push({
+    id: uid(),
+    date: document.getElementById('exp_date').value,
+    category: document.getElementById('exp_cat').value,
+    desc: document.getElementById('exp_desc').value,
+    amount: amt
+  });
+  saveBudgetData(d);
+  renderBudget();
+  closeModal('expenseModal');
+  ['exp_amt','exp_desc'].forEach(id => document.getElementById(id).value = '');
+}
+
+function deleteExpense(id) {
+  const d = getBudgetData();
+  d.expenses = d.expenses.filter(x => x.id !== id);
+  saveBudgetData(d);
+  renderBudget();
+}
+
+function renderBudget() {
+  const d = getBudgetData();
+  const expenses = d.expenses;
+  const budget = d.budget;
+  const takehome = budget.takehome || 0;
+
+  // category totals
+  const totals = {};
+  expenseCategories.forEach(c => totals[c] = 0);
+  expenses.forEach(e => { if (totals[e.category] !== undefined) totals[e.category] += e.amount; });
+
+  const totalSpent = Object.values(totals).reduce((a,b) => a+b, 0);
+  const surplus = takehome - totalSpent;
+
+  // stats
+  const statsEl = document.getElementById('budgetSummaryStats');
+  statsEl.innerHTML = `
+    <div class="stat-card"><div class="stat-value">$${fmt(takehome)}</div><div class="stat-label">Monthly Take-Home</div></div>
+    <div class="stat-card"><div class="stat-value">$${fmt(totalSpent)}</div><div class="stat-label">Total Spent</div></div>
+    <div class="stat-card"><div class="stat-value ${surplus >= 0 ? 'stat-green' : 'stat-red'}">${surplus >= 0 ? '+' : ''}$${fmt(Math.abs(surplus))}</div><div class="stat-label">${surplus >= 0 ? 'SURPLUS' : 'DEFICIT'}</div></div>
+  `;
+
+  // category bars
+  const barsEl = document.getElementById('budgetCategoryBars');
+  barsEl.innerHTML = expenseCategories.map(c => {
+    const spent = totals[c] || 0;
+    const bgt = budget[c] || 0;
+    const pct = bgt > 0 ? Math.min(100, (spent / bgt * 100)) : 0;
+    const over = spent > bgt && bgt > 0;
+    return `<div class="budget-summary-row">
+      <span class="cat-name">${c}</span>
+      <div style="flex:1;margin:0 16px;">
+        <div class="progress-bar" style="height:6px;">
+          <div class="progress-fill" style="width:${pct}%;background:${over?'#ff3344':'var(--cyan)'};box-shadow:0 0 6px ${over?'rgba(255,51,68,0.4)':'var(--cyan-glow)'};"></div>
+        </div>
+      </div>
+      <span class="spent" style="color:${over?'#ff3344':'var(--text)'};">$${fmt(spent)}</span>
+      <span class="budgeted" style="margin-left:8px;">/ $${fmt(bgt)}</span>
+      ${over ? '<span style="color:#ff3344;font-size:9px;letter-spacing:1px;margin-left:8px;">OVER</span>' : ''}
+    </div>`;
+  }).join('');
+
+  // table
+  const tbody = document.getElementById('expenseTableBody');
+  const sorted = [...expenses].sort((a,b) => b.date.localeCompare(a.date));
+  tbody.innerHTML = sorted.length ? sorted.map(e => `
+    <tr>
+      <td>${e.date}</td>
+      <td><span class="badge" style="font-size:8px;">${escHtml(e.category)}</span></td>
+      <td>${escHtml(e.desc)}</td>
+      <td style="color:var(--cyan);font-weight:700;">$${fmt(e.amount)}</td>
+      <td><button class="del-btn" onclick="deleteExpense('${e.id}')">✕ DEL</button></td>
+    </tr>`).join('') : '<tr><td colspan="5" style="text-align:center;color:var(--text-dim);letter-spacing:2px;padding:20px;">NO EXPENSES LOGGED</td></tr>';
+}
+
+// ═══════════════════════ FITNESS ═══════════════════════
+const FITNESS_KEY = 'jarvis_personal_fitness';
+
+function getFitnessData() {
+  try { return JSON.parse(localStorage.getItem(FITNESS_KEY)) || { stats: {}, workouts: [] }; } catch { return { stats: {}, workouts: [] }; }
+}
+function saveFitnessData(d) { localStorage.setItem(FITNESS_KEY, JSON.stringify(d)); }
+
+function initFitness() {
+  const d = getFitnessData();
+  const s = d.stats;
+  ['weight','goalweight','height','steps','weeklygoal'].forEach(k => {
+    const el = document.getElementById('f_' + k);
+    if (el && s[k]) el.value = s[k];
+  });
+  renderFitness();
+}
+
+function saveFitnessStats() {
+  const d = getFitnessData();
+  d.stats = {
+    weight: document.getElementById('f_weight').value,
+    goalweight: document.getElementById('f_goalweight').value,
+    height: document.getElementById('f_height').value,
+    steps: document.getElementById('f_steps').value,
+    weeklygoal: document.getElementById('f_weeklygoal').value
+  };
+  saveFitnessData(d);
+  renderFitness();
+  showFlash('STATS SAVED');
+}
+
+function addWorkout() {
+  const d = getFitnessData();
+  const date = document.getElementById('wo_date').value;
+  if (!date) { alert('Please select a date.'); return; }
+  d.workouts.push({
+    id: uid(),
+    date,
+    type: document.getElementById('wo_type').value,
+    duration: document.getElementById('wo_duration').value,
+    notes: document.getElementById('wo_notes').value
+  });
+  saveFitnessData(d);
+  renderFitness();
+  closeModal('workoutModal');
+  ['wo_duration','wo_notes'].forEach(id => document.getElementById(id).value = '');
+}
+
+function deleteWorkout(id) {
+  const d = getFitnessData();
+  d.workouts = d.workouts.filter(x => x.id !== id);
+  saveFitnessData(d);
+  renderFitness();
+}
+
+function renderFitness() {
+  const d = getFitnessData();
+  const s = d.stats;
+  const w = parseFloat(s.weight) || 0;
+  const gw = parseFloat(s.goalweight) || 0;
+
+  document.getElementById('displayWeight').textContent = w || '—';
+  document.getElementById('displayGoalWeight').textContent = gw || '—';
+
+  // weight progress bar (toward goal, assuming goal is lower)
+  const bar = document.getElementById('weightProgressBar');
+  let pct = 0;
+  if (w && gw && s.startWeight) {
+    pct = Math.max(0, Math.min(100, ((parseFloat(s.startWeight) - w) / (parseFloat(s.startWeight) - gw)) * 100));
+  } else if (w && gw) {
+    pct = w <= gw ? 100 : Math.max(0, ((gw / w) * 100));
+  }
+  bar.style.width = pct.toFixed(0) + '%';
+  document.getElementById('weightProgressPct').textContent = pct.toFixed(0) + '%';
+  document.getElementById('weightProgressStart').textContent = w ? `Current: ${w} lbs` : '—';
+  document.getElementById('weightProgressEnd').textContent = gw ? `Goal: ${gw} lbs` : 'Goal: —';
+
+  // workouts last 30 days
+  const today = new Date();
+  const cutoff = new Date(today); cutoff.setDate(cutoff.getDate() - 30);
+  const recent = d.workouts.filter(x => new Date(x.date) >= cutoff);
+  document.getElementById('displayWorkouts').textContent = recent.length;
+
+  // streak (consecutive weeks with at least 1 workout)
+  const streak = calcStreak(d.workouts);
+  document.getElementById('displayStreak').textContent = streak;
+  const sd = document.getElementById('streakDisplay');
+  if (streak > 0) { sd.style.display = ''; document.getElementById('streakText').textContent = streak + ' WEEK STREAK'; }
+  else sd.style.display = 'none';
+
+  // table (last 30)
+  const sorted = [...d.workouts].sort((a,b) => b.date.localeCompare(a.date)).slice(0, 30);
+  const tbody = document.getElementById('workoutTableBody');
+  tbody.innerHTML = sorted.length ? sorted.map(w => `
+    <tr>
+      <td>${w.date}</td>
+      <td><span class="badge ${w.type}" style="font-size:8px;">${escHtml(w.type)}</span></td>
+      <td>${escHtml(w.duration)}</td>
+      <td>${escHtml(w.notes)}</td>
+      <td><button class="del-btn" onclick="deleteWorkout('${w.id}')">✕ DEL</button></td>
+    </tr>`).join('') : '<tr><td colspan="5" style="text-align:center;color:var(--text-dim);letter-spacing:2px;padding:20px;">NO WORKOUTS LOGGED YET</td></tr>';
+}
+
+function calcStreak(workouts) {
+  if (!workouts.length) return 0;
+  const getWeekKey = d => { const dt = new Date(d); const day = dt.getDay(); const mon = new Date(dt); mon.setDate(dt.getDate() - day + (day === 0 ? -6 : 1)); return mon.toISOString().split('T')[0]; };
+  const weeks = new Set(workouts.map(w => getWeekKey(w.date)));
+  const thisMonday = getWeekKey(new Date().toISOString().split('T')[0]);
+  let streak = 0;
+  let check = new Date(thisMonday);
+  while (weeks.has(check.toISOString().split('T')[0])) {
+    streak++;
+    check.setDate(check.getDate() - 7);
+  }
+  return streak;
+}
+
+// ═══════════════════════ LEARNING ═══════════════════════
+const LEARNING_KEY = 'jarvis_personal_learning';
+
+function getLearningData() {
+  try { return JSON.parse(localStorage.getItem(LEARNING_KEY)) || { books: [], courses: [] }; } catch { return { books: [], courses: [] }; }
+}
+function saveLearningData(d) { localStorage.setItem(LEARNING_KEY, JSON.stringify(d)); }
+
+const defaultBooks = [
+  { id: 'bk1', title: 'Atomic Habits', author: 'James Clear', status: 'Completed', rating: 5, notes: 'Life-changing', year: 2025 },
+  { id: 'bk2', title: 'The Psychology of Money', author: 'Morgan Housel', status: 'Completed', rating: 5, notes: 'Must-read for finance', year: 2025 },
+  { id: 'bk3', title: 'Never Split the Difference', author: 'Chris Voss', status: 'Reading', rating: 0, notes: '' },
+  { id: 'bk4', title: "Can't Hurt Me", author: 'David Goggins', status: 'Want to Read', rating: 0, notes: '' },
+  { id: 'bk5', title: 'How to Win Friends and Influence People', author: 'Dale Carnegie', status: 'Want to Read', rating: 0, notes: '' }
+];
+
+let bookFilter = 'All';
+
+function initLearning() {
+  const d = getLearningData();
+  if (!d.books.length) { d.books = defaultBooks; saveLearningData(d); }
+  renderBooks();
+  renderCourses();
+}
+
+function filterBooks(f, btn) {
+  bookFilter = f;
+  document.querySelectorAll('#bookFilterBar .filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderBooks();
+}
+
+function renderBooks() {
+  const d = getLearningData();
+  const books = bookFilter === 'All' ? d.books : d.books.filter(b => b.status === bookFilter);
+  const thisYear = new Date().getFullYear();
+  const completedThisYear = d.books.filter(b => b.status === 'Completed' && b.year === thisYear).length;
+  document.getElementById('booksThisYear').textContent = completedThisYear;
+
+  const grid = document.getElementById('booksGrid');
+  grid.innerHTML = books.length ? books.map(b => `
+    <div class="book-card">
+      <div class="book-title">${escHtml(b.title)}</div>
+      <div class="book-author">by ${escHtml(b.author)}</div>
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;flex-wrap:wrap;">
+        <span class="badge ${b.status.replace(/ /g,'_')}" style="font-size:8px;">${escHtml(b.status)}</span>
+        <div class="star-rating">${stars(b.rating)}</div>
+      </div>
+      ${b.notes ? `<div style="font-size:10px;color:var(--text-dim);letter-spacing:0.5px;margin-bottom:10px;border-left:2px solid var(--border-dim);padding-left:8px;">${escHtml(b.notes)}</div>` : ''}
+      <div class="card-actions">
+        <button class="card-btn" onclick="cycleBookStatus('${b.id}')">CYCLE STATUS</button>
+        <button class="card-btn danger" onclick="deleteBook('${b.id}')">✕ DELETE</button>
+      </div>
+    </div>`).join('') : '<div style="color:var(--text-dim);font-size:11px;letter-spacing:2px;">NO BOOKS FOUND</div>';
+}
+
+function stars(n) {
+  return Array.from({length:5}, (_,i) => `<span class="${i < n ? 'filled' : ''}">★</span>`).join('');
+}
+
+function addBook() {
+  const title = document.getElementById('bk_title').value.trim();
+  if (!title) { alert('Please enter a book title.'); return; }
+  const d = getLearningData();
+  const status = document.getElementById('bk_status').value;
+  d.books.push({
+    id: uid(),
+    title,
+    author: document.getElementById('bk_author').value,
+    status,
+    rating: parseInt(document.getElementById('bk_rating').value) || 0,
+    notes: document.getElementById('bk_notes').value,
+    year: status === 'Completed' ? new Date().getFullYear() : null
+  });
+  saveLearningData(d);
+  renderBooks();
+  closeModal('bookModal');
+  ['bk_title','bk_author','bk_rating','bk_notes'].forEach(id => document.getElementById(id).value = '');
+}
+
+function cycleBookStatus(id) {
+  const d = getLearningData();
+  const i = d.books.findIndex(x => x.id === id);
+  if (i < 0) return;
+  const cycle = ['Want to Read','Reading','Completed'];
+  const cur = cycle.indexOf(d.books[i].status);
+  const next = cycle[(cur + 1) % cycle.length];
+  d.books[i].status = next;
+  if (next === 'Completed') d.books[i].year = new Date().getFullYear();
+  saveLearningData(d);
+  renderBooks();
+}
+
+function deleteBook(id) {
+  if (!confirm('Delete this book?')) return;
+  const d = getLearningData();
+  d.books = d.books.filter(x => x.id !== id);
+  saveLearningData(d);
+  renderBooks();
+}
+
+function addCourse() {
+  const name = document.getElementById('co_name').value.trim();
+  if (!name) { alert('Please enter a course name.'); return; }
+  const d = getLearningData();
+  d.courses.push({
+    id: uid(),
+    name,
+    platform: document.getElementById('co_platform').value,
+    status: document.getElementById('co_status').value,
+    pct: parseInt(document.getElementById('co_pct').value) || 0,
+    notes: document.getElementById('co_notes').value
+  });
+  saveLearningData(d);
+  renderCourses();
+  closeModal('courseModal');
+  ['co_name','co_platform','co_pct','co_notes'].forEach(id => document.getElementById(id).value = '');
+}
+
+function deleteCourse(id) {
+  const d = getLearningData();
+  d.courses = d.courses.filter(x => x.id !== id);
+  saveLearningData(d);
+  renderCourses();
+}
+
+function renderCourses() {
+  const d = getLearningData();
+  const tbody = document.getElementById('courseTableBody');
+  tbody.innerHTML = d.courses.length ? d.courses.map(c => {
+    const pct = Math.min(100, Math.max(0, c.pct || 0));
+    return `<tr>
+      <td style="font-weight:700;color:var(--cyan);">${escHtml(c.name)}</td>
+      <td>${escHtml(c.platform)}</td>
+      <td><span class="badge" style="font-size:8px;">${escHtml(c.status)}</span></td>
+      <td>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <div class="completion-bar"><div class="completion-fill" style="width:${pct}%"></div></div>
+          <span style="font-size:10px;color:var(--text-dim);">${pct}%</span>
+        </div>
+      </td>
+      <td style="color:var(--text-dim);font-size:10px;">${escHtml(c.notes)}</td>
+      <td><button class="del-btn" onclick="deleteCourse('${c.id}')">✕ DEL</button></td>
+    </tr>`;
+  }).join('') : '<tr><td colspan="6" style="text-align:center;color:var(--text-dim);letter-spacing:2px;padding:20px;">NO COURSES ADDED YET</td></tr>';
+}
+
+// ═══════════════════════ TRAVEL ═══════════════════════
+const TRAVEL_KEY = 'jarvis_personal_travel';
+
+function getTravelData() {
+  try { return JSON.parse(localStorage.getItem(TRAVEL_KEY)) || []; } catch { return []; }
+}
+function saveTravelData(d) { localStorage.setItem(TRAVEL_KEY, JSON.stringify(d)); }
+
+const defaultTravel = [
+  { id: 'tr1', dest: 'Family Beach Vacation', type: 'Trip', date: 'Aug 2026', status: 'Planning', budget: 3000, notes: 'Looking at Outer Banks or Hilton Head' },
+  { id: 'tr2', dest: 'NYC Weekend', type: 'Experience', date: 'TBD', status: 'Planning', budget: 500, notes: 'Broadway show + restaurants' }
+];
+
+let travelFilter = 'All';
+
+function initTravel() {
+  if (!localStorage.getItem(TRAVEL_KEY)) saveTravelData(defaultTravel);
+  renderTravel();
+}
+
+function filterTravel(f, btn) {
+  travelFilter = f;
+  document.querySelectorAll('#travelFilterBar .filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderTravel();
+}
+
+function renderTravel() {
+  const data = getTravelData();
+  const filtered = travelFilter === 'All' ? data : data.filter(t => t.status === travelFilter);
+  const grid = document.getElementById('travelGrid');
+  grid.innerHTML = filtered.length ? filtered.map(t => `
+    <div class="travel-card">
+      <div class="travel-dest">${escHtml(t.dest)}</div>
+      <div style="margin-bottom:10px;"><span class="badge ${t.status}" style="font-size:8px;">${escHtml(t.status)}</span> &nbsp; <span class="badge" style="font-size:8px;border-color:var(--border-dim);color:var(--text-dim);">${escHtml(t.type)}</span></div>
+      <div class="travel-meta">
+        DATE: <span>${escHtml(t.date)}</span><br>
+        BUDGET: <span>$${fmt(t.budget)}</span><br>
+        ${t.notes ? `NOTES: <span>${escHtml(t.notes)}</span>` : ''}
+      </div>
+      <div class="card-actions" style="margin-top:12px;">
+        <button class="card-btn" onclick="editTravel('${t.id}')">✎ EDIT</button>
+        <button class="card-btn danger" onclick="deleteTravel('${t.id}')">✕ DELETE</button>
+      </div>
+    </div>`).join('') : '<div style="color:var(--text-dim);font-size:11px;letter-spacing:2px;">NO TRIPS FOUND</div>';
+}
+
+function saveTravel() {
+  const dest = document.getElementById('tr_dest').value.trim();
+  if (!dest) { alert('Please enter a destination.'); return; }
+  const data = getTravelData();
+  const editId = document.getElementById('tr_editId').value;
+  const obj = {
+    dest,
+    type: document.getElementById('tr_type').value,
+    date: document.getElementById('tr_date').value,
+    status: document.getElementById('tr_status').value,
+    budget: parseFloat(document.getElementById('tr_budget').value) || 0,
+    notes: document.getElementById('tr_notes').value
+  };
+  if (editId) {
+    const i = data.findIndex(x => x.id === editId);
+    if (i >= 0) { data[i] = { ...data[i], ...obj }; }
+  } else {
+    data.push({ id: uid(), ...obj });
+  }
+  saveTravelData(data);
+  renderTravel();
+  closeModal('travelModal');
+  document.getElementById('tr_editId').value = '';
+  ['tr_dest','tr_date','tr_budget','tr_notes'].forEach(id => document.getElementById(id).value = '');
+}
+
+function editTravel(id) {
+  const t = getTravelData().find(x => x.id === id);
+  if (!t) return;
+  document.getElementById('tr_editId').value = id;
+  document.getElementById('tr_dest').value = t.dest;
+  document.getElementById('tr_type').value = t.type;
+  document.getElementById('tr_date').value = t.date;
+  document.getElementById('tr_status').value = t.status;
+  document.getElementById('tr_budget').value = t.budget;
+  document.getElementById('tr_notes').value = t.notes;
+  openModal('travelModal');
+}
+
+function deleteTravel(id) {
+  if (!confirm('Delete this trip?')) return;
+  saveTravelData(getTravelData().filter(x => x.id !== id));
+  renderTravel();
+}
+
+// ═══════════════════════ TODOS ═══════════════════════
+const TODOS_KEY = 'jarvis_personal_todos';
+
+function getTodos() {
+  try { return JSON.parse(localStorage.getItem(TODOS_KEY)) || []; } catch { return []; }
+}
+function saveTodos(t) { localStorage.setItem(TODOS_KEY, JSON.stringify(t)); }
+
+const today = new Date();
+const defaultTodos = [
+  { id: 'td1', title: 'Schedule Annual Physical', category: 'HEALTH', priority: 'HIGH', due: 'This Month', done: false, snoozed: false },
+  { id: 'td2', title: 'Organize Home Office', category: 'HOME', priority: 'NORMAL', due: 'This Week', done: false, snoozed: false },
+  { id: 'td3', title: 'Call Parents', category: 'FAMILY', priority: 'HIGH', due: 'Today', done: false, snoozed: false }
+];
+
+let todoFilter = 'All';
+
+function initTodos() {
+  if (!localStorage.getItem(TODOS_KEY)) saveTodos(defaultTodos);
+  renderTodos();
+}
+
+function filterTodos(f, btn) {
+  todoFilter = f;
+  document.querySelectorAll('#todoFilterBar .filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderTodos();
+}
+
+function renderTodos() {
+  let todos = getTodos();
+  if (todoFilter !== 'All') todos = todos.filter(t => t.priority === todoFilter);
+  const container = document.getElementById('todosContainer');
+  const active = todos.filter(t => !t.done);
+  const done = todos.filter(t => t.done);
+  container.innerHTML = [...active, ...done].map(t => `
+    <div class="todo-card ${t.priority}${t.done ? ' done' : ''}">
+      <div class="todo-header">
+        <div class="todo-title">${escHtml(t.title)}</div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;">
+          <span class="badge ${t.priority}" style="font-size:8px;">${t.priority}</span>
+          <span class="badge ${t.category}" style="font-size:8px;">${t.category}</span>
+        </div>
+      </div>
+      <div class="todo-meta">
+        DUE: <span>${escHtml(t.due)}</span>
+        ${t.snoozed ? ' &nbsp; <span style="color:#ffcc00;font-size:9px;">SNOOZED</span>' : ''}
+        ${t.done ? ' &nbsp; <span style="color:#00ff88;font-size:9px;">✓ COMPLETED</span>' : ''}
+      </div>
+      <div class="card-actions" style="margin-top:10px;">
+        ${!t.done ? `<button class="card-btn success" onclick="completeTodo('${t.id}')">✓ COMPLETE</button>` : ''}
+        ${!t.done && !t.snoozed ? `<button class="card-btn" onclick="snoozeTodo('${t.id}')">⏸ SNOOZE</button>` : ''}
+        <button class="card-btn danger" onclick="deleteTodo('${t.id}')">✕ DELETE</button>
+      </div>
+    </div>`).join('') || '<div style="color:var(--text-dim);font-size:11px;letter-spacing:2px;padding:20px 0;">NO TASKS FOUND</div>';
+}
+
+function addTodo() {
+  const title = document.getElementById('td_title').value.trim();
+  if (!title) { alert('Please enter a task title.'); return; }
+  const todos = getTodos();
+  todos.unshift({
+    id: uid(),
+    title,
+    priority: document.getElementById('td_priority').value,
+    category: document.getElementById('td_cat').value,
+    due: document.getElementById('td_due').value,
+    done: false,
+    snoozed: false
+  });
+  saveTodos(todos);
+  renderTodos();
+  closeModal('todoModal');
+  ['td_title','td_due'].forEach(id => document.getElementById(id).value = '');
+}
+
+function completeTodo(id) {
+  const todos = getTodos();
+  const i = todos.findIndex(x => x.id === id);
+  if (i >= 0) todos[i].done = true;
+  saveTodos(todos);
+  renderTodos();
+}
+
+function snoozeTodo(id) {
+  const todos = getTodos();
+  const i = todos.findIndex(x => x.id === id);
+  if (i >= 0) todos[i].snoozed = !todos[i].snoozed;
+  saveTodos(todos);
+  renderTodos();
+}
+
+function deleteTodo(id) {
+  if (!confirm('Delete this task?')) return;
+  saveTodos(getTodos().filter(x => x.id !== id));
+  renderTodos();
+}
+
+// ═══════════════════════ UTILS ═══════════════════════
+function escHtml(s) {
+  if (s === undefined || s === null) return '';
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function fmt(n) {
+  n = parseFloat(n) || 0;
+  return n.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 2 });
+}
+
+function showFlash(msg) {
+  const el = document.createElement('div');
+  el.textContent = '✓ ' + msg;
+  el.style.cssText = 'position:fixed;bottom:80px;right:30px;background:var(--cyan);color:#000;font-family:Courier New,monospace;font-size:11px;letter-spacing:2px;padding:10px 20px;clip-path:polygon(8px 0%,100% 0%,calc(100% - 8px) 100%,0% 100%);z-index:9999;font-weight:700;box-shadow:0 0 20px var(--cyan-glow);';
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), 2200);
+}
+
+// ═══════════════════════ INIT ═══════════════════════
+document.addEventListener('DOMContentLoaded', () => {
+  initGoals();
+  initBudget();
+  initFitness();
+  initLearning();
+  initTravel();
+  initTodos();
+});
+</script>
+</body>
+</html>
