@@ -1212,6 +1212,105 @@ footer span { color: rgba(0,212,255,0.6); }
 a[href^="mailto:"] { color: var(--cyan) !important; text-decoration: none; }
 a[href^="http"] { color: var(--cyan) !important; text-decoration: none; }
 a:hover { text-shadow: 0 0 6px rgba(0,212,255,0.6); }
+
+/* ---- NEW TAB STYLES ---- */
+.goal-input {
+  width: 100%;
+  margin-top: 6px;
+  background: var(--bg-dark);
+  color: var(--cyan);
+  font-size: 18px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.cat-filter-btn {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+  font-family: 'Courier New', monospace;
+  font-size: 11px;
+  padding: 4px 10px;
+  cursor: pointer;
+  clip-path: polygon(6px 0%,100% 0%,calc(100% - 6px) 100%,0% 100%);
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+.cat-filter-btn:hover, .cat-filter-btn.active {
+  background: var(--cyan-faint);
+  border-color: var(--cyan);
+  color: var(--cyan);
+  box-shadow: var(--cyan-glow-sm);
+}
+
+.template-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  padding: 16px;
+  clip-path: polygon(10px 0%,100% 0%,calc(100% - 10px) 100%,0% 100%);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.template-card:hover {
+  border-color: var(--border-bright);
+  box-shadow: 0 0 12px rgba(0,212,255,0.15);
+}
+.template-card-title {
+  color: var(--cyan);
+  font-size: 13px;
+  font-weight: bold;
+  letter-spacing: 0.5px;
+}
+.template-card-cat {
+  color: var(--cyan-dim);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+.template-card-preview {
+  color: var(--text);
+  font-size: 11px;
+  line-height: 1.5;
+  opacity: 0.7;
+  flex: 1;
+}
+.template-card-actions {
+  display: flex;
+  gap: 6px;
+  margin-top: 4px;
+}
+.btn-copy-flash {
+  background: #16a34a !important;
+  border-color: #16a34a !important;
+  color: #fff !important;
+}
+
+.row-overdue { box-shadow: inset 0 0 12px rgba(239,68,68,0.25); }
+.row-today { box-shadow: inset 0 0 12px rgba(249,115,22,0.25); }
+.row-upcoming { box-shadow: inset 0 0 8px rgba(0,212,255,0.12); }
+
+.lasttouch-green { color: #22c55e; }
+.lasttouch-yellow { color: #eab308; }
+.lasttouch-red { color: #ef4444; }
+
+.ref-status-new { background: rgba(0,212,255,0.15); color: #00d4ff; border: 1px solid rgba(0,212,255,0.4); padding: 2px 8px; font-size: 10px; clip-path: polygon(4px 0%,100% 0%,calc(100% - 4px) 100%,0% 100%); }
+.ref-status-building { background: rgba(234,179,8,0.15); color: #eab308; border: 1px solid rgba(234,179,8,0.4); padding: 2px 8px; font-size: 10px; clip-path: polygon(4px 0%,100% 0%,calc(100% - 4px) 100%,0% 100%); }
+.ref-status-active { background: rgba(34,197,94,0.15); color: #22c55e; border: 1px solid rgba(34,197,94,0.4); padding: 2px 8px; font-size: 10px; clip-path: polygon(4px 0%,100% 0%,calc(100% - 4px) 100%,0% 100%); }
+.ref-status-dormant { background: rgba(239,68,68,0.15); color: #ef4444; border: 1px solid rgba(239,68,68,0.4); padding: 2px 8px; font-size: 10px; clip-path: polygon(4px 0%,100% 0%,calc(100% - 4px) 100%,0% 100%); }
+
+.otr-status-pending { background: rgba(100,116,139,0.2); color: #94a3b8; border: 1px solid rgba(100,116,139,0.3); padding: 2px 8px; font-size: 10px; clip-path: polygon(4px 0%,100% 0%,calc(100% - 4px) 100%,0% 100%); }
+.otr-status-attempted { background: rgba(234,179,8,0.15); color: #eab308; border: 1px solid rgba(234,179,8,0.4); padding: 2px 8px; font-size: 10px; clip-path: polygon(4px 0%,100% 0%,calc(100% - 4px) 100%,0% 100%); }
+.otr-status-connected { background: rgba(0,212,255,0.15); color: #00d4ff; border: 1px solid rgba(0,212,255,0.4); padding: 2px 8px; font-size: 10px; clip-path: polygon(4px 0%,100% 0%,calc(100% - 4px) 100%,0% 100%); }
+.otr-status-notinterested { background: rgba(239,68,68,0.15); color: #ef4444; border: 1px solid rgba(239,68,68,0.4); padding: 2px 8px; font-size: 10px; clip-path: polygon(4px 0%,100% 0%,calc(100% - 4px) 100%,0% 100%); }
+.otr-status-followup { background: rgba(249,115,22,0.15); color: #f97316; border: 1px solid rgba(249,115,22,0.4); padding: 2px 8px; font-size: 10px; clip-path: polygon(4px 0%,100% 0%,calc(100% - 4px) 100%,0% 100%); }
+.otr-status-converted { background: rgba(22,163,74,0.15); color: #16a34a; border: 1px solid rgba(22,163,74,0.4); padding: 2px 8px; font-size: 10px; clip-path: polygon(4px 0%,100% 0%,calc(100% - 4px) 100%,0% 100%); }
+
+.grade-badge-a { color: var(--grade-a); font-weight:bold; font-size:18px; }
+.grade-badge-b { color: var(--grade-b); font-weight:bold; font-size:18px; }
+.grade-badge-c { color: var(--grade-c); font-weight:bold; font-size:18px; }
+.grade-badge-d { color: var(--grade-d); font-weight:bold; font-size:18px; }
 </style>
 </head>
 <body>
@@ -1256,6 +1355,10 @@ a:hover { text-shadow: 0 0 6px rgba(0,212,255,0.6); }
   <button class="tab-btn" data-tab="4" onclick="switchTab(4)">[NETWORK] Network &amp; Events</button>
   <button class="tab-btn" data-tab="5" onclick="switchTab(5)">[ALERTS] Trigger Alerts</button>
   <button class="tab-btn" data-tab="6" onclick="switchTab(6)">[LOG] Activity Log</button>
+  <button class="tab-btn" data-tab="7" onclick="switchTab(7)">[OUTREACH] Outreach Tracker</button>
+  <button class="tab-btn" data-tab="8" onclick="switchTab(8)">[SCRIPTS] Scripts &amp; Templates</button>
+  <button class="tab-btn" data-tab="9" onclick="switchTab(9)">[GOALS] Goals &amp; Scorecard</button>
+  <button class="tab-btn" data-tab="10" onclick="switchTab(10)">[REFERRALS] Referral Partners</button>
 </nav>
 
 <!-- ============================================================
@@ -1583,6 +1686,204 @@ a:hover { text-shadow: 0 0 6px rgba(0,212,255,0.6); }
           <div class="empty-state-text">No activity yet</div>
           <div class="empty-state-sub">Actions across all tabs will appear here automatically</div>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====== TAB 7: OUTREACH TRACKER ====== -->
+  <div class="tab-panel" id="tab-7">
+    <div class="table-wrap">
+      <div class="table-header">
+        <div class="flex items-center gap-2">
+          <div class="section-title" style="margin:0;">[OUTREACH] Outreach Tracker</div>
+          <span class="table-count" id="outreach-count">0 records</span>
+        </div>
+        <div class="flex gap-2" style="flex-wrap:wrap;align-items:center;">
+          <select class="form-input" id="outreach-filter-type" onchange="renderOutreach()" style="width:130px;font-size:11px;">
+            <option value="">All Types</option>
+            <option>Employer</option><option>Individual</option><option>Wealth</option>
+          </select>
+          <select class="form-input" id="outreach-filter-status" onchange="renderOutreach()" style="width:150px;font-size:11px;">
+            <option value="">All Statuses</option>
+            <option>Pending</option><option>Attempted</option><option>Connected</option>
+            <option>Not Interested</option><option>Follow-Up Scheduled</option><option>Converted</option>
+          </select>
+          <input type="date" class="form-input" id="outreach-filter-date" onchange="renderOutreach()" style="width:145px;font-size:11px;" title="Filter by Date">
+          <button class="btn-export" onclick="exportOutreachCSV()">[CSV] Export</button>
+          <button class="btn-primary" onclick="openOutreachModal()">[+] Add New Outreach</button>
+        </div>
+      </div>
+      <div style="overflow-x:auto;">
+        <table class="data-table" id="outreach-table">
+          <thead>
+            <tr>
+              <th>#</th><th>Prospect Name</th><th>Type</th><th>Method</th><th>Date</th>
+              <th>Outcome</th><th>Next Step</th><th>Follow-Up Date</th><th>Status</th>
+              <th>Notes</th><th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="outreach-tbody"></tbody>
+        </table>
+      </div>
+      <div class="empty-state" id="outreach-empty" style="display:none;">
+        <div class="empty-state-icon">[OUTREACH]</div>
+        <div class="empty-state-text">No outreach records yet</div>
+        <div class="empty-state-sub">Click [+] Add New Outreach to log your first contact</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====== TAB 8: SCRIPTS & TEMPLATES ====== -->
+  <div class="tab-panel" id="tab-8">
+    <div class="table-wrap">
+      <div class="table-header">
+        <div class="flex items-center gap-2">
+          <div class="section-title" style="margin:0;">[SCRIPTS] Scripts &amp; Templates</div>
+          <span class="table-count" id="templates-count">0 templates</span>
+        </div>
+        <button class="btn-primary" onclick="openTemplateModal(null)">[+] New Template</button>
+      </div>
+      <div id="template-category-filters" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px;">
+        <button class="cat-filter-btn active" data-cat="" onclick="setTemplateFilter(this,'')">All</button>
+        <button class="cat-filter-btn" data-cat="Cold Call" onclick="setTemplateFilter(this,'Cold Call')">Cold Call</button>
+        <button class="cat-filter-btn" data-cat="Cold Email" onclick="setTemplateFilter(this,'Cold Email')">Cold Email</button>
+        <button class="cat-filter-btn" data-cat="LinkedIn Message" onclick="setTemplateFilter(this,'LinkedIn Message')">LinkedIn Message</button>
+        <button class="cat-filter-btn" data-cat="Follow-Up" onclick="setTemplateFilter(this,'Follow-Up')">Follow-Up</button>
+        <button class="cat-filter-btn" data-cat="Objection Response" onclick="setTemplateFilter(this,'Objection Response')">Objection Response</button>
+        <button class="cat-filter-btn" data-cat="Employer/GWL Pitch" onclick="setTemplateFilter(this,'Employer/GWL Pitch')">Employer/GWL Pitch</button>
+        <button class="cat-filter-btn" data-cat="HENRY Pitch" onclick="setTemplateFilter(this,'HENRY Pitch')">HENRY Pitch</button>
+        <button class="cat-filter-btn" data-cat="Rollover Pitch" onclick="setTemplateFilter(this,'Rollover Pitch')">Rollover Pitch</button>
+      </div>
+      <div id="templates-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px;"></div>
+      <div class="empty-state" id="templates-empty" style="display:none;">
+        <div class="empty-state-icon">[SCRIPTS]</div>
+        <div class="empty-state-text">No templates found</div>
+        <div class="empty-state-sub">Click [+] New Template to add your first script</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====== TAB 9: GOALS & SCORECARD ====== -->
+  <div class="tab-panel" id="tab-9">
+    <div class="table-wrap">
+      <div class="section-title">[GOALS] Goals &amp; Scorecard</div>
+
+      <!-- SECTION 1: Goal Setting -->
+      <div style="margin-bottom:28px;">
+        <div class="section-title" style="font-size:13px;color:var(--cyan-dim);margin-bottom:14px;">// ANNUAL GOALS — EDITABLE</div>
+        <div class="stats-grid" style="grid-template-columns:repeat(auto-fill,minmax(200px,1fr));">
+          <div class="stat-card">
+            <div class="stat-label">New Clients Target</div>
+            <input type="number" class="form-input goal-input" id="goal-clients" placeholder="0" oninput="saveGoals()">
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">AUM Growth Target ($)</div>
+            <input type="number" class="form-input goal-input" id="goal-aum" placeholder="0" oninput="saveGoals()">
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Meetings Per Week</div>
+            <input type="number" class="form-input goal-input" id="goal-meetings-wk" placeholder="0" oninput="saveGoals()">
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Calls Per Day</div>
+            <input type="number" class="form-input goal-input" id="goal-calls-day" placeholder="0" oninput="saveGoals()">
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Emails Per Day</div>
+            <input type="number" class="form-input goal-input" id="goal-emails-day" placeholder="0" oninput="saveGoals()">
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">New Prospects / Month</div>
+            <input type="number" class="form-input goal-input" id="goal-prospects-mo" placeholder="0" oninput="saveGoals()">
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Revenue / Fee Target ($)</div>
+            <input type="number" class="form-input goal-input" id="goal-revenue" placeholder="0" oninput="saveGoals()">
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION 2: Weekly Scorecard -->
+      <div>
+        <div class="table-header" style="margin-bottom:14px;">
+          <div class="section-title" style="font-size:13px;color:var(--cyan-dim);margin:0;">// WEEKLY SCORECARD (LAST 12 WEEKS)</div>
+          <button class="btn-primary" onclick="openScorecardModal()">[+] Add This Week</button>
+        </div>
+        <div style="overflow-x:auto;">
+          <table class="data-table" id="scorecard-table">
+            <thead>
+              <tr>
+                <th>Week</th><th>Calls Made</th><th>Emails Sent</th><th>LinkedIn Msgs</th>
+                <th>Meetings Set</th><th>New Prospects</th><th>New Clients</th><th>AUM Added</th>
+                <th>Grade</th><th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="scorecard-tbody"></tbody>
+            <tfoot>
+              <tr style="border-top:2px solid var(--cyan);color:var(--cyan);font-weight:bold;">
+                <td>YTD TOTALS</td>
+                <td id="ytd-calls">0</td><td id="ytd-emails">0</td><td id="ytd-linkedin">0</td>
+                <td id="ytd-meetings">0</td><td id="ytd-prospects">0</td>
+                <td id="ytd-clients">0</td><td id="ytd-aum">$0</td><td></td><td></td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+        <div class="empty-state" id="scorecard-empty" style="display:none;">
+          <div class="empty-state-icon">[SCORECARD]</div>
+          <div class="empty-state-text">No weekly data yet</div>
+          <div class="empty-state-sub">Click [+] Add This Week to log your first week</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====== TAB 10: REFERRAL PARTNERS ====== -->
+  <div class="tab-panel" id="tab-10">
+    <div class="table-wrap">
+      <div class="table-header">
+        <div class="flex items-center gap-2">
+          <div class="section-title" style="margin:0;">[REFERRALS] Referral Partners</div>
+          <span class="table-count" id="referrals-count">0 partners</span>
+        </div>
+        <div class="flex gap-2" style="flex-wrap:wrap;align-items:center;">
+          <select class="form-input" id="referral-filter-type" onchange="renderReferrals()" style="width:130px;font-size:11px;">
+            <option value="">All Types</option>
+            <option>CPA</option><option>Attorney</option><option>Mortgage</option>
+            <option>RE Agent</option><option>Other</option>
+          </select>
+          <select class="form-input" id="referral-filter-status" onchange="renderReferrals()" style="width:150px;font-size:11px;">
+            <option value="">All Statuses</option>
+            <option>New Contact</option><option>Building</option>
+            <option>Active Partner</option><option>Dormant</option>
+          </select>
+          <button class="btn-export" onclick="exportReferralsCSV()">[CSV] Export</button>
+          <button class="btn-primary" onclick="openReferralModal(null)">[+] Add Partner</button>
+        </div>
+      </div>
+      <!-- Stats Bar -->
+      <div class="stats-grid" style="grid-template-columns:repeat(4,1fr);margin-bottom:16px;" id="referral-stats-bar">
+        <div class="stat-card"><div class="stat-label">Total Partners</div><div class="stat-value" id="ref-stat-total">0</div></div>
+        <div class="stat-card"><div class="stat-label">Active Partners</div><div class="stat-value text-green" id="ref-stat-active">0</div></div>
+        <div class="stat-card"><div class="stat-label">Referrals YTD</div><div class="stat-value text-gold" id="ref-stat-ytd">0</div></div>
+        <div class="stat-card"><div class="stat-label">Best Referrer</div><div class="stat-value" id="ref-stat-best" style="font-size:13px;">—</div></div>
+      </div>
+      <div style="overflow-x:auto;">
+        <table class="data-table" id="referrals-table">
+          <thead>
+            <tr>
+              <th>#</th><th>Name</th><th>Title</th><th>Company</th><th>Type</th>
+              <th>Phone</th><th>Email</th><th>LinkedIn</th>
+              <th>Status</th><th>Last Touch</th><th>Referrals</th><th>Notes</th><th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="referrals-tbody"></tbody>
+        </table>
+      </div>
+      <div class="empty-state" id="referrals-empty" style="display:none;">
+        <div class="empty-state-icon">[REFERRALS]</div>
+        <div class="empty-state-text">No referral partners yet</div>
+        <div class="empty-state-sub">Click [+] Add Partner to start building your referral network</div>
       </div>
     </div>
   </div>
@@ -1941,6 +2242,227 @@ a:hover { text-shadow: 0 0 6px rgba(0,212,255,0.6); }
     <div class="modal-actions">
       <button class="btn-secondary" onclick="closeModal('note')">Cancel</button>
       <button class="btn-primary" onclick="saveNote()">[SAVE] Save Note</button>
+    </div>
+  </div>
+</div>
+
+<!-- ====== OUTREACH MODAL ====== -->
+<div class="modal-overlay" id="modal-outreach">
+  <div class="modal-box" style="max-width:700px;">
+    <div class="modal-title" id="outreach-modal-title">[OUTREACH] Add Outreach Record</div>
+    <button class="modal-close" onclick="closeModal('outreach')">X</button>
+    <input type="hidden" id="outreach-edit-id">
+    <div class="form-grid">
+      <div class="form-group span-2">
+        <label class="form-label">Prospect Name *</label>
+        <input type="text" class="form-input" id="otr-name" placeholder="Full name or company">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Type</label>
+        <select class="form-select" id="otr-type">
+          <option>Employer</option><option>Individual</option><option>Wealth</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Outreach Method</label>
+        <select class="form-select" id="otr-method">
+          <option>Call</option><option>Email</option><option>LinkedIn</option><option>Text</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Date</label>
+        <input type="date" class="form-input" id="otr-date">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Outcome</label>
+        <select class="form-select" id="otr-outcome">
+          <option>No Answer</option><option>Left Voicemail</option>
+          <option>Spoke - Interested</option><option>Spoke - Not Interested</option>
+          <option>Email Opened</option><option>Email Replied</option><option>Meeting Booked</option>
+        </select>
+      </div>
+      <div class="form-group span-2">
+        <label class="form-label">Next Step</label>
+        <input type="text" class="form-input" id="otr-next" placeholder="e.g. Follow up by email in 3 days">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Follow-Up Date</label>
+        <input type="date" class="form-input" id="otr-followup">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Status</label>
+        <select class="form-select" id="otr-status">
+          <option>Pending</option><option>Attempted</option><option>Connected</option>
+          <option>Not Interested</option><option>Follow-Up Scheduled</option><option>Converted</option>
+        </select>
+      </div>
+      <div class="form-group span-2">
+        <label class="form-label">Notes</label>
+        <textarea class="form-textarea" id="otr-notes" placeholder="Any additional context..." style="min-height:60px;"></textarea>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-secondary" onclick="closeModal('outreach')">Cancel</button>
+      <button class="btn-primary" onclick="saveOutreach()">[SAVE] Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- ====== TEMPLATE VIEW MODAL ====== -->
+<div class="modal-overlay" id="modal-template-view">
+  <div class="modal-box" style="max-width:680px;">
+    <div class="modal-title" id="tmpl-view-title">[SCRIPT] View Template</div>
+    <button class="modal-close" onclick="closeModal('template-view')">X</button>
+    <div style="padding:0 24px 16px;">
+      <div id="tmpl-view-category" style="color:var(--cyan-dim);font-size:11px;margin-bottom:8px;"></div>
+      <pre id="tmpl-view-body" style="white-space:pre-wrap;color:var(--text);font-family:Courier New,monospace;font-size:13px;line-height:1.7;background:var(--bg-card);border:1px solid var(--border);padding:16px;max-height:400px;overflow-y:auto;"></pre>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-secondary" onclick="closeModal('template-view')">Close</button>
+      <button class="btn-primary" id="tmpl-view-copy-btn" onclick="copyTemplateFromView()">[COPY] Copy to Clipboard</button>
+    </div>
+  </div>
+</div>
+
+<!-- ====== TEMPLATE EDIT/ADD MODAL ====== -->
+<div class="modal-overlay" id="modal-template-edit">
+  <div class="modal-box" style="max-width:680px;">
+    <div class="modal-title" id="tmpl-edit-title">[SCRIPTS] Add Template</div>
+    <button class="modal-close" onclick="closeModal('template-edit')">X</button>
+    <input type="hidden" id="tmpl-edit-id">
+    <div class="form-grid">
+      <div class="form-group span-2">
+        <label class="form-label">Title *</label>
+        <input type="text" class="form-input" id="tmpl-title" placeholder="e.g. Cold Call — HENRY (Tech)">
+      </div>
+      <div class="form-group span-2">
+        <label class="form-label">Category</label>
+        <select class="form-select" id="tmpl-category">
+          <option>Cold Call</option><option>Cold Email</option><option>LinkedIn Message</option>
+          <option>Follow-Up</option><option>Objection Response</option>
+          <option>Employer/GWL Pitch</option><option>HENRY Pitch</option><option>Rollover Pitch</option>
+        </select>
+      </div>
+      <div class="form-group span-2">
+        <label class="form-label">Script / Template Text *</label>
+        <textarea class="form-textarea" id="tmpl-body" placeholder="Full script text..." style="min-height:220px;"></textarea>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-secondary" onclick="closeModal('template-edit')">Cancel</button>
+      <button class="btn-primary" onclick="saveTemplate()">[SAVE] Save Template</button>
+    </div>
+  </div>
+</div>
+
+<!-- ====== SCORECARD MODAL ====== -->
+<div class="modal-overlay" id="modal-scorecard">
+  <div class="modal-box" style="max-width:620px;">
+    <div class="modal-title">[SCORECARD] Log This Week</div>
+    <button class="modal-close" onclick="closeModal('scorecard')">X</button>
+    <input type="hidden" id="sc-edit-id">
+    <div class="form-grid">
+      <div class="form-group span-2">
+        <label class="form-label">Week of (date)</label>
+        <input type="date" class="form-input" id="sc-week">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Calls Made</label>
+        <input type="number" class="form-input" id="sc-calls" placeholder="0" min="0">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Emails Sent</label>
+        <input type="number" class="form-input" id="sc-emails" placeholder="0" min="0">
+      </div>
+      <div class="form-group">
+        <label class="form-label">LinkedIn Messages</label>
+        <input type="number" class="form-input" id="sc-linkedin" placeholder="0" min="0">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Meetings Set</label>
+        <input type="number" class="form-input" id="sc-meetings" placeholder="0" min="0">
+      </div>
+      <div class="form-group">
+        <label class="form-label">New Prospects Added</label>
+        <input type="number" class="form-input" id="sc-prospects" placeholder="0" min="0">
+      </div>
+      <div class="form-group">
+        <label class="form-label">New Clients</label>
+        <input type="number" class="form-input" id="sc-clients" placeholder="0" min="0">
+      </div>
+      <div class="form-group span-2">
+        <label class="form-label">AUM Added ($)</label>
+        <input type="number" class="form-input" id="sc-aum" placeholder="0" min="0">
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-secondary" onclick="closeModal('scorecard')">Cancel</button>
+      <button class="btn-primary" onclick="saveScorecard()">[SAVE] Save Week</button>
+    </div>
+  </div>
+</div>
+
+<!-- ====== REFERRAL PARTNER MODAL ====== -->
+<div class="modal-overlay" id="modal-referral">
+  <div class="modal-box" style="max-width:700px;">
+    <div class="modal-title" id="referral-modal-title">[REFERRALS] Add Referral Partner</div>
+    <button class="modal-close" onclick="closeModal('referral')">X</button>
+    <input type="hidden" id="ref-edit-id">
+    <div class="form-grid">
+      <div class="form-group span-2">
+        <label class="form-label">Name *</label>
+        <input type="text" class="form-input" id="ref-name" placeholder="Full name">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Title</label>
+        <input type="text" class="form-input" id="ref-title" placeholder="Job title">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Company</label>
+        <input type="text" class="form-input" id="ref-company" placeholder="Company name">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Type</label>
+        <select class="form-select" id="ref-type">
+          <option>CPA</option><option>Attorney</option><option>Mortgage</option>
+          <option>RE Agent</option><option>Other</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Relationship Status</label>
+        <select class="form-select" id="ref-status">
+          <option>New Contact</option><option>Building</option>
+          <option>Active Partner</option><option>Dormant</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Phone</label>
+        <input type="tel" class="form-input" id="ref-phone" placeholder="(555) 555-5555">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Email</label>
+        <input type="email" class="form-input" id="ref-email" placeholder="email@example.com">
+      </div>
+      <div class="form-group span-2">
+        <label class="form-label">LinkedIn</label>
+        <input type="text" class="form-input" id="ref-linkedin" placeholder="linkedin.com/in/...">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Last Touch Date</label>
+        <input type="date" class="form-input" id="ref-lasttouch">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Referrals Received</label>
+        <input type="number" class="form-input" id="ref-referrals" placeholder="0" min="0">
+      </div>
+      <div class="form-group span-2">
+        <label class="form-label">Notes</label>
+        <textarea class="form-textarea" id="ref-notes" placeholder="Relationship notes..." style="min-height:70px;"></textarea>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-secondary" onclick="closeModal('referral')">Cancel</button>
+      <button class="btn-primary" onclick="saveReferral()">[SAVE] Save Partner</button>
     </div>
   </div>
 </div>
@@ -2964,6 +3486,12 @@ function init() {
   if (!data.activity) { data.activity = []; save('activity'); }
   if (!data.performance) data.performance = { grade: 'A', notes: '', notesUpdated: '' };
 
+  // Init new module data
+  initOutreach();
+  initTemplates();
+  initGoals();
+  initReferrals();
+
   // Restore grade
   const g = (data.performance && data.performance.grade) || 'A';
   currentGradeIdx = Math.max(0, GRADES.indexOf(g));
@@ -2999,6 +3527,689 @@ function init() {
 }
 
 init();
+
+/* ================================================================
+   NEW MODULE: OUTREACH TRACKER (Tab 7)
+   ================================================================ */
+var outreachData = [];
+var outreachCurrentId = null;
+
+function initOutreach() {
+  outreachData = JSON.parse(localStorage.getItem('jarvis_outreach') || '[]');
+  renderOutreach();
+}
+
+function saveOutreachData() {
+  localStorage.setItem('jarvis_outreach', JSON.stringify(outreachData));
+}
+
+function openOutreachModal(id) {
+  outreachCurrentId = id || null;
+  const item = id ? outreachData.find(x => x.id === id) : null;
+  document.getElementById('outreach-modal-title').textContent = item ? '[OUTREACH] Edit Outreach Record' : '[OUTREACH] Add Outreach Record';
+  document.getElementById('outreach-edit-id').value = id || '';
+  document.getElementById('otr-name').value = item ? item.name : '';
+  document.getElementById('otr-type').value = item ? item.type : 'Employer';
+  document.getElementById('otr-method').value = item ? item.method : 'Call';
+  document.getElementById('otr-date').value = item ? item.date : new Date().toISOString().split('T')[0];
+  document.getElementById('otr-outcome').value = item ? item.outcome : 'No Answer';
+  document.getElementById('otr-next').value = item ? item.next : '';
+  document.getElementById('otr-followup').value = item ? item.followup : '';
+  document.getElementById('otr-status').value = item ? item.status : 'Pending';
+  document.getElementById('otr-notes').value = item ? item.notes : '';
+  document.getElementById('modal-outreach').classList.add('active');
+}
+
+function saveOutreach() {
+  const name = document.getElementById('otr-name').value.trim();
+  if (!name) { toast('Prospect name is required', 'warn'); return; }
+  const editId = document.getElementById('outreach-edit-id').value;
+  const record = {
+    id: editId || ('otr_' + Date.now()),
+    name,
+    type: document.getElementById('otr-type').value,
+    method: document.getElementById('otr-method').value,
+    date: document.getElementById('otr-date').value,
+    outcome: document.getElementById('otr-outcome').value,
+    next: document.getElementById('otr-next').value.trim(),
+    followup: document.getElementById('otr-followup').value,
+    status: document.getElementById('otr-status').value,
+    notes: document.getElementById('otr-notes').value.trim(),
+    created: editId ? (outreachData.find(x=>x.id===editId)||{}).created || new Date().toISOString() : new Date().toISOString()
+  };
+  if (editId) {
+    const idx = outreachData.findIndex(x => x.id === editId);
+    if (idx > -1) outreachData[idx] = record;
+  } else {
+    outreachData.push(record);
+  }
+  saveOutreachData();
+  renderOutreach();
+  closeModal('outreach');
+  toast(editId ? 'Outreach record updated' : 'Outreach record added', 'success');
+  // POST to API (fail silently)
+  if (!editId) {
+    fetch('http://localhost:8765/api/outreach', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(record),
+      signal: AbortSignal.timeout(3000)
+    }).catch(() => {});
+  }
+}
+
+function deleteOutreach(id) {
+  if (!confirm('Delete this outreach record?')) return;
+  outreachData = outreachData.filter(x => x.id !== id);
+  saveOutreachData();
+  renderOutreach();
+  toast('Outreach record deleted', 'info');
+}
+
+function otrStatusClass(s) {
+  const map = {
+    'Pending': 'otr-status-pending',
+    'Attempted': 'otr-status-attempted',
+    'Connected': 'otr-status-connected',
+    'Not Interested': 'otr-status-notinterested',
+    'Follow-Up Scheduled': 'otr-status-followup',
+    'Converted': 'otr-status-converted'
+  };
+  return map[s] || 'otr-status-pending';
+}
+
+function renderOutreach() {
+  const filterType = document.getElementById('outreach-filter-type').value;
+  const filterStatus = document.getElementById('outreach-filter-status').value;
+  const filterDate = document.getElementById('outreach-filter-date').value;
+  const today = new Date().toISOString().split('T')[0];
+
+  let rows = [...outreachData];
+
+  // Sort by follow-up date (soonest first, empty last)
+  rows.sort((a, b) => {
+    if (!a.followup && !b.followup) return 0;
+    if (!a.followup) return 1;
+    if (!b.followup) return -1;
+    return a.followup.localeCompare(b.followup);
+  });
+
+  if (filterType) rows = rows.filter(r => r.type === filterType);
+  if (filterStatus) rows = rows.filter(r => r.status === filterStatus);
+  if (filterDate) rows = rows.filter(r => r.date === filterDate);
+
+  const tbody = document.getElementById('outreach-tbody');
+  const empty = document.getElementById('outreach-empty');
+  document.getElementById('outreach-count').textContent = rows.length + ' records';
+
+  if (!rows.length) {
+    tbody.innerHTML = '';
+    empty.style.display = '';
+    return;
+  }
+  empty.style.display = 'none';
+
+  tbody.innerHTML = rows.map((r, i) => {
+    let rowClass = '';
+    if (r.followup) {
+      if (r.followup < today) rowClass = 'row-overdue';
+      else if (r.followup === today) rowClass = 'row-today';
+      else rowClass = 'row-upcoming';
+    }
+    const fuDisplay = r.followup ? (r.followup < today ? `<span style="color:#ef4444;">${r.followup} ⚠</span>` : r.followup === today ? `<span style="color:#f97316;">${r.followup} ●</span>` : `<span style="color:#00d4ff;">${r.followup}</span>`) : '—';
+    return `<tr class="${rowClass}" data-id="${r.id}">
+      <td>${i + 1}</td>
+      <td style="color:var(--cyan);">${esc(r.name)}</td>
+      <td>${esc(r.type)}</td>
+      <td>${esc(r.method)}</td>
+      <td>${r.date || '—'}</td>
+      <td style="font-size:11px;">${esc(r.outcome)}</td>
+      <td style="font-size:11px;max-width:140px;">${esc(r.next)}</td>
+      <td>${fuDisplay}</td>
+      <td><span class="${otrStatusClass(r.status)}">${esc(r.status)}</span></td>
+      <td style="font-size:11px;max-width:120px;opacity:0.7;">${esc(r.notes)}</td>
+      <td>
+        <button class="btn-sm" onclick="openOutreachModal('${r.id}')" style="margin-right:4px;">[EDIT]</button>
+        <button class="btn-sm" onclick="deleteOutreach('${r.id}')" style="color:#ef4444;border-color:rgba(239,68,68,0.3);">[DEL]</button>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+function exportOutreachCSV() {
+  const headers = ['#','Prospect Name','Type','Method','Date','Outcome','Next Step','Follow-Up Date','Status','Notes'];
+  const rows = outreachData.map((r, i) => [i+1, r.name, r.type, r.method, r.date, r.outcome, r.next, r.followup, r.status, r.notes]);
+  const csv = [headers, ...rows].map(r => r.map(c => `"${String(c||'').replace(/"/g,'""')}"`).join(',')).join('\n');
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = `jarvis_outreach_${new Date().toISOString().split('T')[0]}.csv`; a.click();
+  URL.revokeObjectURL(url);
+  toast('Outreach data exported as CSV', 'success');
+}
+
+/* ================================================================
+   NEW MODULE: SCRIPTS & TEMPLATES (Tab 8)
+   ================================================================ */
+var templateData = [];
+var templateFilter = '';
+var viewingTemplateId = null;
+
+const DEFAULT_TEMPLATES = [
+  {
+    id: 'tmpl_1', title: 'Cold Call \u2014 HENRY (Tech)', category: 'Cold Call',
+    body: `Hi [Name], this is AJ Donofrio with Barnum Financial Group. I work with senior engineers and tech professionals who are great at building products but haven't had time to build their own financial plan \u2014 especially around income protection and the tax impact of RSU vesting. I know this is out of the blue \u2014 do you have 2 minutes? ... [If yes] Great. I specialize in helping high earners close the gap between what they earn and what they actually keep. Could we schedule a quick 20-minute call this week to see if there's a fit?`
+  },
+  {
+    id: 'tmpl_2', title: 'Cold Email \u2014 HENRY', category: 'Cold Email',
+    body: `Subject: Protecting what you have built \u2014 quick thought for [First Name]\n\nHi [First Name],\n\nI came across your profile and noticed you are doing impressive work in [industry/role]. At this stage in your career \u2014 high income, building momentum \u2014 most people I talk to have one blind spot: their income is protected, but their wealth-building strategy has not caught up yet.\n\nI am a financial advisor with Barnum Financial Group. I specialize in helping high earners build tax-advantaged wealth, protect income, and close the gap between what you earn and what you keep.\n\nWould you be open to a 20-minute call? No pitch \u2014 just a conversation to see if there is a fit.\n\n\u2014 AJ Donofrio | Barnum Financial Group`
+  },
+  {
+    id: 'tmpl_3', title: 'LinkedIn Message \u2014 Employer (HR Director)', category: 'LinkedIn Message',
+    body: `Hi [First Name], I work with companies like [Company Name] to offer employees access to Group Whole Life insurance \u2014 a permanent, portable benefit they own regardless of employment status. Zero cost to the employer. High perceived value to your team. We also offer SmartStart \u2014 a financial education seminar series for employees. Would you be open to a 15-minute call to see if it fits your team?`
+  },
+  {
+    id: 'tmpl_4', title: 'Follow-Up \u2014 No Response (Email)', category: 'Follow-Up',
+    body: `Subject: Re: [Previous Subject]\n\nHi [First Name], just wanted to follow up on my note from last week. I know things get busy \u2014 totally understand. If the timing is not right, no worries at all. But if you have 15 minutes sometime this week or next, I would love to connect. Either way, wishing you a great week. \u2014 AJ`
+  },
+  {
+    id: 'tmpl_5', title: 'Objection \u2014 Already Have Benefits', category: 'Objection Response',
+    body: `That is great to hear \u2014 it sounds like you are already taking care of your team. The reason I ask is that Group Whole Life through Barnum/MassMutual actually works alongside existing benefits \u2014 it is not a replacement. It is a permanent, portable policy employees own even if they leave the company. Most benefits packages do not include that. Would it be worth a 15-minute call just to see how it compares?`
+  },
+  {
+    id: 'tmpl_6', title: 'Cold Email \u2014 Rollover Candidate', category: 'Rollover Pitch',
+    body: `Subject: Your 401(k) has options \u2014 here is what most people miss\n\nHi [First Name], with your recent transition from [Company], you likely have a retirement account sitting in limbo. Many people do not realize how many options they have \u2014 and waiting can cost them in fees, missed growth, or lost flexibility. I am a financial advisor who helps people in transition take control of their retirement assets. Would a quick 20-minute call be worth your time? Zero obligation. \u2014 AJ Donofrio | Barnum Financial Group`
+  },
+  {
+    id: 'tmpl_7', title: 'SmartStart Employer Pitch', category: 'Employer/GWL Pitch',
+    body: `Hi [First Name], I wanted to share something that has been really well-received by companies your size. We offer SmartStart \u2014 a financial education seminar program for employees covering budgeting, debt elimination, retirement planning, and wealth building. It is fully facilitated, costs nothing to the employer, and positions you as a company that genuinely invests in your team. It has become a strong recruiting and retention differentiator. Would you be open to a 15-minute call to learn more?`
+  }
+];
+
+function initTemplates() {
+  const stored = localStorage.getItem('jarvis_templates');
+  templateData = stored ? JSON.parse(stored) : [];
+  if (!templateData.length) {
+    templateData = DEFAULT_TEMPLATES.map(t => ({...t}));
+    localStorage.setItem('jarvis_templates', JSON.stringify(templateData));
+  }
+  renderTemplates();
+}
+
+function saveTemplatesData() {
+  localStorage.setItem('jarvis_templates', JSON.stringify(templateData));
+}
+
+function setTemplateFilter(btn, cat) {
+  templateFilter = cat;
+  document.querySelectorAll('.cat-filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderTemplates();
+}
+
+function openTemplateModal(id) {
+  const item = id ? templateData.find(t => t.id === id) : null;
+  document.getElementById('tmpl-edit-title').textContent = item ? '[SCRIPTS] Edit Template' : '[SCRIPTS] Add Template';
+  document.getElementById('tmpl-edit-id').value = id || '';
+  document.getElementById('tmpl-title').value = item ? item.title : '';
+  document.getElementById('tmpl-category').value = item ? item.category : 'Cold Call';
+  document.getElementById('tmpl-body').value = item ? item.body : '';
+  document.getElementById('modal-template-edit').classList.add('active');
+}
+
+function saveTemplate() {
+  const title = document.getElementById('tmpl-title').value.trim();
+  const body = document.getElementById('tmpl-body').value.trim();
+  if (!title || !body) { toast('Title and script text are required', 'warn'); return; }
+  const editId = document.getElementById('tmpl-edit-id').value;
+  const record = {
+    id: editId || ('tmpl_' + Date.now()),
+    title,
+    category: document.getElementById('tmpl-category').value,
+    body
+  };
+  if (editId) {
+    const idx = templateData.findIndex(t => t.id === editId);
+    if (idx > -1) templateData[idx] = record;
+  } else {
+    templateData.push(record);
+  }
+  saveTemplatesData();
+  renderTemplates();
+  closeModal('template-edit');
+  toast(editId ? 'Template updated' : 'Template added', 'success');
+}
+
+function deleteTemplate(id) {
+  if (!confirm('Delete this template?')) return;
+  templateData = templateData.filter(t => t.id !== id);
+  saveTemplatesData();
+  renderTemplates();
+  toast('Template deleted', 'info');
+}
+
+function viewTemplate(id) {
+  const t = templateData.find(x => x.id === id);
+  if (!t) return;
+  viewingTemplateId = id;
+  document.getElementById('tmpl-view-title').textContent = '[SCRIPT] ' + t.title;
+  document.getElementById('tmpl-view-category').textContent = t.category;
+  document.getElementById('tmpl-view-body').textContent = t.body;
+  document.getElementById('modal-template-view').classList.add('active');
+}
+
+function copyTemplateFromView() {
+  const t = templateData.find(x => x.id === viewingTemplateId);
+  if (!t) return;
+  navigator.clipboard.writeText(t.body).then(() => {
+    const btn = document.getElementById('tmpl-view-copy-btn');
+    btn.textContent = 'COPIED!';
+    btn.classList.add('btn-copy-flash');
+    setTimeout(() => { btn.textContent = '[COPY] Copy to Clipboard'; btn.classList.remove('btn-copy-flash'); }, 1800);
+    toast('Script copied to clipboard!', 'success');
+  }).catch(() => toast('Copy failed \u2014 try manually selecting text', 'warn'));
+}
+
+function copyTemplate(id) {
+  const t = templateData.find(x => x.id === id);
+  if (!t) return;
+  navigator.clipboard.writeText(t.body).then(() => {
+    const btn = document.getElementById('copy-btn-' + id);
+    if (btn) {
+      btn.textContent = 'COPIED!';
+      btn.classList.add('btn-copy-flash');
+      setTimeout(() => { btn.textContent = '[COPY]'; btn.classList.remove('btn-copy-flash'); }, 1800);
+    }
+    toast('Script copied to clipboard!', 'success');
+  }).catch(() => toast('Copy failed', 'warn'));
+}
+
+function renderTemplates() {
+  const filtered = templateFilter ? templateData.filter(t => t.category === templateFilter) : templateData;
+  const grid = document.getElementById('templates-grid');
+  const empty = document.getElementById('templates-empty');
+  document.getElementById('templates-count').textContent = templateData.length + ' templates';
+  if (!filtered.length) {
+    grid.innerHTML = '';
+    empty.style.display = '';
+    return;
+  }
+  empty.style.display = 'none';
+  grid.innerHTML = filtered.map(t => {
+    const preview = t.body.replace(/\n/g, ' ').substring(0, 100) + (t.body.length > 100 ? '...' : '');
+    return `<div class="template-card">
+      <div class="template-card-title">${esc(t.title)}</div>
+      <div class="template-card-cat">${esc(t.category)}</div>
+      <div class="template-card-preview">${esc(preview)}</div>
+      <div class="template-card-actions">
+        <button class="btn-sm" onclick="viewTemplate('${t.id}')">[VIEW]</button>
+        <button class="btn-sm" id="copy-btn-${t.id}" onclick="copyTemplate('${t.id}')">[COPY]</button>
+        <button class="btn-sm" onclick="openTemplateModal('${t.id}')">[EDIT]</button>
+        <button class="btn-sm" onclick="deleteTemplate('${t.id}')" style="color:#ef4444;border-color:rgba(239,68,68,0.3);margin-left:auto;">[DEL]</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+/* ================================================================
+   NEW MODULE: GOALS & SCORECARD (Tab 9)
+   ================================================================ */
+var goalsData = { annualGoals: {}, scorecard: [] };
+
+function initGoals() {
+  const stored = localStorage.getItem('jarvis_goals');
+  goalsData = stored ? JSON.parse(stored) : { annualGoals: {}, scorecard: [] };
+  loadGoalInputs();
+  renderScorecard();
+}
+
+function saveGoals() {
+  goalsData.annualGoals = {
+    clients: parseFloat(document.getElementById('goal-clients').value) || 0,
+    aum: parseFloat(document.getElementById('goal-aum').value) || 0,
+    meetingsWk: parseFloat(document.getElementById('goal-meetings-wk').value) || 0,
+    callsDay: parseFloat(document.getElementById('goal-calls-day').value) || 0,
+    emailsDay: parseFloat(document.getElementById('goal-emails-day').value) || 0,
+    prospectsMonth: parseFloat(document.getElementById('goal-prospects-mo').value) || 0,
+    revenue: parseFloat(document.getElementById('goal-revenue').value) || 0
+  };
+  localStorage.setItem('jarvis_goals', JSON.stringify(goalsData));
+}
+
+function loadGoalInputs() {
+  const g = goalsData.annualGoals || {};
+  document.getElementById('goal-clients').value = g.clients || '';
+  document.getElementById('goal-aum').value = g.aum || '';
+  document.getElementById('goal-meetings-wk').value = g.meetingsWk || '';
+  document.getElementById('goal-calls-day').value = g.callsDay || '';
+  document.getElementById('goal-emails-day').value = g.emailsDay || '';
+  document.getElementById('goal-prospects-mo').value = g.prospectsMonth || '';
+  document.getElementById('goal-revenue').value = g.revenue || '';
+}
+
+function openScorecardModal(id) {
+  const item = id ? goalsData.scorecard.find(x => x.id === id) : null;
+  document.getElementById('sc-edit-id').value = id || '';
+  document.getElementById('sc-week').value = item ? item.week : new Date().toISOString().split('T')[0];
+  document.getElementById('sc-calls').value = item ? item.calls : '';
+  document.getElementById('sc-emails').value = item ? item.emails : '';
+  document.getElementById('sc-linkedin').value = item ? item.linkedin : '';
+  document.getElementById('sc-meetings').value = item ? item.meetings : '';
+  document.getElementById('sc-prospects').value = item ? item.prospects : '';
+  document.getElementById('sc-clients').value = item ? item.clients : '';
+  document.getElementById('sc-aum').value = item ? item.aum : '';
+  document.getElementById('modal-scorecard').classList.add('active');
+}
+
+function calcScorecardGrade(row) {
+  const g = goalsData.annualGoals || {};
+  // Weekly targets derived from annual
+  const wklyCallsTarget = (g.callsDay || 0) * 5;
+  const wklyEmailsTarget = (g.emailsDay || 0) * 5;
+  const wklyMeetingsTarget = g.meetingsWk || 0;
+  const wklyProspectsTarget = (g.prospectsMonth || 0) / 4;
+
+  const targets = [
+    { actual: row.calls, target: wklyCallsTarget },
+    { actual: row.emails, target: wklyEmailsTarget },
+    { actual: row.meetings, target: wklyMeetingsTarget },
+    { actual: row.prospects, target: wklyProspectsTarget }
+  ].filter(t => t.target > 0);
+
+  if (!targets.length) return 'N/A';
+  const pct = targets.reduce((sum, t) => sum + Math.min(t.actual / t.target, 1), 0) / targets.length * 100;
+  if (pct >= 90) return 'A';
+  if (pct >= 70) return 'B';
+  if (pct >= 50) return 'C';
+  return 'D';
+}
+
+function saveScorecard() {
+  const editId = document.getElementById('sc-edit-id').value;
+  const row = {
+    id: editId || ('sc_' + Date.now()),
+    week: document.getElementById('sc-week').value,
+    calls: parseFloat(document.getElementById('sc-calls').value) || 0,
+    emails: parseFloat(document.getElementById('sc-emails').value) || 0,
+    linkedin: parseFloat(document.getElementById('sc-linkedin').value) || 0,
+    meetings: parseFloat(document.getElementById('sc-meetings').value) || 0,
+    prospects: parseFloat(document.getElementById('sc-prospects').value) || 0,
+    clients: parseFloat(document.getElementById('sc-clients').value) || 0,
+    aum: parseFloat(document.getElementById('sc-aum').value) || 0
+  };
+  row.grade = calcScorecardGrade(row);
+  if (editId) {
+    const idx = goalsData.scorecard.findIndex(x => x.id === editId);
+    if (idx > -1) goalsData.scorecard[idx] = row;
+  } else {
+    goalsData.scorecard.push(row);
+  }
+  // Keep only last 12 weeks
+  goalsData.scorecard.sort((a, b) => b.week.localeCompare(a.week));
+  if (goalsData.scorecard.length > 12) goalsData.scorecard = goalsData.scorecard.slice(0, 12);
+  localStorage.setItem('jarvis_goals', JSON.stringify(goalsData));
+  renderScorecard();
+  closeModal('scorecard');
+  toast('Week logged!', 'success');
+}
+
+function deleteScorecard(id) {
+  if (!confirm('Delete this week entry?')) return;
+  goalsData.scorecard = goalsData.scorecard.filter(x => x.id !== id);
+  localStorage.setItem('jarvis_goals', JSON.stringify(goalsData));
+  renderScorecard();
+  toast('Week deleted', 'info');
+}
+
+function renderScorecard() {
+  const rows = [...goalsData.scorecard].sort((a, b) => b.week.localeCompare(a.week));
+  const tbody = document.getElementById('scorecard-tbody');
+  const empty = document.getElementById('scorecard-empty');
+
+  if (!rows.length) {
+    tbody.innerHTML = '';
+    empty.style.display = '';
+    document.getElementById('ytd-calls').textContent = '0';
+    document.getElementById('ytd-emails').textContent = '0';
+    document.getElementById('ytd-linkedin').textContent = '0';
+    document.getElementById('ytd-meetings').textContent = '0';
+    document.getElementById('ytd-prospects').textContent = '0';
+    document.getElementById('ytd-clients').textContent = '0';
+    document.getElementById('ytd-aum').textContent = '$0';
+    return;
+  }
+  empty.style.display = 'none';
+
+  const gradeClass = { 'A': 'grade-badge-a', 'B': 'grade-badge-b', 'C': 'grade-badge-c', 'D': 'grade-badge-d' };
+  tbody.innerHTML = rows.map(r => `<tr>
+    <td>${r.week}</td>
+    <td>${r.calls}</td><td>${r.emails}</td><td>${r.linkedin}</td>
+    <td>${r.meetings}</td><td>${r.prospects}</td><td>${r.clients}</td>
+    <td>$${Number(r.aum).toLocaleString()}</td>
+    <td><span class="${gradeClass[r.grade] || ''}">${r.grade}</span></td>
+    <td>
+      <button class="btn-sm" onclick="openScorecardModal('${r.id}')">[EDIT]</button>
+      <button class="btn-sm" onclick="deleteScorecard('${r.id}')" style="color:#ef4444;border-color:rgba(239,68,68,0.3);margin-left:4px;">[DEL]</button>
+    </td>
+  </tr>`).join('');
+
+  // YTD totals
+  const ytd = rows.reduce((acc, r) => {
+    acc.calls += r.calls; acc.emails += r.emails; acc.linkedin += r.linkedin;
+    acc.meetings += r.meetings; acc.prospects += r.prospects; acc.clients += r.clients; acc.aum += r.aum;
+    return acc;
+  }, { calls:0, emails:0, linkedin:0, meetings:0, prospects:0, clients:0, aum:0 });
+  document.getElementById('ytd-calls').textContent = ytd.calls;
+  document.getElementById('ytd-emails').textContent = ytd.emails;
+  document.getElementById('ytd-linkedin').textContent = ytd.linkedin;
+  document.getElementById('ytd-meetings').textContent = ytd.meetings;
+  document.getElementById('ytd-prospects').textContent = ytd.prospects;
+  document.getElementById('ytd-clients').textContent = ytd.clients;
+  document.getElementById('ytd-aum').textContent = '$' + Number(ytd.aum).toLocaleString();
+}
+
+/* ================================================================
+   NEW MODULE: REFERRAL PARTNERS (Tab 10)
+   ================================================================ */
+var referralsData = [];
+
+const DEFAULT_REFERRALS = [
+  {
+    id: 'ref_seed_1', name: 'Partner - CPA (Accounting Firm)', title: '', company: '',
+    type: 'CPA', phone: '', email: '', linkedin: '',
+    status: 'New Contact', lastTouch: '', referrals: 0,
+    notes: 'CPAs are top referral source for HENRYs and business owners',
+    created: new Date().toISOString()
+  },
+  {
+    id: 'ref_seed_2', name: 'Partner - Real Estate Attorney', title: '', company: '',
+    type: 'Attorney', phone: '', email: '', linkedin: '',
+    status: 'New Contact', lastTouch: '', referrals: 0,
+    notes: 'Sees wealth events \u2014 home purchases, business sales',
+    created: new Date().toISOString()
+  },
+  {
+    id: 'ref_seed_3', name: 'Partner - Mortgage Broker', title: '', company: '',
+    type: 'Mortgage', phone: '', email: '', linkedin: '',
+    status: 'New Contact', lastTouch: '', referrals: 0,
+    notes: 'Meets clients at major financial decision moments',
+    created: new Date().toISOString()
+  }
+];
+
+function initReferrals() {
+  const stored = localStorage.getItem('jarvis_referrals');
+  referralsData = stored ? JSON.parse(stored) : [];
+  if (!referralsData.length) {
+    referralsData = DEFAULT_REFERRALS.map(r => ({...r}));
+    localStorage.setItem('jarvis_referrals', JSON.stringify(referralsData));
+  }
+  renderReferrals();
+}
+
+function saveReferralsData() {
+  localStorage.setItem('jarvis_referrals', JSON.stringify(referralsData));
+}
+
+function openReferralModal(id) {
+  const item = id ? referralsData.find(x => x.id === id) : null;
+  document.getElementById('referral-modal-title').textContent = item ? '[REFERRALS] Edit Partner' : '[REFERRALS] Add Referral Partner';
+  document.getElementById('ref-edit-id').value = id || '';
+  document.getElementById('ref-name').value = item ? item.name : '';
+  document.getElementById('ref-title').value = item ? item.title : '';
+  document.getElementById('ref-company').value = item ? item.company : '';
+  document.getElementById('ref-type').value = item ? item.type : 'CPA';
+  document.getElementById('ref-status').value = item ? item.status : 'New Contact';
+  document.getElementById('ref-phone').value = item ? item.phone : '';
+  document.getElementById('ref-email').value = item ? item.email : '';
+  document.getElementById('ref-linkedin').value = item ? item.linkedin : '';
+  document.getElementById('ref-lasttouch').value = item ? item.lastTouch : '';
+  document.getElementById('ref-referrals').value = item ? item.referrals : 0;
+  document.getElementById('ref-notes').value = item ? item.notes : '';
+  document.getElementById('modal-referral').classList.add('active');
+}
+
+function saveReferral() {
+  const name = document.getElementById('ref-name').value.trim();
+  if (!name) { toast('Name is required', 'warn'); return; }
+  const editId = document.getElementById('ref-edit-id').value;
+  const record = {
+    id: editId || ('ref_' + Date.now()),
+    name, title: document.getElementById('ref-title').value.trim(),
+    company: document.getElementById('ref-company').value.trim(),
+    type: document.getElementById('ref-type').value,
+    status: document.getElementById('ref-status').value,
+    phone: document.getElementById('ref-phone').value.trim(),
+    email: document.getElementById('ref-email').value.trim(),
+    linkedin: document.getElementById('ref-linkedin').value.trim(),
+    lastTouch: document.getElementById('ref-lasttouch').value,
+    referrals: parseInt(document.getElementById('ref-referrals').value) || 0,
+    notes: document.getElementById('ref-notes').value.trim(),
+    created: editId ? (referralsData.find(x=>x.id===editId)||{}).created || new Date().toISOString() : new Date().toISOString()
+  };
+  if (editId) {
+    const idx = referralsData.findIndex(x => x.id === editId);
+    if (idx > -1) referralsData[idx] = record;
+  } else {
+    referralsData.push(record);
+  }
+  saveReferralsData();
+  renderReferrals();
+  closeModal('referral');
+  toast(editId ? 'Partner updated' : 'Partner added', 'success');
+}
+
+function deleteReferral(id) {
+  if (!confirm('Delete this referral partner?')) return;
+  referralsData = referralsData.filter(x => x.id !== id);
+  saveReferralsData();
+  renderReferrals();
+  toast('Partner deleted', 'info');
+}
+
+function markTouched(id) {
+  const idx = referralsData.findIndex(x => x.id === id);
+  if (idx > -1) {
+    referralsData[idx].lastTouch = new Date().toISOString().split('T')[0];
+    saveReferralsData();
+    renderReferrals();
+    toast('Last touch updated to today', 'success');
+  }
+}
+
+function lastTouchClass(dateStr) {
+  if (!dateStr) return 'lasttouch-red';
+  const today = new Date();
+  const d = new Date(dateStr);
+  const diffDays = Math.floor((today - d) / 86400000);
+  if (diffDays <= 30) return 'lasttouch-green';
+  if (diffDays <= 60) return 'lasttouch-yellow';
+  return 'lasttouch-red';
+}
+
+function refStatusClass(s) {
+  const map = { 'New Contact': 'ref-status-new', 'Building': 'ref-status-building', 'Active Partner': 'ref-status-active', 'Dormant': 'ref-status-dormant' };
+  return map[s] || 'ref-status-new';
+}
+
+function renderReferrals() {
+  const filterType = document.getElementById('referral-filter-type').value;
+  const filterStatus = document.getElementById('referral-filter-status').value;
+
+  let rows = [...referralsData];
+  // Sort by last touch (oldest first = needs attention)
+  rows.sort((a, b) => {
+    if (!a.lastTouch && !b.lastTouch) return 0;
+    if (!a.lastTouch) return -1;
+    if (!b.lastTouch) return 1;
+    return a.lastTouch.localeCompare(b.lastTouch);
+  });
+
+  if (filterType) rows = rows.filter(r => r.type === filterType);
+  if (filterStatus) rows = rows.filter(r => r.status === filterStatus);
+
+  // Stats
+  const total = referralsData.length;
+  const active = referralsData.filter(r => r.status === 'Active Partner').length;
+  const ytdRefs = referralsData.reduce((s, r) => s + (r.referrals || 0), 0);
+  const best = referralsData.reduce((best, r) => (!best || r.referrals > best.referrals) ? r : best, null);
+  document.getElementById('ref-stat-total').textContent = total;
+  document.getElementById('ref-stat-active').textContent = active;
+  document.getElementById('ref-stat-ytd').textContent = ytdRefs;
+  document.getElementById('ref-stat-best').textContent = best && best.referrals > 0 ? best.name.substring(0, 20) : '\u2014';
+  document.getElementById('referrals-count').textContent = rows.length + ' partners';
+
+  const tbody = document.getElementById('referrals-tbody');
+  const empty = document.getElementById('referrals-empty');
+
+  if (!rows.length) {
+    tbody.innerHTML = '';
+    empty.style.display = '';
+    return;
+  }
+  empty.style.display = 'none';
+
+  tbody.innerHTML = rows.map((r, i) => {
+    const ltClass = lastTouchClass(r.lastTouch);
+    const ltDisplay = r.lastTouch ? `<span class="${ltClass}">${r.lastTouch}</span>` : `<span class="${ltClass}">Never</span>`;
+    return `<tr data-id="${r.id}">
+      <td>${i + 1}</td>
+      <td style="color:var(--cyan);">${esc(r.name)}</td>
+      <td style="font-size:11px;">${esc(r.title)}</td>
+      <td style="font-size:11px;">${esc(r.company)}</td>
+      <td>${esc(r.type)}</td>
+      <td style="font-size:11px;">${r.phone ? `<a href="tel:${esc(r.phone)}">${esc(r.phone)}</a>` : '—'}</td>
+      <td style="font-size:11px;">${r.email ? `<a href="mailto:${esc(r.email)}">${esc(r.email)}</a>` : '—'}</td>
+      <td style="font-size:11px;">${r.linkedin ? `<a href="${esc(r.linkedin)}" target="_blank">LinkedIn</a>` : '—'}</td>
+      <td><span class="${refStatusClass(r.status)}">${esc(r.status)}</span></td>
+      <td>${ltDisplay}</td>
+      <td style="text-align:center;">${r.referrals || 0}</td>
+      <td style="font-size:11px;max-width:120px;opacity:0.7;">${esc(r.notes)}</td>
+      <td style="white-space:nowrap;">
+        <button class="btn-sm" onclick="markTouched('${r.id}')" style="margin-bottom:2px;">[TOUCH]</button>
+        <button class="btn-sm" onclick="openReferralModal('${r.id}')" style="margin-right:2px;">[EDIT]</button>
+        <button class="btn-sm" onclick="deleteReferral('${r.id}')" style="color:#ef4444;border-color:rgba(239,68,68,0.3);">[DEL]</button>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+function exportReferralsCSV() {
+  const headers = ['#','Name','Title','Company','Type','Phone','Email','LinkedIn','Status','Last Touch','Referrals','Notes'];
+  const rows = referralsData.map((r, i) => [i+1, r.name, r.title, r.company, r.type, r.phone, r.email, r.linkedin, r.status, r.lastTouch, r.referrals, r.notes]);
+  const csv = [headers, ...rows].map(r => r.map(c => `"${String(c||'').replace(/"/g,'""')}"`).join(',')).join('\n');
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = `jarvis_referrals_${new Date().toISOString().split('T')[0]}.csv`; a.click();
+  URL.revokeObjectURL(url);
+  toast('Referrals exported as CSV', 'success');
+}
+
+/* Helper: HTML escape (reuse existing esc() if defined, else define locally) */
+if (typeof esc === 'undefined') {
+  function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+}
 </script>
 
 <script>
