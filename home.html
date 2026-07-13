@@ -6,9 +6,9 @@
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { background: #000; color: #fff; font-family: 'Courier New', monospace; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; overflow: hidden; }
   body::before { content: ''; position: fixed; inset: 0; background: repeating-linear-gradient(0deg, transparent, transparent 40px, rgba(0,212,255,0.03) 40px, rgba(0,212,255,0.03) 41px), repeating-linear-gradient(90deg, transparent, transparent 40px, rgba(0,212,255,0.03) 40px, rgba(0,212,255,0.03) 41px); pointer-events: none; }
-  .logo { font-size: 3.5em; letter-spacing: 0.3em; color: #00d4ff; text-shadow: 0 0 20px #00d4ff, 0 0 40px #00d4ff; font-weight: 900; margin-bottom: 0.2em; animation: pulse 2s ease-in-out infinite; }
+  .logo { font-size: clamp(1.8em, 8vw, 3.5em); letter-spacing: clamp(0.1em, 2vw, 0.3em); color: #00d4ff; text-shadow: 0 0 20px #00d4ff, 0 0 40px #00d4ff; font-weight: 900; margin-bottom: 0.2em; animation: pulse 2s ease-in-out infinite; }
   @keyframes pulse { 0%,100%{text-shadow:0 0 20px #00d4ff,0 0 40px #00d4ff} 50%{text-shadow:0 0 30px #00d4ff,0 0 80px #00a8cc} }
-  .subtitle { color: #00d4ff; opacity: 0.7; letter-spacing: 0.12em; font-size: 0.65em; margin-bottom: 0.4em; text-transform: uppercase; text-align: center; }
+  .subtitle { color: #00d4ff; opacity: 0.7; letter-spacing: 0.08em; font-size: clamp(0.45em, 2vw, 0.65em); margin-bottom: 0.4em; text-transform: uppercase; text-align: center; }
   .firm { color: #00d4ff; opacity: 0.5; letter-spacing: 0.1em; font-size: 0.55em; margin-bottom: 2em; text-transform: uppercase; }
   .status { display: flex; align-items: center; gap: 8px; color: #00d4ff; font-size: 0.75em; margin-bottom: 2em; letter-spacing: 0.1em; }
   .dot { width: 8px; height: 8px; background: #00ff88; border-radius: 50%; box-shadow: 0 0 10px #00ff88; animation: blink 1s infinite; }
