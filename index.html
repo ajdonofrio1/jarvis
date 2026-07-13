@@ -1,0 +1,3028 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JARVIS | Command Center — AJ Donofrio · Barnum Financial Group</title>
+<style>
+/* ============================================================
+   J.A.R.V.I.S COMMAND CENTER — FUTURISTIC HUD THEME
+   Black/Cyan JARVIS Iron Man Aesthetic
+   ============================================================ */
+:root {
+  --cyan: #00d4ff;
+  --cyan-dim: rgba(0,212,255,0.5);
+  --cyan-faint: rgba(0,212,255,0.15);
+  --cyan-ghost: rgba(0,212,255,0.06);
+  --cyan-glow: 0 0 15px #00d4ff, 0 0 30px rgba(0,212,255,0.4);
+  --cyan-glow-sm: 0 0 8px rgba(0,212,255,0.6);
+  --bg: #000000;
+  --bg-card: #020810;
+  --bg-table: #000000;
+  --bg-hover: #020d15;
+  --bg-dark: #010508;
+  --border: rgba(0,212,255,0.2);
+  --border-bright: rgba(0,212,255,0.5);
+  --text: #c0e8f0;
+  --text-dim: rgba(0,212,255,0.45);
+  --text-bright: #00d4ff;
+  --white: #ffffff;
+  /* Status Colors */
+  --status-new: #00d4ff;
+  --status-contacted: #eab308;
+  --status-followup: #f97316;
+  --status-meeting: #22c55e;
+  --status-proposal: #a855f7;
+  --status-won: #16a34a;
+  --status-lost: #ef4444;
+  /* Alert/Badge Colors */
+  --henry-blue: #3b82f6;
+  --rollover-orange: #f97316;
+  --event-purple: #a855f7;
+  --group-blue: #3b82f6;
+  --virtual-yellow: #eab308;
+  --referral-green: #22c55e;
+  --layoff-red: #ef4444;
+  --funding-green: #22c55e;
+  --expansion-blue: #3b82f6;
+  --leadership-yellow: #eab308;
+  --retirement-orange: #f97316;
+  --health-purple: #a855f7;
+  /* Grade Colors */
+  --grade-a: #22c55e;
+  --grade-b: #00d4ff;
+  --grade-c: #eab308;
+  --grade-d: #ef4444;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+@keyframes gridPulse {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 0.8; }
+}
+
+@keyframes scanLine {
+  0% { left: -100%; }
+  100% { left: 200%; }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; box-shadow: 0 0 6px #22c55e; }
+  50% { opacity: 0.4; box-shadow: 0 0 2px #22c55e; }
+}
+
+@keyframes glowPulse {
+  0%, 100% { box-shadow: 0 0 10px rgba(0,212,255,0.3), inset 0 0 10px rgba(0,212,255,0.05); }
+  50% { box-shadow: 0 0 20px rgba(0,212,255,0.6), inset 0 0 20px rgba(0,212,255,0.1); }
+}
+
+@keyframes slideIn {
+  from { transform: translateX(100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes fadeOut {
+  from { opacity: 1; transform: translateX(0); }
+  to { opacity: 0; transform: translateX(100%); }
+}
+
+@keyframes topBarScan {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes borderGlow {
+  0%, 100% { border-color: rgba(0,212,255,0.3); }
+  50% { border-color: rgba(0,212,255,0.8); }
+}
+
+body {
+  font-family: 'Courier New', Courier, monospace;
+  background: #000000;
+  color: var(--text);
+  min-height: 100vh;
+  font-size: 13px;
+  line-height: 1.5;
+  position: relative;
+}
+
+/* ---- HUD BACKGROUND GRID ---- */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(0,212,255,0.04) 39px, rgba(0,212,255,0.04) 40px),
+    repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(0,212,255,0.04) 39px, rgba(0,212,255,0.04) 40px);
+  pointer-events: none;
+  z-index: 0;
+  animation: gridPulse 4s ease-in-out infinite;
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(ellipse at center, rgba(0,212,255,0.03) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ---- SCROLLBAR ---- */
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-track { background: #000; }
+::-webkit-scrollbar-thumb { background: rgba(0,212,255,0.3); }
+::-webkit-scrollbar-thumb:hover { background: var(--cyan); }
+
+/* ============================================================
+   HEADER
+   ============================================================ */
+#header {
+  background: #000000;
+  border-bottom: 1px solid var(--cyan);
+  box-shadow: 0 2px 20px rgba(0,212,255,0.3), 0 0 40px rgba(0,212,255,0.1);
+  padding: 12px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  overflow: hidden;
+}
+
+#header::after {
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0;
+  width: 60px;
+  background: linear-gradient(90deg, transparent, rgba(0,212,255,0.15), transparent);
+  animation: scanLine 4s linear infinite;
+  pointer-events: none;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.live-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(34,197,94,0.08);
+  border: 1px solid rgba(34,197,94,0.4);
+  padding: 4px 10px;
+  font-size: 10px;
+  font-weight: 700;
+  color: #22c55e;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  font-family: 'Courier New', monospace;
+}
+
+.pulse-dot {
+  width: 7px; height: 7px;
+  background: #22c55e;
+  border-radius: 50%;
+  animation: pulse 1.5s infinite;
+}
+
+.header-title {
+  display: flex;
+  flex-direction: column;
+}
+
+.title-main {
+  font-size: 22px;
+  font-weight: 900;
+  color: var(--cyan);
+  letter-spacing: 0.3em;
+  line-height: 1.1;
+  text-shadow: 0 0 10px rgba(0,212,255,0.8), 0 0 20px rgba(0,212,255,0.4);
+  font-family: 'Courier New', monospace;
+  text-transform: uppercase;
+}
+
+.title-sub {
+  font-size: 10px;
+  color: var(--text-dim);
+  letter-spacing: 0.2em;
+  margin-top: 3px;
+  text-transform: uppercase;
+  font-family: 'Courier New', monospace;
+}
+
+.header-center {
+  flex: 1;
+  max-width: 400px;
+  min-width: 200px;
+}
+
+.search-wrap {
+  position: relative;
+}
+
+.search-input {
+  width: 100%;
+  background: rgba(0,212,255,0.04);
+  border: 1px solid rgba(0,212,255,0.3);
+  padding: 8px 12px 8px 36px;
+  color: var(--cyan);
+  font-size: 12px;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  font-family: 'Courier New', monospace;
+  letter-spacing: 0.05em;
+  clip-path: polygon(6px 0%, 100% 0%, calc(100% - 6px) 100%, 0% 100%);
+}
+
+.search-input:focus {
+  border-color: var(--cyan);
+  box-shadow: var(--cyan-glow-sm);
+}
+
+.search-input::placeholder { color: rgba(0,212,255,0.3); }
+
+.search-icon {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-dim);
+  font-size: 13px;
+  font-style: normal;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.btn-add-new {
+  background: transparent;
+  color: var(--cyan);
+  border: 1px solid var(--cyan);
+  padding: 7px 16px;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+  font-family: 'Courier New', monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+}
+
+.btn-add-new:hover {
+  background: rgba(0,212,255,0.1);
+  box-shadow: var(--cyan-glow-sm);
+  transform: translateY(-1px);
+}
+
+#live-clock {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--cyan);
+  font-family: 'Courier New', monospace;
+  letter-spacing: 0.1em;
+  white-space: nowrap;
+  text-shadow: 0 0 8px rgba(0,212,255,0.6);
+}
+
+/* ============================================================
+   TABS
+   ============================================================ */
+#tab-bar {
+  background: #000000;
+  border-bottom: 1px solid rgba(0,212,255,0.15);
+  display: flex;
+  overflow-x: auto;
+  padding: 0 16px;
+  gap: 4px;
+  position: sticky;
+  top: 67px;
+  z-index: 99;
+}
+
+.tab-btn {
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  padding: 13px 16px;
+  color: rgba(0,212,255,0.4);
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: color 0.2s, border-color 0.2s, text-shadow 0.2s;
+  letter-spacing: 0.12em;
+  font-family: 'Courier New', monospace;
+  text-transform: uppercase;
+}
+
+.tab-btn:hover { color: var(--cyan); }
+
+.tab-btn.active {
+  color: var(--cyan);
+  border-bottom-color: var(--cyan);
+  text-shadow: 0 0 8px rgba(0,212,255,0.8);
+}
+
+/* ============================================================
+   CONTENT AREA
+   ============================================================ */
+#content {
+  padding: 24px;
+  min-height: calc(100vh - 120px);
+  position: relative;
+  z-index: 1;
+}
+
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+
+/* ============================================================
+   CARDS & STATS
+   ============================================================ */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.stat-card {
+  background: #020810;
+  border: 1px solid rgba(0,212,255,0.25);
+  padding: 18px;
+  position: relative;
+  overflow: hidden;
+  transition: box-shadow 0.3s, border-color 0.3s;
+  clip-path: polygon(10px 0%, 100% 0%, calc(100% - 10px) 100%, 0% 100%);
+  animation: glowPulse 3s ease-in-out infinite;
+}
+
+.stat-card:hover {
+  border-color: var(--cyan);
+  box-shadow: var(--cyan-glow);
+}
+
+.stat-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+}
+
+.stat-label {
+  font-size: 10px;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  margin-bottom: 10px;
+  font-family: 'Courier New', monospace;
+}
+
+.stat-value {
+  font-size: 42px;
+  font-weight: 900;
+  color: var(--cyan);
+  line-height: 1;
+  text-shadow: 0 0 10px rgba(0,212,255,0.7);
+  font-family: 'Courier New', monospace;
+}
+
+.stat-sub {
+  font-size: 10px;
+  color: rgba(0,212,255,0.3);
+  margin-top: 6px;
+  font-family: 'Courier New', monospace;
+}
+
+/* ============================================================
+   GRADE CARD
+   ============================================================ */
+.grade-section {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 24px;
+  align-items: stretch;
+  flex-wrap: wrap;
+}
+
+.grade-card {
+  background: #020810;
+  border: 1px solid rgba(0,212,255,0.25);
+  padding: 24px;
+  min-width: 160px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  clip-path: polygon(12px 0%, 100% 0%, calc(100% - 12px) 100%, 0% 100%);
+  animation: glowPulse 3s ease-in-out infinite;
+}
+
+.grade-label {
+  font-size: 10px;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  font-family: 'Courier New', monospace;
+}
+
+.grade-display {
+  font-size: 64px;
+  font-weight: 900;
+  line-height: 1;
+  cursor: pointer;
+  transition: transform 0.2s, text-shadow 0.2s;
+  user-select: none;
+  font-family: 'Courier New', monospace;
+  text-shadow: 0 0 20px currentColor;
+}
+.grade-display:hover { transform: scale(1.1); }
+
+.grade-display.A { color: var(--grade-a); }
+.grade-display.B { color: var(--grade-b); }
+.grade-display.C { color: var(--grade-c); }
+.grade-display.D { color: var(--grade-d); }
+
+.grade-hint { font-size: 10px; color: rgba(0,212,255,0.25); text-align: center; font-family: 'Courier New', monospace; letter-spacing: 0.05em; }
+
+/* ============================================================
+   FUNNEL
+   ============================================================ */
+.funnel-section {
+  background: #020810;
+  border: 1px solid rgba(0,212,255,0.2);
+  padding: 20px;
+  margin-bottom: 24px;
+  position: relative;
+}
+
+.funnel-section::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+}
+
+.section-title {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--cyan);
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Courier New', monospace;
+  text-shadow: 0 0 8px rgba(0,212,255,0.5);
+}
+
+.funnel-steps {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+}
+
+.funnel-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  min-width: 100px;
+}
+
+.funnel-bar {
+  width: 100%;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: 800;
+  color: #000;
+  position: relative;
+  clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 50%, calc(100% - 10px) 100%, 0 100%, 10px 50%);
+  font-family: 'Courier New', monospace;
+  text-shadow: none;
+}
+
+.funnel-step:first-child .funnel-bar {
+  clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 50%, calc(100% - 10px) 100%, 0 100%);
+}
+
+.funnel-step-label {
+  font-size: 10px;
+  color: var(--text-dim);
+  text-align: center;
+  white-space: nowrap;
+  font-family: 'Courier New', monospace;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.funnel-arrow { color: rgba(0,212,255,0.3); font-size: 16px; padding-top: 12px; }
+
+.conversion-rates {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-top: 16px;
+}
+
+.conv-rate {
+  background: rgba(0,212,255,0.04);
+  border: 1px solid rgba(0,212,255,0.2);
+  padding: 10px 16px;
+  font-size: 12px;
+  clip-path: polygon(6px 0%, 100% 0%, calc(100% - 6px) 100%, 0% 100%);
+}
+
+.conv-rate-label { color: var(--text-dim); margin-bottom: 4px; font-family: 'Courier New', monospace; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; }
+.conv-rate-value { font-size: 22px; font-weight: 900; color: var(--cyan); font-family: 'Courier New', monospace; text-shadow: 0 0 8px rgba(0,212,255,0.6); }
+
+/* ============================================================
+   WEEKLY NOTES
+   ============================================================ */
+.notes-section {
+  background: #020810;
+  border: 1px solid rgba(0,212,255,0.2);
+  padding: 20px;
+  margin-bottom: 24px;
+  position: relative;
+}
+
+.notes-section::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+}
+
+.notes-textarea {
+  width: 100%;
+  background: rgba(0,212,255,0.03);
+  border: 1px solid rgba(0,212,255,0.2);
+  padding: 12px;
+  color: var(--cyan);
+  font-size: 12px;
+  line-height: 1.7;
+  resize: vertical;
+  min-height: 120px;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  font-family: 'Courier New', monospace;
+}
+
+.notes-textarea:focus {
+  border-color: var(--cyan);
+  box-shadow: var(--cyan-glow-sm);
+}
+
+.notes-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.last-updated {
+  font-size: 10px;
+  color: rgba(0,212,255,0.25);
+  font-family: 'Courier New', monospace;
+  letter-spacing: 0.05em;
+}
+
+.btn-save {
+  background: transparent;
+  color: var(--cyan);
+  border: 1px solid var(--cyan);
+  padding: 5px 14px;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: 'Courier New', monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  clip-path: polygon(6px 0%, 100% 0%, calc(100% - 6px) 100%, 0% 100%);
+}
+.btn-save:hover {
+  background: rgba(0,212,255,0.1);
+  box-shadow: var(--cyan-glow-sm);
+}
+
+/* ============================================================
+   TABLES
+   ============================================================ */
+.table-wrap {
+  background: #000000;
+  border: 1px solid rgba(0,212,255,0.2);
+  overflow: hidden;
+  position: relative;
+}
+
+.table-wrap::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+}
+
+.table-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 18px;
+  border-bottom: 1px solid rgba(0,212,255,0.15);
+  flex-wrap: wrap;
+  gap: 10px;
+  background: rgba(0,212,255,0.03);
+}
+
+.table-count {
+  font-size: 10px;
+  color: var(--text-dim);
+  background: rgba(0,212,255,0.06);
+  border: 1px solid rgba(0,212,255,0.2);
+  padding: 3px 10px;
+  font-family: 'Courier New', monospace;
+  letter-spacing: 0.1em;
+}
+
+.btn-export {
+  background: transparent;
+  border: 1px solid rgba(0,212,255,0.25);
+  padding: 5px 12px;
+  color: var(--text-dim);
+  font-size: 11px;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: 'Courier New', monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.btn-export:hover {
+  border-color: var(--cyan);
+  color: var(--cyan);
+  box-shadow: var(--cyan-glow-sm);
+}
+
+.table-scroll { overflow-x: auto; }
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 600px;
+}
+
+thead th {
+  background: #001a20;
+  color: var(--cyan);
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  padding: 9px 12px;
+  text-align: left;
+  border-bottom: 1px solid rgba(0,212,255,0.3);
+  white-space: nowrap;
+  font-family: 'Courier New', monospace;
+}
+
+tbody tr {
+  border-bottom: 1px solid rgba(0,212,255,0.08);
+  transition: background 0.15s, box-shadow 0.15s;
+  border-left: 2px solid transparent;
+}
+
+tbody tr:nth-child(even) { background: #050a0f; }
+tbody tr:nth-child(odd) { background: #000000; }
+
+tbody tr:hover {
+  background: #020d15;
+  border-left-color: var(--cyan);
+  box-shadow: inset 0 0 20px rgba(0,212,255,0.05);
+}
+
+tbody tr.search-hidden { display: none; }
+
+tbody td {
+  padding: 9px 12px;
+  font-size: 12px;
+  color: var(--text);
+  vertical-align: middle;
+  font-family: 'Courier New', monospace;
+}
+
+/* ============================================================
+   BADGES
+   ============================================================ */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  font-size: 10px;
+  font-weight: 700;
+  white-space: nowrap;
+  font-family: 'Courier New', monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.badge-new { background: rgba(0,212,255,0.08); color: var(--cyan); border: 1px solid rgba(0,212,255,0.4); box-shadow: 0 0 6px rgba(0,212,255,0.25); }
+.badge-contacted { background: rgba(234,179,8,0.08); color: #eab308; border: 1px solid rgba(234,179,8,0.35); box-shadow: 0 0 6px rgba(234,179,8,0.2); }
+.badge-followup { background: rgba(249,115,22,0.08); color: #f97316; border: 1px solid rgba(249,115,22,0.35); box-shadow: 0 0 6px rgba(249,115,22,0.2); }
+.badge-meeting { background: rgba(34,197,94,0.08); color: #22c55e; border: 1px solid rgba(34,197,94,0.35); box-shadow: 0 0 6px rgba(34,197,94,0.2); }
+.badge-proposal { background: rgba(168,85,247,0.08); color: #a855f7; border: 1px solid rgba(168,85,247,0.35); box-shadow: 0 0 6px rgba(168,85,247,0.2); }
+.badge-won { background: rgba(22,163,74,0.08); color: #22c55e; border: 1px solid rgba(22,163,74,0.4); box-shadow: 0 0 8px rgba(22,163,74,0.3); }
+.badge-lost { background: rgba(239,68,68,0.08); color: #ef4444; border: 1px solid rgba(239,68,68,0.35); box-shadow: 0 0 6px rgba(239,68,68,0.2); }
+
+.badge-henry { background: rgba(59,130,246,0.08); color: #3b82f6; border: 1px solid rgba(59,130,246,0.35); box-shadow: 0 0 6px rgba(59,130,246,0.2); }
+.badge-rollover { background: rgba(249,115,22,0.08); color: #f97316; border: 1px solid rgba(249,115,22,0.35); box-shadow: 0 0 6px rgba(249,115,22,0.2); }
+
+.badge-event { background: rgba(168,85,247,0.08); color: #a855f7; border: 1px solid rgba(168,85,247,0.35); box-shadow: 0 0 6px rgba(168,85,247,0.2); }
+.badge-group { background: rgba(59,130,246,0.08); color: #3b82f6; border: 1px solid rgba(59,130,246,0.35); box-shadow: 0 0 6px rgba(59,130,246,0.2); }
+.badge-virtual { background: rgba(234,179,8,0.08); color: #eab308; border: 1px solid rgba(234,179,8,0.35); box-shadow: 0 0 6px rgba(234,179,8,0.2); }
+.badge-referral { background: rgba(34,197,94,0.08); color: #22c55e; border: 1px solid rgba(34,197,94,0.35); box-shadow: 0 0 6px rgba(34,197,94,0.2); }
+
+.badge-layoff { background: rgba(239,68,68,0.08); color: #ef4444; border: 1px solid rgba(239,68,68,0.35); box-shadow: 0 0 6px rgba(239,68,68,0.2); }
+.badge-funding { background: rgba(34,197,94,0.08); color: #22c55e; border: 1px solid rgba(34,197,94,0.35); box-shadow: 0 0 6px rgba(34,197,94,0.2); }
+.badge-expansion { background: rgba(59,130,246,0.08); color: #3b82f6; border: 1px solid rgba(59,130,246,0.35); box-shadow: 0 0 6px rgba(59,130,246,0.2); }
+.badge-leadership { background: rgba(234,179,8,0.08); color: #eab308; border: 1px solid rgba(234,179,8,0.35); box-shadow: 0 0 6px rgba(234,179,8,0.2); }
+.badge-retirement { background: rgba(249,115,22,0.08); color: #f97316; border: 1px solid rgba(249,115,22,0.35); box-shadow: 0 0 6px rgba(249,115,22,0.2); }
+.badge-healthcare { background: rgba(168,85,247,0.08); color: #a855f7; border: 1px solid rgba(168,85,247,0.35); box-shadow: 0 0 6px rgba(168,85,247,0.2); }
+
+.badge-draft {
+  background: rgba(239,68,68,0.06);
+  color: #ef4444;
+  border: 1px solid rgba(239,68,68,0.2);
+  font-size: 9px;
+  padding: 1px 5px;
+  display: block;
+  margin-top: 3px;
+  width: fit-content;
+  font-family: 'Courier New', monospace;
+  letter-spacing: 0.05em;
+}
+
+.urgency-today { color: #ef4444; text-shadow: 0 0 6px rgba(239,68,68,0.5); }
+.urgency-week { color: #eab308; text-shadow: 0 0 6px rgba(234,179,8,0.4); }
+.urgency-month { color: var(--cyan); text-shadow: 0 0 6px rgba(0,212,255,0.4); }
+
+/* ============================================================
+   ACTION BUTTONS
+   ============================================================ */
+.action-btns {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.btn-sm {
+  background: transparent;
+  border: 1px solid rgba(0,212,255,0.2);
+  padding: 3px 8px;
+  font-size: 10px;
+  color: var(--text-dim);
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+  font-family: 'Courier New', monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.btn-sm:hover { background: rgba(0,212,255,0.08); border-color: var(--cyan); color: var(--cyan); box-shadow: var(--cyan-glow-sm); }
+.btn-sm.danger:hover { border-color: #ef4444; color: #ef4444; box-shadow: 0 0 8px rgba(239,68,68,0.4); }
+.btn-sm.success:hover { border-color: #22c55e; color: #22c55e; box-shadow: 0 0 8px rgba(34,197,94,0.4); }
+
+/* ============================================================
+   AUM TICKER
+   ============================================================ */
+.aum-ticker {
+  background: linear-gradient(135deg, #020d18, #010810);
+  border: 1px solid rgba(0,212,255,0.3);
+  box-shadow: 0 0 20px rgba(0,212,255,0.1);
+  padding: 16px 24px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  flex-wrap: wrap;
+  position: relative;
+  overflow: hidden;
+}
+
+.aum-ticker::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+  animation: topBarScan 3s linear infinite;
+  background-size: 200% 100%;
+}
+
+.aum-label {
+  font-size: 10px;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  font-family: 'Courier New', monospace;
+}
+
+.aum-value {
+  font-size: 32px;
+  font-weight: 900;
+  color: var(--cyan);
+  font-family: 'Courier New', monospace;
+  text-shadow: 0 0 12px rgba(0,212,255,0.7);
+  letter-spacing: 0.05em;
+}
+
+.aum-sub {
+  font-size: 10px;
+  color: rgba(0,212,255,0.3);
+  font-family: 'Courier New', monospace;
+}
+
+/* ============================================================
+   EMPTY STATE
+   ============================================================ */
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: rgba(0,212,255,0.2);
+}
+
+.empty-state-icon { font-size: 40px; margin-bottom: 12px; }
+.empty-state-text { font-size: 13px; margin-bottom: 6px; color: rgba(0,212,255,0.3); font-family: 'Courier New', monospace; text-transform: uppercase; letter-spacing: 0.1em; }
+.empty-state-sub { font-size: 11px; color: rgba(0,212,255,0.2); font-family: 'Courier New', monospace; }
+
+/* ============================================================
+   ACTIVITY LOG
+   ============================================================ */
+.activity-entry {
+  display: grid;
+  grid-template-columns: 160px 160px 120px 1fr;
+  gap: 12px;
+  padding: 9px 16px;
+  border-bottom: 1px solid rgba(0,212,255,0.06);
+  font-size: 11px;
+  align-items: start;
+  transition: background 0.15s;
+  font-family: 'Courier New', monospace;
+}
+
+.activity-entry:hover { background: rgba(0,212,255,0.04); }
+
+.act-time { color: rgba(0,212,255,0.35); font-variant-numeric: tabular-nums; }
+.act-action { color: var(--cyan); font-weight: 700; text-shadow: 0 0 6px rgba(0,212,255,0.4); text-transform: uppercase; letter-spacing: 0.06em; }
+.act-category {
+  color: var(--text-dim);
+  background: rgba(0,212,255,0.06);
+  border: 1px solid rgba(0,212,255,0.15);
+  padding: 1px 6px;
+  width: fit-content;
+  text-transform: uppercase;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+}
+.act-detail { color: rgba(0,212,255,0.6); }
+
+.activity-header-row {
+  display: grid;
+  grid-template-columns: 160px 160px 120px 1fr;
+  gap: 12px;
+  padding: 9px 16px;
+  background: #001a20;
+  border-bottom: 1px solid rgba(0,212,255,0.2);
+  font-size: 10px;
+  color: var(--cyan);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-family: 'Courier New', monospace;
+}
+
+/* ============================================================
+   MODALS
+   ============================================================ */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.85);
+  z-index: 1000;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  backdrop-filter: blur(6px);
+}
+
+.modal-overlay.active { display: flex; }
+
+.modal-box {
+  background: #000000;
+  border: 1px solid rgba(0,212,255,0.4);
+  box-shadow: 0 0 40px rgba(0,212,255,0.2), 0 0 80px rgba(0,212,255,0.1);
+  padding: 0;
+  max-width: 640px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+  clip-path: polygon(16px 0%, 100% 0%, calc(100% - 16px) 100%, 0% 100%);
+}
+
+.modal-box::before {
+  content: '';
+  display: block;
+  height: 3px;
+  background: linear-gradient(90deg, transparent 0%, var(--cyan) 50%, transparent 100%);
+  animation: topBarScan 2s linear infinite;
+  background-size: 200% 100%;
+}
+
+.modal-box > *:not(:first-child) {
+  /* Give inner content padding after the top bar */
+}
+
+/* Wrapper inside modal box for content */
+.modal-box .modal-title,
+.modal-box .modal-close,
+.modal-box .form-grid,
+.modal-box .form-group,
+.modal-box .modal-actions {
+  /* These elements get natural padding from their own rules */
+}
+
+/* Override padding — apply to inner wrapper via modal-box padding after the bar */
+.modal-box {
+  padding-top: 0;
+}
+
+.modal-title {
+  font-size: 15px;
+  font-weight: 900;
+  color: var(--cyan);
+  margin-bottom: 20px;
+  padding: 20px 24px 0 24px;
+  padding-right: 60px;
+  text-shadow: 0 0 10px rgba(0,212,255,0.6);
+  font-family: 'Courier New', monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+}
+
+.modal-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: transparent;
+  border: 1px solid rgba(0,212,255,0.3);
+  color: var(--text-dim);
+  cursor: pointer;
+  font-size: 16px;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  font-family: 'Courier New', monospace;
+}
+.modal-close:hover { border-color: #ef4444; color: #ef4444; box-shadow: 0 0 8px rgba(239,68,68,0.3); }
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-bottom: 16px;
+  padding: 0 24px;
+}
+
+.form-grid.single { grid-template-columns: 1fr; }
+
+.form-group { display: flex; flex-direction: column; gap: 6px; }
+.form-group.span-2 { grid-column: span 2; }
+
+.form-label {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-family: 'Courier New', monospace;
+}
+
+.form-input, .form-select, .form-textarea {
+  background: rgba(0,212,255,0.04);
+  border: 1px solid rgba(0,212,255,0.2);
+  padding: 7px 10px;
+  color: var(--cyan);
+  font-size: 12px;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  font-family: 'Courier New', monospace;
+  width: 100%;
+}
+
+.form-input:focus, .form-select:focus, .form-textarea:focus {
+  border-color: var(--cyan);
+  box-shadow: var(--cyan-glow-sm);
+}
+
+.form-select {
+  appearance: none;
+  -webkit-appearance: none;
+  cursor: pointer;
+}
+
+.form-select option { background: #000; color: var(--cyan); }
+
+.form-textarea { resize: vertical; min-height: 80px; }
+
+.modal-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  margin-top: 20px;
+  padding: 16px 24px;
+  border-top: 1px solid rgba(0,212,255,0.15);
+}
+
+.btn-primary {
+  background: rgba(0,212,255,0.1);
+  color: var(--cyan);
+  border: 1px solid var(--cyan);
+  padding: 9px 22px;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: 'Courier New', monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+}
+.btn-primary:hover {
+  background: rgba(0,212,255,0.2);
+  box-shadow: var(--cyan-glow-sm);
+}
+
+.btn-secondary {
+  background: transparent;
+  color: var(--text-dim);
+  border: 1px solid rgba(0,212,255,0.2);
+  padding: 9px 18px;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: 'Courier New', monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+}
+.btn-secondary:hover { border-color: rgba(0,212,255,0.5); color: var(--cyan); }
+
+/* ============================================================
+   TOAST
+   ============================================================ */
+.toast-container {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.toast {
+  background: #000000;
+  border: 1px solid rgba(0,212,255,0.4);
+  border-left: 3px solid var(--cyan);
+  box-shadow: 0 0 20px rgba(0,212,255,0.2);
+  padding: 11px 16px;
+  font-size: 12px;
+  color: var(--cyan);
+  animation: slideIn 0.3s ease;
+  max-width: 320px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: 'Courier New', monospace;
+  letter-spacing: 0.05em;
+}
+
+.toast.success { border-left-color: #22c55e; }
+.toast.error { border-left-color: #ef4444; }
+.toast.info { border-left-color: var(--cyan); }
+
+.toast.hiding { animation: fadeOut 0.3s ease forwards; }
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+footer {
+  text-align: center;
+  padding: 16px 24px;
+  border-top: 1px solid rgba(0,212,255,0.15);
+  font-size: 10px;
+  color: rgba(0,212,255,0.25);
+  letter-spacing: 0.2em;
+  margin-top: 40px;
+  font-family: 'Courier New', monospace;
+  text-transform: uppercase;
+  position: relative;
+  z-index: 1;
+}
+
+footer span { color: rgba(0,212,255,0.6); }
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 768px) {
+  #header { padding: 10px 16px; }
+  .title-main { font-size: 16px; letter-spacing: 0.15em; }
+  #content { padding: 16px; }
+  .form-grid { grid-template-columns: 1fr; }
+  .form-group.span-2 { grid-column: 1; }
+  .activity-entry, .activity-header-row {
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+  }
+  .stats-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* ============================================================
+   MISC UTILITIES
+   ============================================================ */
+.text-gold { color: var(--cyan); }
+.text-green { color: #22c55e; }
+.text-red { color: #ef4444; }
+.text-muted { color: rgba(0,212,255,0.3); }
+.fw-bold { font-weight: 700; }
+.mt-4 { margin-top: 16px; }
+.mb-4 { margin-bottom: 16px; }
+.gap-2 { gap: 8px; }
+.flex { display: flex; }
+.items-center { align-items: center; }
+.justify-between { justify-content: space-between; }
+.flex-wrap { flex-wrap: wrap; }
+.row-num { color: rgba(0,212,255,0.2); font-size: 11px; font-weight: 600; font-family: 'Courier New', monospace; }
+.cell-email { color: var(--cyan); font-size: 11px; }
+.cell-email a { color: var(--cyan) !important; text-decoration: none; }
+.cell-email a:hover { text-shadow: 0 0 6px rgba(0,212,255,0.6); }
+.cell-phone { color: rgba(0,212,255,0.5); font-size: 11px; }
+.cell-notes { color: rgba(0,212,255,0.4); font-size: 11px; max-width: 180px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.cell-company { font-weight: 700; color: var(--cyan); text-shadow: 0 0 6px rgba(0,212,255,0.3); }
+.cell-name { font-weight: 700; color: var(--cyan); text-shadow: 0 0 6px rgba(0,212,255,0.3); }
+.highlight { background: rgba(0,212,255,0.1); }
+
+/* Inline link styles in JS-rendered content */
+a[href^="mailto:"] { color: var(--cyan) !important; text-decoration: none; }
+a[href^="http"] { color: var(--cyan) !important; text-decoration: none; }
+a:hover { text-shadow: 0 0 6px rgba(0,212,255,0.6); }
+</style>
+</head>
+<body>
+
+<!-- ============================================================
+     HEADER
+     ============================================================ -->
+<header id="header">
+  <div class="header-left">
+    <div class="live-badge">
+      <div class="pulse-dot"></div>
+      SYSTEM ONLINE
+    </div>
+    <div class="header-title">
+      <div class="title-main">J.A.R.V.I.S</div>
+      <div class="title-sub">COMMAND CENTER | AJ DONOFRIO | BARNUM FINANCIAL GROUP</div>
+    </div>
+  </div>
+  <div class="header-center">
+    <div class="search-wrap">
+      <span class="search-icon">[?]</span>
+      <input type="text" class="search-input" id="global-search" placeholder="SEARCH ACROSS ALL TABS... (CTRL+F)" autocomplete="off">
+    </div>
+  </div>
+  <div class="header-right">
+    <a href="home.html" style="display:inline-block;color:#00d4ff;border:1px solid #00d4ff;padding:6px 16px;font-family:'Courier New',monospace;font-size:11px;letter-spacing:2px;text-decoration:none;text-transform:uppercase;clip-path:polygon(6px 0%,100% 0%,calc(100% - 6px) 100%,0% 100%);transition:all 0.2s;" onmouseover="this.style.background='rgba(0,212,255,0.15)';this.style.boxShadow='0 0 15px rgba(0,212,255,0.4)'" onmouseout="this.style.background='transparent';this.style.boxShadow='none'">[HOME]</a>
+    <button id="bgToggle" onclick="toggleBG()" style="display:inline-block;color:#00d4ff;border:1px solid #00d4ff;padding:6px 16px;font-family:'Courier New',monospace;font-size:11px;letter-spacing:2px;background:transparent;cursor:pointer;text-transform:uppercase;clip-path:polygon(6px 0%,100% 0%,calc(100% - 6px) 100%,0% 100%);transition:all 0.2s;" onmouseover="this.style.boxShadow='0 0 15px rgba(0,212,255,0.4)'" onmouseout="this.style.boxShadow='none'">[DARK MODE]</button>
+
+    <button class="btn-add-new" id="btn-add-new" onclick="addNewContextual()">[+] ADD NEW</button>
+    <div id="live-clock"></div>
+  </div>
+</header>
+
+<!-- ============================================================
+     TAB BAR
+     ============================================================ -->
+<nav id="tab-bar">
+  <button class="tab-btn active" data-tab="0" onclick="switchTab(0)">[PERF] Performance</button>
+  <button class="tab-btn" data-tab="1" onclick="switchTab(1)">[EMPLOYER] Employer Prospects</button>
+  <button class="tab-btn" data-tab="2" onclick="switchTab(2)">[INDIVIDUAL] Individual Prospects</button>
+  <button class="tab-btn" data-tab="3" onclick="switchTab(3)">[WEALTH] Wealth Management</button>
+  <button class="tab-btn" data-tab="4" onclick="switchTab(4)">[NETWORK] Network &amp; Events</button>
+  <button class="tab-btn" data-tab="5" onclick="switchTab(5)">[ALERTS] Trigger Alerts</button>
+  <button class="tab-btn" data-tab="6" onclick="switchTab(6)">[LOG] Activity Log</button>
+</nav>
+
+<!-- ============================================================
+     CONTENT
+     ============================================================ -->
+<main id="content">
+
+  <!-- ====== TAB 0: PERFORMANCE ====== -->
+  <div class="tab-panel active" id="tab-0">
+    <div class="grade-section">
+      <div class="grade-card">
+        <div class="grade-label">Weekly Grade</div>
+        <div class="grade-display A" id="grade-display" onclick="cycleGrade()">A</div>
+        <div class="grade-hint">Click to change grade</div>
+      </div>
+      <div style="flex:1; min-width:200px;">
+        <div class="stats-grid" style="margin-bottom:0;">
+          <div class="stat-card">
+            <div class="stat-label">Total Prospects</div>
+            <div class="stat-value" id="perf-total">0</div>
+            <div class="stat-sub">All pipelines</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Contacted This Week</div>
+            <div class="stat-value" id="perf-contacted">0</div>
+            <div class="stat-sub">Outreach sent</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Meetings Set</div>
+            <div class="stat-value" id="perf-meetings">0</div>
+            <div class="stat-sub">Scheduled calls</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Proposals Out</div>
+            <div class="stat-value" id="perf-proposals">0</div>
+            <div class="stat-sub">Sent this month</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Closed Won</div>
+            <div class="stat-value text-green" id="perf-won">0</div>
+            <div class="stat-sub">New clients</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">AUM Potential</div>
+            <div class="stat-value text-gold" id="perf-aum">$0</div>
+            <div class="stat-sub">Total pipeline</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="funnel-section">
+      <div class="section-title">[&gt;&gt;] Conversion Funnel</div>
+      <div class="funnel-steps" id="funnel-display">
+        <!-- rendered by JS -->
+      </div>
+      <div class="conversion-rates">
+        <div class="conv-rate">
+          <div class="conv-rate-label">Contact Rate</div>
+          <div class="conv-rate-value" id="rate-contact">0%</div>
+        </div>
+        <div class="conv-rate">
+          <div class="conv-rate-label">Meeting Rate</div>
+          <div class="conv-rate-value" id="rate-meeting">0%</div>
+        </div>
+        <div class="conv-rate">
+          <div class="conv-rate-label">Close Rate</div>
+          <div class="conv-rate-value" id="rate-close">0%</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="notes-section">
+      <div class="section-title">[//] Weekly Notes</div>
+      <textarea class="notes-textarea" id="weekly-notes" placeholder="Record wins, blockers, goals, follow-ups for this week..."></textarea>
+      <div class="notes-footer">
+        <span class="last-updated" id="notes-updated">Not yet saved</span>
+        <button class="btn-save" onclick="saveNotes()">[SAVE] Save Notes</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====== TAB 1: EMPLOYER PROSPECTS ====== -->
+  <div class="tab-panel" id="tab-1">
+    <div class="table-wrap">
+      <div class="table-header">
+        <div class="flex items-center gap-2">
+          <div class="section-title" style="margin:0;">[EMPLOYER] Employer Prospects</div>
+          <span class="table-count" id="employer-count">0 companies</span>
+        </div>
+        <div class="flex gap-2">
+          <button class="btn-export" onclick="exportCSV('employer')">[CSV] Export CSV</button>
+          <button class="btn-add-new" onclick="openModal('employer')">[+] Add Company</button>
+        </div>
+      </div>
+      <div class="table-scroll">
+        <table id="employer-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Company</th>
+              <th>Industry</th>
+              <th>Employees</th>
+              <th>Location</th>
+              <th>Growth Signal</th>
+              <th>Contact</th>
+              <th>Title</th>
+              <th>Email</th>
+              <th>Phone</th>
+              <th>Status</th>
+              <th>Last Contact</th>
+              <th>Notes</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="employer-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====== TAB 2: INDIVIDUAL PROSPECTS ====== -->
+  <div class="tab-panel" id="tab-2">
+    <div class="table-wrap">
+      <div class="table-header">
+        <div class="flex items-center gap-2">
+          <div class="section-title" style="margin:0;">[INDIVIDUAL] Individual Prospects</div>
+          <span class="table-count" id="individual-count">0 prospects</span>
+        </div>
+        <div class="flex gap-2">
+          <button class="btn-export" onclick="exportCSV('individual')">[CSV] Export CSV</button>
+          <button class="btn-add-new" onclick="openModal('individual')">[+] Add Prospect</button>
+        </div>
+      </div>
+      <div class="table-scroll">
+        <table id="individual-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Name</th>
+              <th>Type</th>
+              <th>Job Title</th>
+              <th>Company</th>
+              <th>Location</th>
+              <th>Email</th>
+              <th>Phone</th>
+              <th>LinkedIn</th>
+              <th>Status</th>
+              <th>Last Contact</th>
+              <th>Notes</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="individual-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====== TAB 3: WEALTH MANAGEMENT ====== -->
+  <div class="tab-panel" id="tab-3">
+    <div class="aum-ticker" id="aum-ticker">
+      <div>
+        <div class="aum-label">Total AUM Pipeline</div>
+        <div class="aum-value" id="aum-total">$0</div>
+      </div>
+      <div>
+        <div class="aum-label">Prospects</div>
+        <div class="aum-value" id="aum-count" style="font-size:24px;">0</div>
+      </div>
+      <div>
+        <div class="aum-label">Avg. Assets</div>
+        <div class="aum-value" id="aum-avg" style="font-size:24px;">$0</div>
+      </div>
+    </div>
+    <div class="table-wrap">
+      <div class="table-header">
+        <div class="flex items-center gap-2">
+          <div class="section-title" style="margin:0;">[WEALTH] Wealth Management Prospects</div>
+          <span class="table-count" id="wealth-count">0 prospects</span>
+        </div>
+        <div class="flex gap-2">
+          <button class="btn-export" onclick="exportCSV('wealth')">[CSV] Export CSV</button>
+          <button class="btn-add-new" onclick="openModal('wealth')">[+] Add Prospect</button>
+        </div>
+      </div>
+      <div class="table-scroll">
+        <table id="wealth-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Name</th>
+              <th>Wealth Source</th>
+              <th>Est. Investable Assets</th>
+              <th>Location</th>
+              <th>Email</th>
+              <th>Phone</th>
+              <th>LinkedIn</th>
+              <th>Status</th>
+              <th>Last Contact</th>
+              <th>Outreach Angle</th>
+              <th>Notes</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="wealth-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====== TAB 4: NETWORK & EVENTS ====== -->
+  <div class="tab-panel" id="tab-4">
+    <div class="table-wrap">
+      <div class="table-header">
+        <div class="flex items-center gap-2">
+          <div class="section-title" style="margin:0;">[NETWORK] Network &amp; Events</div>
+          <span class="table-count" id="network-count">0 entries</span>
+        </div>
+        <div class="flex gap-2">
+          <button class="btn-export" onclick="exportCSV('network')">[CSV] Export CSV</button>
+          <button class="btn-add-new" onclick="openModal('network')">[+] Add Event</button>
+        </div>
+      </div>
+      <div class="table-scroll">
+        <table id="network-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Name</th>
+              <th>Type</th>
+              <th>Date/Frequency</th>
+              <th>Location/Platform</th>
+              <th>Who Attends</th>
+              <th>Cost</th>
+              <th>How to Join</th>
+              <th>AJ's Angle</th>
+              <th>Status</th>
+              <th>Notes</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="network-tbody">
+            <tr id="network-empty">
+              <td colspan="12">
+                <div class="empty-state">
+                  <div class="empty-state-icon">[NET]</div>
+                  <div class="empty-state-text">No network events yet</div>
+                  <div class="empty-state-sub">Ready to receive data -- click "+ Add Event" or wait for Monday agent sync</div>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====== TAB 5: TRIGGER ALERTS ====== -->
+  <div class="tab-panel" id="tab-5">
+    <div class="table-wrap">
+      <div class="table-header">
+        <div class="flex items-center gap-2">
+          <div class="section-title" style="margin:0;">[ALERTS] Trigger Alerts</div>
+          <span class="table-count" id="alerts-count">0 alerts</span>
+        </div>
+        <div class="flex gap-2">
+          <button class="btn-export" onclick="exportCSV('alerts')">[CSV] Export CSV</button>
+          <button class="btn-add-new" onclick="openModal('alerts')">[+] Add Alert</button>
+        </div>
+      </div>
+      <div class="table-scroll">
+        <table id="alerts-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Date</th>
+              <th>Alert Type</th>
+              <th>Company/Person</th>
+              <th>What Happened</th>
+              <th>Opportunity</th>
+              <th>Urgency</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="alerts-tbody">
+            <tr id="alerts-empty">
+              <td colspan="9">
+                <div class="empty-state">
+                  <div class="empty-state-icon">[ALT]</div>
+                  <div class="empty-state-text">No trigger alerts yet</div>
+                  <div class="empty-state-sub">Ready to receive data -- click "+ Add Alert" or wait for daily trigger agent sync</div>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====== TAB 6: ACTIVITY LOG ====== -->
+  <div class="tab-panel" id="tab-6">
+    <div class="table-wrap">
+      <div class="table-header">
+        <div class="flex items-center gap-2">
+          <div class="section-title" style="margin:0;">[LOG] Activity Log</div>
+          <span class="table-count" id="activity-count">0 entries</span>
+        </div>
+        <div class="flex gap-2">
+          <button class="btn-export" onclick="exportCSV('activity')">[CSV] Export CSV</button>
+          <button class="btn-sm" onclick="clearActivityLog()" style="color: #ef4444; border-color: rgba(239,68,68,0.3);">[X] Clear Log</button>
+        </div>
+      </div>
+      <div class="activity-header-row">
+        <span>Timestamp</span>
+        <span>Action</span>
+        <span>Category</span>
+        <span>Detail</span>
+      </div>
+      <div id="activity-log-body">
+        <div class="empty-state" id="activity-empty">
+          <div class="empty-state-icon">[LOG]</div>
+          <div class="empty-state-text">No activity yet</div>
+          <div class="empty-state-sub">Actions across all tabs will appear here automatically</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<!-- ============================================================
+     MODALS
+     ============================================================ -->
+
+<!-- Employer Modal -->
+<div class="modal-overlay" id="modal-employer">
+  <div class="modal-box">
+    <div class="modal-title" id="employer-modal-title">[EMPLOYER] Add Employer Prospect</div>
+    <button class="modal-close" onclick="closeModal('employer')">X</button>
+    <input type="hidden" id="employer-edit-id">
+    <div class="form-grid">
+      <div class="form-group">
+        <label class="form-label">Company Name *</label>
+        <input type="text" class="form-input" id="emp-company" placeholder="Acme Corp">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Industry</label>
+        <input type="text" class="form-input" id="emp-industry" placeholder="Manufacturing">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Employees</label>
+        <input type="text" class="form-input" id="emp-employees" placeholder="~200">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Location</label>
+        <input type="text" class="form-input" id="emp-location" placeholder="City, ST">
+      </div>
+      <div class="form-group span-2">
+        <label class="form-label">Growth Signal</label>
+        <input type="text" class="form-input" id="emp-signal" placeholder="Recent funding, expansion, hiring...">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Contact Name</label>
+        <input type="text" class="form-input" id="emp-contact" placeholder="Jane Smith">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Title</label>
+        <input type="text" class="form-input" id="emp-title" placeholder="HR Director">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Email</label>
+        <input type="email" class="form-input" id="emp-email" placeholder="jane@company.com">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Phone</label>
+        <input type="text" class="form-input" id="emp-phone" placeholder="555-0100">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Status</label>
+        <select class="form-select" id="emp-status">
+          <option value="New">[NEW] New</option>
+          <option value="Contacted">[CNT] Contacted</option>
+          <option value="Follow-Up">[FLW] Follow-Up</option>
+          <option value="Meeting Set">[MTG] Meeting Set</option>
+          <option value="Proposal Sent">[PRP] Proposal Sent</option>
+          <option value="Closed Won">[WON] Closed Won</option>
+          <option value="Closed Lost">[LST] Closed Lost</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Last Contact</label>
+        <input type="date" class="form-input" id="emp-last-contact">
+      </div>
+      <div class="form-group span-2">
+        <label class="form-label">Notes</label>
+        <textarea class="form-textarea" id="emp-notes" placeholder="Add notes..."></textarea>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-secondary" onclick="closeModal('employer')">Cancel</button>
+      <button class="btn-primary" onclick="saveEmployer()">[SAVE] Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- Individual Modal -->
+<div class="modal-overlay" id="modal-individual">
+  <div class="modal-box">
+    <div class="modal-title" id="individual-modal-title">[INDIVIDUAL] Add Individual Prospect</div>
+    <button class="modal-close" onclick="closeModal('individual')">X</button>
+    <input type="hidden" id="individual-edit-id">
+    <div class="form-grid">
+      <div class="form-group">
+        <label class="form-label">Name *</label>
+        <input type="text" class="form-input" id="ind-name" placeholder="Full Name">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Type</label>
+        <select class="form-select" id="ind-type">
+          <option value="HENRY">HENRY</option>
+          <option value="Rollover">Rollover</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Job Title</label>
+        <input type="text" class="form-input" id="ind-jobtitle" placeholder="Senior Software Engineer">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Company</label>
+        <input type="text" class="form-input" id="ind-company" placeholder="Big Tech Co">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Location</label>
+        <input type="text" class="form-input" id="ind-location" placeholder="City, ST">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Email</label>
+        <input type="email" class="form-input" id="ind-email" placeholder="name@email.com">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Phone</label>
+        <input type="text" class="form-input" id="ind-phone" placeholder="555-0100">
+      </div>
+      <div class="form-group">
+        <label class="form-label">LinkedIn</label>
+        <input type="text" class="form-input" id="ind-linkedin" placeholder="linkedin.com/in/...">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Status</label>
+        <select class="form-select" id="ind-status">
+          <option value="New">[NEW] New</option>
+          <option value="Contacted">[CNT] Contacted</option>
+          <option value="Follow-Up">[FLW] Follow-Up</option>
+          <option value="Meeting Set">[MTG] Meeting Set</option>
+          <option value="Proposal Sent">[PRP] Proposal Sent</option>
+          <option value="Closed Won">[WON] Closed Won</option>
+          <option value="Closed Lost">[LST] Closed Lost</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Last Contact</label>
+        <input type="date" class="form-input" id="ind-last-contact">
+      </div>
+      <div class="form-group span-2">
+        <label class="form-label">Notes</label>
+        <textarea class="form-textarea" id="ind-notes" placeholder="Add notes..."></textarea>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-secondary" onclick="closeModal('individual')">Cancel</button>
+      <button class="btn-primary" onclick="saveIndividual()">[SAVE] Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- Wealth Modal -->
+<div class="modal-overlay" id="modal-wealth">
+  <div class="modal-box">
+    <div class="modal-title" id="wealth-modal-title">[WEALTH] Add Wealth Prospect</div>
+    <button class="modal-close" onclick="closeModal('wealth')">X</button>
+    <input type="hidden" id="wealth-edit-id">
+    <div class="form-grid">
+      <div class="form-group">
+        <label class="form-label">Name *</label>
+        <input type="text" class="form-input" id="wth-name" placeholder="Full Name">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Wealth Source</label>
+        <input type="text" class="form-input" id="wth-source" placeholder="Business Owner, CFO...">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Est. Investable Assets</label>
+        <input type="text" class="form-input" id="wth-assets" placeholder="$2,000,000">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Location</label>
+        <input type="text" class="form-input" id="wth-location" placeholder="City, ST">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Email</label>
+        <input type="email" class="form-input" id="wth-email" placeholder="name@email.com">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Phone</label>
+        <input type="text" class="form-input" id="wth-phone" placeholder="555-0100">
+      </div>
+      <div class="form-group span-2">
+        <label class="form-label">LinkedIn</label>
+        <input type="text" class="form-input" id="wth-linkedin" placeholder="linkedin.com/in/...">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Status</label>
+        <select class="form-select" id="wth-status">
+          <option value="New">[NEW] New</option>
+          <option value="Contacted">[CNT] Contacted</option>
+          <option value="Follow-Up">[FLW] Follow-Up</option>
+          <option value="Meeting Set">[MTG] Meeting Set</option>
+          <option value="Proposal Sent">[PRP] Proposal Sent</option>
+          <option value="Closed Won">[WON] Closed Won</option>
+          <option value="Closed Lost">[LST] Closed Lost</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Last Contact</label>
+        <input type="date" class="form-input" id="wth-last-contact">
+      </div>
+      <div class="form-group span-2">
+        <label class="form-label">Outreach Angle</label>
+        <input type="text" class="form-input" id="wth-angle" placeholder="Retirement planning, tax-efficient wealth transfer...">
+      </div>
+      <div class="form-group span-2">
+        <label class="form-label">Notes</label>
+        <textarea class="form-textarea" id="wth-notes" placeholder="Add notes..."></textarea>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-secondary" onclick="closeModal('wealth')">Cancel</button>
+      <button class="btn-primary" onclick="saveWealth()">[SAVE] Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- Network Modal -->
+<div class="modal-overlay" id="modal-network">
+  <div class="modal-box">
+    <div class="modal-title" id="network-modal-title">[NETWORK] Add Network / Event</div>
+    <button class="modal-close" onclick="closeModal('network')">X</button>
+    <input type="hidden" id="network-edit-id">
+    <div class="form-grid">
+      <div class="form-group span-2">
+        <label class="form-label">Name *</label>
+        <input type="text" class="form-input" id="net-name" placeholder="Event or Group Name">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Type</label>
+        <select class="form-select" id="net-type">
+          <option value="Event">[EVT] Event</option>
+          <option value="Recurring Group">[GRP] Recurring Group</option>
+          <option value="Virtual Community">[VRT] Virtual Community</option>
+          <option value="Referral Partner">[REF] Referral Partner</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Date/Frequency</label>
+        <input type="text" class="form-input" id="net-date" placeholder="Monthly / Jan 15, 2026">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Location/Platform</label>
+        <input type="text" class="form-input" id="net-location" placeholder="Zoom / Chicago, IL">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Who Attends</label>
+        <input type="text" class="form-input" id="net-who" placeholder="CFOs, HNW business owners...">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Cost</label>
+        <input type="text" class="form-input" id="net-cost" placeholder="Free / $99">
+      </div>
+      <div class="form-group">
+        <label class="form-label">How to Join</label>
+        <input type="text" class="form-input" id="net-how" placeholder="Eventbrite, referral, website...">
+      </div>
+      <div class="form-group span-2">
+        <label class="form-label">AJ's Angle</label>
+        <input type="text" class="form-input" id="net-angle" placeholder="Connect with HR directors, offer group benefits talk...">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Status</label>
+        <select class="form-select" id="net-status">
+          <option value="Interested">Interested</option>
+          <option value="Registered">Registered</option>
+          <option value="Attending">Attending</option>
+          <option value="Joined">Joined</option>
+          <option value="Pass">Pass</option>
+        </select>
+      </div>
+      <div class="form-group span-2">
+        <label class="form-label">Notes</label>
+        <textarea class="form-textarea" id="net-notes" placeholder="Add notes..."></textarea>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-secondary" onclick="closeModal('network')">Cancel</button>
+      <button class="btn-primary" onclick="saveNetwork()">[SAVE] Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- Alerts Modal -->
+<div class="modal-overlay" id="modal-alerts">
+  <div class="modal-box">
+    <div class="modal-title" id="alerts-modal-title">[ALERTS] Add Trigger Alert</div>
+    <button class="modal-close" onclick="closeModal('alerts')">X</button>
+    <input type="hidden" id="alerts-edit-id">
+    <div class="form-grid">
+      <div class="form-group">
+        <label class="form-label">Date</label>
+        <input type="date" class="form-input" id="alt-date">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Alert Type</label>
+        <select class="form-select" id="alt-type">
+          <option value="Layoff">[RED] Layoff</option>
+          <option value="Funding Round">[GRN] Funding Round</option>
+          <option value="Expansion">[BLU] Expansion</option>
+          <option value="Leadership Change">[YLW] Leadership Change</option>
+          <option value="Retirement">[ORG] Retirement</option>
+          <option value="Hospital/Healthcare">[PRP] Hospital/Healthcare</option>
+        </select>
+      </div>
+      <div class="form-group span-2">
+        <label class="form-label">Company/Person *</label>
+        <input type="text" class="form-input" id="alt-entity" placeholder="Company or Person name">
+      </div>
+      <div class="form-group span-2">
+        <label class="form-label">What Happened</label>
+        <textarea class="form-textarea" id="alt-what" placeholder="Describe the trigger event..." style="min-height:60px;"></textarea>
+      </div>
+      <div class="form-group span-2">
+        <label class="form-label">Opportunity</label>
+        <input type="text" class="form-input" id="alt-opportunity" placeholder="401k rollover, group benefits intro...">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Urgency</label>
+        <select class="form-select" id="alt-urgency">
+          <option value="Act Today">[!!!] Act Today</option>
+          <option value="This Week">[!!] This Week</option>
+          <option value="This Month">[!] This Month</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Status</label>
+        <select class="form-select" id="alt-status">
+          <option value="New">New</option>
+          <option value="Reviewed">Reviewed</option>
+          <option value="Outreach Drafted">Outreach Drafted</option>
+          <option value="Contacted">Contacted</option>
+          <option value="Pass">Pass</option>
+        </select>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-secondary" onclick="closeModal('alerts')">Cancel</button>
+      <button class="btn-primary" onclick="saveAlert()">[SAVE] Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- Note Modal -->
+<div class="modal-overlay" id="modal-note">
+  <div class="modal-box" style="max-width:420px;">
+    <div class="modal-title">[NOTE] Add / Update Note</div>
+    <button class="modal-close" onclick="closeModal('note')">X</button>
+    <input type="hidden" id="note-table">
+    <input type="hidden" id="note-id">
+    <div class="form-group" style="margin-bottom:16px; padding: 0 24px;">
+      <label class="form-label">Note</label>
+      <textarea class="form-textarea" id="note-text" placeholder="Add your note here..." style="min-height:100px;"></textarea>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-secondary" onclick="closeModal('note')">Cancel</button>
+      <button class="btn-primary" onclick="saveNote()">[SAVE] Save Note</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     TOAST CONTAINER
+     ============================================================ -->
+<div class="toast-container" id="toast-container"></div>
+
+<!-- ============================================================
+     FOOTER
+     ============================================================ -->
+<footer>
+  <span>J.A.R.V.I.S</span> | Powered by AI &middot; Built for <span>AJ Donofrio</span> &middot; <span>Barnum Financial Group</span> Financial Advisor
+</footer>
+
+<!-- ============================================================
+     JAVASCRIPT
+     ============================================================ -->
+<script>
+/* ============================================================
+   JARVIS COMMAND CENTER — JAVASCRIPT
+   ============================================================ */
+
+// ---- DATA STORES ----
+const KEYS = {
+  employer: 'jarvis_employer',
+  individual: 'jarvis_individual',
+  wealth: 'jarvis_wealth',
+  network: 'jarvis_network',
+  alerts: 'jarvis_alerts',
+  activity: 'jarvis_activity',
+  performance: 'jarvis_performance'
+};
+
+let data = {
+  employer: [],
+  individual: [],
+  wealth: [],
+  network: [],
+  alerts: [],
+  activity: [],
+  performance: { grade: 'A', notes: '', notesUpdated: '' }
+};
+
+let currentTab = 0;
+let searchTerm = '';
+
+// ---- INITIAL DATA ----
+const DEFAULT_EMPLOYERS = [
+  { id: uid(), company: 'Metalcraft of Mayville', industry: 'Manufacturing', employees: '~200', location: 'Mayville, WI', signal: 'Stable manufacturer', contact: '', title: 'HR Director', email: '', phone: '', status: 'New', lastContact: '', notes: '' },
+  { id: uid(), company: 'IEC Electronics', industry: 'Manufacturing', employees: '~150', location: 'Newark, NY', signal: 'Contract electronics', contact: '', title: 'VP HR', email: '', phone: '', status: 'New', lastContact: '', notes: '' },
+  { id: uid(), company: 'OSF HealthCare Medical Group', industry: 'Healthcare', employees: '~300', location: 'Peoria, IL', signal: 'Regional health system', contact: '', title: 'HR Director', email: '', phone: '', status: 'New', lastContact: '', notes: '' },
+  { id: uid(), company: 'Concentra Urgent Care', industry: 'Healthcare', employees: '~400', location: 'Multi-state', signal: 'Urgent care chain', contact: '', title: 'Benefits Admin', email: '', phone: '', status: 'New', lastContact: '', notes: '' },
+  { id: uid(), company: 'Rehmann Group', industry: 'Prof. Services', employees: '~200', location: 'Troy, MI', signal: 'CPA/advisory firm', contact: '', title: 'HR Director', email: '', phone: '', status: 'New', lastContact: '', notes: '' },
+  { id: uid(), company: 'Sikich LLP', industry: 'Prof. Services', employees: '~300', location: 'Chicago, IL', signal: 'Accounting firm', contact: '', title: 'COO/HR', email: '', phone: '', status: 'New', lastContact: '', notes: '' },
+  { id: uid(), company: 'MoLo Solutions', industry: 'Logistics', employees: '~150', location: 'Chicago, IL', signal: 'Freight brokerage', contact: '', title: 'VP HR', email: '', phone: '', status: 'New', lastContact: '', notes: '' },
+  { id: uid(), company: 'Messer Construction Co.', industry: 'Construction', employees: '~250', location: 'Cincinnati, OH', signal: 'Regional contractor', contact: '', title: 'HR Director', email: '', phone: '', status: 'New', lastContact: '', notes: '' },
+  { id: uid(), company: 'SciSafe Inc.', industry: 'Healthcare', employees: '~100', location: 'East Brunswick, NJ', signal: 'New biorepository 2025', contact: '', title: 'HR Director', email: '', phone: '', status: 'New', lastContact: '', notes: '' },
+  { id: uid(), company: 'Biocon Generics Inc.', industry: 'Pharma', employees: '~100', location: 'Cranbury, NJ', signal: 'New US facility $30M', contact: '', title: 'HR Manager', email: '', phone: '', status: 'New', lastContact: '', notes: '' },
+  { id: uid(), company: 'IMC Construction', industry: 'Construction', employees: '~150', location: 'Woodbridge, NJ', signal: 'ENR award, expanding', contact: '', title: 'HR Director/CFO', email: '', phone: '', status: 'New', lastContact: '', notes: '' },
+  { id: uid(), company: 'Hopeworks', industry: 'Nonprofit', employees: '~75', location: 'Camden, NJ', signal: '$650K Newark expansion', contact: '', title: 'Executive Director', email: '', phone: '', status: 'New', lastContact: '', notes: '' },
+  { id: uid(), company: 'Lyzr AI', industry: 'Tech', employees: '~50', location: 'Jersey City, NJ', signal: '$14.5M Series A', contact: '', title: 'CEO/Head of People', email: '', phone: '', status: 'New', lastContact: '', notes: '' }
+];
+
+const DEFAULT_INDIVIDUALS = [
+  { id: uid(), name: 'Prospect — Senior SWE', type: 'HENRY', jobTitle: 'Senior Software Engineer', company: 'Big Tech', location: 'Remote', email: '', phone: '', linkedin: '', status: 'New', lastContact: '', notes: '' },
+  { id: uid(), name: 'Prospect — Biglaw Associate', type: 'HENRY', jobTitle: 'Associate Attorney', company: 'AmLaw Firm', location: 'New York, NY', email: '', phone: '', linkedin: '', status: 'New', lastContact: '', notes: '' },
+  { id: uid(), name: 'Prospect — Early Attending MD', type: 'HENRY', jobTitle: 'Attending Physician', company: 'Hospital Group', location: 'Boston, MA', email: '', phone: '', linkedin: '', status: 'New', lastContact: '', notes: '' },
+  { id: uid(), name: 'Prospect — VP Sales SaaS', type: 'HENRY', jobTitle: 'VP of Sales', company: 'SaaS Company', location: 'Austin, TX', email: '', phone: '', linkedin: '', status: 'New', lastContact: '', notes: '' },
+  { id: uid(), name: 'Prospect — Management Consultant', type: 'HENRY', jobTitle: 'Senior Manager', company: 'Big 4 Firm', location: 'Chicago, IL', email: '', phone: '', linkedin: '', status: 'New', lastContact: '', notes: '' },
+  { id: uid(), name: 'Prospect — Tech Layoff 401k', type: 'Rollover', jobTitle: 'Former Software Engineer', company: 'Ex-Big Tech', location: 'San Francisco, CA', email: '', phone: '', linkedin: '', status: 'New', lastContact: '', notes: '' },
+  { id: uid(), name: 'Prospect — Corporate Early Retiree', type: 'Rollover', jobTitle: 'Former VP Operations', company: 'Fortune 500', location: 'Dallas, TX', email: '', phone: '', linkedin: '', status: 'New', lastContact: '', notes: '' },
+  { id: uid(), name: 'Prospect — Federal Employee TSP', type: 'Rollover', jobTitle: 'Former Federal Agency Staff', company: 'US Government', location: 'Washington, DC', email: '', phone: '', linkedin: '', status: 'New', lastContact: '', notes: '' }
+];
+
+const DEFAULT_WEALTH = [
+  { id: uid(), name: 'Prospect — Business Owner (Mfg)', source: 'Business Owner / Manufacturing Exit', assets: '$2,000,000', location: 'Midwest', email: '', phone: '', linkedin: '', status: 'New', lastContact: '', angle: 'Business succession, tax-efficient wealth transfer', notes: '' },
+  { id: uid(), name: 'Prospect — Retiring CFO', source: 'Corporate Executive / CFO Retirement', assets: '$800,000', location: 'Northeast', email: '', phone: '', linkedin: '', status: 'New', lastContact: '', angle: 'Income replacement, deferred comp rollover', notes: '' },
+  { id: uid(), name: 'Prospect — Real Estate Investor', source: 'Real Estate / Rental Portfolio', assets: '$1,500,000', location: 'Southeast', email: '', phone: '', linkedin: '', status: 'New', lastContact: '', angle: 'Diversification, 1031 alternative, annuity ladder', notes: '' },
+  { id: uid(), name: 'Prospect — Senior Law Partner', source: 'Law Firm Equity Partner', assets: '$1,200,000', location: 'New York, NY', email: '', phone: '', linkedin: '', status: 'New', lastContact: '', angle: 'Estate planning, tax shelter strategies', notes: '' },
+  { id: uid(), name: 'Prospect — Tech Executive Post-IPO', source: 'Tech Executive / Post-IPO RSUs', assets: '$3,000,000', location: 'San Francisco, CA', email: '', phone: '', linkedin: '', status: 'New', lastContact: '', angle: 'Concentrated stock, diversification, tax planning', notes: '' },
+  { id: uid(), name: 'Prospect — Physician 15yr', source: 'Physician / 15 Years Practice', assets: '$900,000', location: 'Boston, MA', email: '', phone: '', linkedin: '', status: 'New', lastContact: '', angle: 'Disability insurance, retirement acceleration, student loan payoff', notes: '' },
+  { id: uid(), name: 'Prospect — Inherited Wealth', source: 'Inherited Wealth / Family Trust', assets: '$1,800,000', location: 'Chicago, IL', email: '', phone: '', linkedin: '', status: 'New', lastContact: '', angle: 'Stewardship, trust-to-investment bridge, life insurance review', notes: '' },
+  { id: uid(), name: 'Prospect — Early Retiree Buyout', source: 'Corporate Buyout / Early Retirement Package', assets: '$650,000', location: 'Dallas, TX', email: '', phone: '', linkedin: '', status: 'New', lastContact: '', angle: '401k rollover, bridge-to-Medicare strategy', notes: '' },
+  { id: uid(), name: 'Prospect — Small Business Owner Exit', source: 'Small Business Owner / Business Sale', assets: '$1,100,000', location: 'Phoenix, AZ', email: '', phone: '', linkedin: '', status: 'New', lastContact: '', angle: 'Post-sale tax management, wealth preservation', notes: '' },
+  { id: uid(), name: 'Prospect — Senior Defense Engineer', source: 'Defense / Government Contractor', assets: '$550,000', location: 'Washington, DC', email: '', phone: '', linkedin: '', status: 'New', lastContact: '', angle: 'TSP rollover, pension supplement, legacy planning', notes: '' }
+];
+
+// ---- UTILITY FUNCTIONS ----
+function uid() {
+  return 'id_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+}
+
+function fmtTimestamp(d) {
+  if (!d) d = new Date();
+  return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) +
+    ' ' + d.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+}
+
+function esc(s) {
+  if (!s) return '';
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function parseAssets(s) {
+  if (!s) return 0;
+  return parseFloat(String(s).replace(/[$,+]/g, '').replace('M', 'e6').replace('K', 'e3')) || 0;
+}
+
+function formatMoney(n) {
+  if (n >= 1e9) return '$' + (n / 1e9).toFixed(2) + 'B';
+  if (n >= 1e6) return '$' + (n / 1e6).toFixed(2) + 'M';
+  if (n >= 1e3) return '$' + (n / 1e3).toFixed(1) + 'K';
+  return '$' + n.toFixed(0);
+}
+
+// ---- LOCAL STORAGE ----
+function save(key) {
+  try { localStorage.setItem(KEYS[key], JSON.stringify(data[key])); } catch(e) {}
+}
+
+function load(key) {
+  try {
+    const s = localStorage.getItem(KEYS[key]);
+    if (s) data[key] = JSON.parse(s);
+  } catch(e) {}
+}
+
+function loadAll() {
+  Object.keys(KEYS).forEach(k => load(k));
+}
+
+function saveAll() {
+  Object.keys(KEYS).forEach(k => save(k));
+}
+
+// ---- CLOCK ----
+function updateClock() {
+  const now = new Date();
+  document.getElementById('live-clock').textContent =
+    now.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' }) +
+    ' · ' + now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+}
+
+// ---- TAB SWITCHING ----
+function switchTab(idx) {
+  currentTab = idx;
+  document.querySelectorAll('.tab-panel').forEach((p, i) => p.classList.toggle('active', i === idx));
+  document.querySelectorAll('.tab-btn').forEach((b, i) => b.classList.toggle('active', i === idx));
+  applySearch();
+}
+
+// ---- TOAST ----
+function toast(msg, type = 'success') {
+  const tc = document.getElementById('toast-container');
+  const t = document.createElement('div');
+  t.className = `toast ${type}`;
+  const icons = { success: '[OK]', error: '[ERR]', info: '[i]' };
+  t.innerHTML = `<span>${icons[type] || '[OK]'}</span> ${esc(msg)}`;
+  tc.appendChild(t);
+  setTimeout(() => {
+    t.classList.add('hiding');
+    setTimeout(() => t.remove(), 300);
+  }, 3200);
+}
+
+// ---- ACTIVITY LOG ----
+function logActivity(action, category, detail) {
+  if (!Array.isArray(data.activity)) data.activity = [];
+  data.activity.unshift({ ts: new Date().toISOString(), action, category, detail });
+  if (data.activity.length > 100) data.activity = data.activity.slice(0, 100);
+  save('activity');
+  renderActivity();
+}
+
+// ---- STATUS BADGE ----
+function statusBadge(s) {
+  const map = {
+    'New': ['badge-new', '[NEW]'],
+    'Contacted': ['badge-contacted', '[CNT]'],
+    'Follow-Up': ['badge-followup', '[FLW]'],
+    'Meeting Set': ['badge-meeting', '[MTG]'],
+    'Proposal Sent': ['badge-proposal', '[PRP]'],
+    'Closed Won': ['badge-won', '[WON]'],
+    'Closed Lost': ['badge-lost', '[LST]']
+  };
+  const [cls, icon] = map[s] || ['badge-new', '[NEW]'];
+  const draft = (s === 'New') ? '<span class="badge-draft">DRAFT -- Awaiting AJ Approval</span>' : '';
+  return `<span class="badge ${cls}">${icon} ${esc(s)}</span>${draft}`;
+}
+
+// ---- MODALS ----
+function openModal(type, editId) {
+  // Reset form
+  const forms = {
+    employer: ['emp-company','emp-industry','emp-employees','emp-location','emp-signal','emp-contact','emp-title','emp-email','emp-phone','emp-notes'],
+    individual: ['ind-name','ind-jobtitle','ind-company','ind-location','ind-email','ind-phone','ind-linkedin','ind-notes'],
+    wealth: ['wth-name','wth-source','wth-assets','wth-location','wth-email','wth-phone','wth-linkedin','wth-angle','wth-notes'],
+    network: ['net-name','net-date','net-location','net-who','net-cost','net-how','net-angle','net-notes'],
+    alerts: ['alt-entity','alt-what','alt-opportunity']
+  };
+  if (forms[type]) forms[type].forEach(id => { const el = document.getElementById(id); if(el) el.value = ''; });
+
+  const selects = {
+    employer: ['emp-status'],
+    individual: ['ind-type','ind-status'],
+    wealth: ['wth-status'],
+    network: ['net-type','net-status'],
+    alerts: ['alt-type','alt-urgency','alt-status']
+  };
+  if (selects[type]) selects[type].forEach(id => { const el = document.getElementById(id); if(el) el.selectedIndex = 0; });
+
+  const dateInputs = {
+    employer: 'emp-last-contact',
+    individual: 'ind-last-contact',
+    wealth: 'wth-last-contact',
+    alerts: 'alt-date'
+  };
+  if (dateInputs[type]) { const el = document.getElementById(dateInputs[type]); if(el) el.value = ''; }
+
+  const editIdEl = document.getElementById(`${type}-edit-id`);
+  const titleEl = document.getElementById(`${type}-modal-title`);
+
+  const titles = {
+    employer: ['[EMPLOYER] Add Employer Prospect', '[EMPLOYER] Edit Employer Prospect'],
+    individual: ['[INDIVIDUAL] Add Individual Prospect', '[INDIVIDUAL] Edit Individual Prospect'],
+    wealth: ['[WEALTH] Add Wealth Prospect', '[WEALTH] Edit Wealth Prospect'],
+    network: ['[NETWORK] Add Network / Event', '[NETWORK] Edit Network / Event'],
+    alerts: ['[ALERTS] Add Trigger Alert', '[ALERTS] Edit Trigger Alert']
+  };
+
+  if (editId) {
+    editIdEl.value = editId;
+    if (titleEl && titles[type]) titleEl.textContent = titles[type][1];
+    // pre-fill
+    const item = data[type === 'employer' ? 'employer' : type === 'individual' ? 'individual' : type === 'wealth' ? 'wealth' : type === 'network' ? 'network' : 'alerts'].find(x => x.id === editId);
+    if (item) prefillModal(type, item);
+  } else {
+    if (editIdEl) editIdEl.value = '';
+    if (titleEl && titles[type]) titleEl.textContent = titles[type][0];
+  }
+
+  document.getElementById(`modal-${type}`).classList.add('active');
+}
+
+function prefillModal(type, item) {
+  if (type === 'employer') {
+    document.getElementById('emp-company').value = item.company || '';
+    document.getElementById('emp-industry').value = item.industry || '';
+    document.getElementById('emp-employees').value = item.employees || '';
+    document.getElementById('emp-location').value = item.location || '';
+    document.getElementById('emp-signal').value = item.signal || '';
+    document.getElementById('emp-contact').value = item.contact || '';
+    document.getElementById('emp-title').value = item.title || '';
+    document.getElementById('emp-email').value = item.email || '';
+    document.getElementById('emp-phone').value = item.phone || '';
+    document.getElementById('emp-status').value = item.status || 'New';
+    document.getElementById('emp-last-contact').value = item.lastContact || '';
+    document.getElementById('emp-notes').value = item.notes || '';
+  } else if (type === 'individual') {
+    document.getElementById('ind-name').value = item.name || '';
+    document.getElementById('ind-type').value = item.type || 'HENRY';
+    document.getElementById('ind-jobtitle').value = item.jobTitle || '';
+    document.getElementById('ind-company').value = item.company || '';
+    document.getElementById('ind-location').value = item.location || '';
+    document.getElementById('ind-email').value = item.email || '';
+    document.getElementById('ind-phone').value = item.phone || '';
+    document.getElementById('ind-linkedin').value = item.linkedin || '';
+    document.getElementById('ind-status').value = item.status || 'New';
+    document.getElementById('ind-last-contact').value = item.lastContact || '';
+    document.getElementById('ind-notes').value = item.notes || '';
+  } else if (type === 'wealth') {
+    document.getElementById('wth-name').value = item.name || '';
+    document.getElementById('wth-source').value = item.source || '';
+    document.getElementById('wth-assets').value = item.assets || '';
+    document.getElementById('wth-location').value = item.location || '';
+    document.getElementById('wth-email').value = item.email || '';
+    document.getElementById('wth-phone').value = item.phone || '';
+    document.getElementById('wth-linkedin').value = item.linkedin || '';
+    document.getElementById('wth-status').value = item.status || 'New';
+    document.getElementById('wth-last-contact').value = item.lastContact || '';
+    document.getElementById('wth-angle').value = item.angle || '';
+    document.getElementById('wth-notes').value = item.notes || '';
+  } else if (type === 'network') {
+    document.getElementById('net-name').value = item.name || '';
+    document.getElementById('net-type').value = item.type || 'Event';
+    document.getElementById('net-date').value = item.date || '';
+    document.getElementById('net-location').value = item.location || '';
+    document.getElementById('net-who').value = item.who || '';
+    document.getElementById('net-cost').value = item.cost || '';
+    document.getElementById('net-how').value = item.how || '';
+    document.getElementById('net-angle').value = item.angle || '';
+    document.getElementById('net-status').value = item.status || 'Interested';
+    document.getElementById('net-notes').value = item.notes || '';
+  } else if (type === 'alerts') {
+    document.getElementById('alt-date').value = item.date || '';
+    document.getElementById('alt-type').value = item.type || 'Layoff';
+    document.getElementById('alt-entity').value = item.entity || '';
+    document.getElementById('alt-what').value = item.what || '';
+    document.getElementById('alt-opportunity').value = item.opportunity || '';
+    document.getElementById('alt-urgency').value = item.urgency || 'Act Today';
+    document.getElementById('alt-status').value = item.status || 'New';
+  }
+}
+
+function closeModal(type) {
+  const el = document.getElementById(`modal-${type}`);
+  if (el) el.classList.remove('active');
+}
+
+// ---- SAVE FUNCTIONS ----
+function saveEmployer() {
+  const company = document.getElementById('emp-company').value.trim();
+  if (!company) { toast('Company name is required', 'error'); return; }
+  const editId = document.getElementById('employer-edit-id').value;
+  const item = {
+    id: editId || uid(),
+    company,
+    industry: document.getElementById('emp-industry').value.trim(),
+    employees: document.getElementById('emp-employees').value.trim(),
+    location: document.getElementById('emp-location').value.trim(),
+    signal: document.getElementById('emp-signal').value.trim(),
+    contact: document.getElementById('emp-contact').value.trim(),
+    title: document.getElementById('emp-title').value.trim(),
+    email: document.getElementById('emp-email').value.trim(),
+    phone: document.getElementById('emp-phone').value.trim(),
+    status: document.getElementById('emp-status').value,
+    lastContact: document.getElementById('emp-last-contact').value,
+    notes: document.getElementById('emp-notes').value.trim()
+  };
+  if (editId) {
+    const idx = data.employer.findIndex(x => x.id === editId);
+    if (idx > -1) data.employer[idx] = item;
+    logActivity('Updated', 'Employer', company);
+    toast(`Updated: ${company}`);
+  } else {
+    data.employer.push(item);
+    logActivity('Added', 'Employer', company);
+    toast(`Added employer: ${company}`, 'success');
+  }
+  save('employer');
+  closeModal('employer');
+  renderEmployer();
+  updatePerformance();
+}
+
+function saveIndividual() {
+  const name = document.getElementById('ind-name').value.trim();
+  if (!name) { toast('Name is required', 'error'); return; }
+  const editId = document.getElementById('individual-edit-id').value;
+  const item = {
+    id: editId || uid(),
+    name,
+    type: document.getElementById('ind-type').value,
+    jobTitle: document.getElementById('ind-jobtitle').value.trim(),
+    company: document.getElementById('ind-company').value.trim(),
+    location: document.getElementById('ind-location').value.trim(),
+    email: document.getElementById('ind-email').value.trim(),
+    phone: document.getElementById('ind-phone').value.trim(),
+    linkedin: document.getElementById('ind-linkedin').value.trim(),
+    status: document.getElementById('ind-status').value,
+    lastContact: document.getElementById('ind-last-contact').value,
+    notes: document.getElementById('ind-notes').value.trim()
+  };
+  if (editId) {
+    const idx = data.individual.findIndex(x => x.id === editId);
+    if (idx > -1) data.individual[idx] = item;
+    logActivity('Updated', 'Individual', name);
+    toast(`Updated: ${name}`);
+  } else {
+    data.individual.push(item);
+    logActivity('Added', 'Individual', `${name} (${item.type})`);
+    toast(`Added prospect: ${name}`, 'success');
+  }
+  save('individual');
+  closeModal('individual');
+  renderIndividual();
+  updatePerformance();
+}
+
+function saveWealth() {
+  const name = document.getElementById('wth-name').value.trim();
+  if (!name) { toast('Name is required', 'error'); return; }
+  const editId = document.getElementById('wealth-edit-id').value;
+  const item = {
+    id: editId || uid(),
+    name,
+    source: document.getElementById('wth-source').value.trim(),
+    assets: document.getElementById('wth-assets').value.trim(),
+    location: document.getElementById('wth-location').value.trim(),
+    email: document.getElementById('wth-email').value.trim(),
+    phone: document.getElementById('wth-phone').value.trim(),
+    linkedin: document.getElementById('wth-linkedin').value.trim(),
+    status: document.getElementById('wth-status').value,
+    lastContact: document.getElementById('wth-last-contact').value,
+    angle: document.getElementById('wth-angle').value.trim(),
+    notes: document.getElementById('wth-notes').value.trim()
+  };
+  if (editId) {
+    const idx = data.wealth.findIndex(x => x.id === editId);
+    if (idx > -1) data.wealth[idx] = item;
+    logActivity('Updated', 'Wealth', name);
+    toast(`Updated: ${name}`);
+  } else {
+    data.wealth.push(item);
+    logActivity('Added', 'Wealth', `${name} — ${item.assets}`);
+    toast(`Added wealth prospect: ${name}`, 'success');
+  }
+  save('wealth');
+  closeModal('wealth');
+  renderWealth();
+  updatePerformance();
+}
+
+function saveNetwork() {
+  const name = document.getElementById('net-name').value.trim();
+  if (!name) { toast('Name is required', 'error'); return; }
+  const editId = document.getElementById('network-edit-id').value;
+  const item = {
+    id: editId || uid(),
+    name,
+    type: document.getElementById('net-type').value,
+    date: document.getElementById('net-date').value.trim(),
+    location: document.getElementById('net-location').value.trim(),
+    who: document.getElementById('net-who').value.trim(),
+    cost: document.getElementById('net-cost').value.trim(),
+    how: document.getElementById('net-how').value.trim(),
+    angle: document.getElementById('net-angle').value.trim(),
+    status: document.getElementById('net-status').value,
+    notes: document.getElementById('net-notes').value.trim()
+  };
+  if (editId) {
+    const idx = data.network.findIndex(x => x.id === editId);
+    if (idx > -1) data.network[idx] = item;
+    logActivity('Updated', 'Network', name);
+    toast(`Updated: ${name}`);
+  } else {
+    data.network.push(item);
+    logActivity('Added', 'Network', `${name} (${item.type})`);
+    toast(`Added: ${name}`, 'success');
+  }
+  save('network');
+  closeModal('network');
+  renderNetwork();
+}
+
+function saveAlert() {
+  const entity = document.getElementById('alt-entity').value.trim();
+  if (!entity) { toast('Company/Person is required', 'error'); return; }
+  const editId = document.getElementById('alerts-edit-id').value;
+  const item = {
+    id: editId || uid(),
+    date: document.getElementById('alt-date').value,
+    type: document.getElementById('alt-type').value,
+    entity,
+    what: document.getElementById('alt-what').value.trim(),
+    opportunity: document.getElementById('alt-opportunity').value.trim(),
+    urgency: document.getElementById('alt-urgency').value,
+    status: document.getElementById('alt-status').value
+  };
+  if (editId) {
+    const idx = data.alerts.findIndex(x => x.id === editId);
+    if (idx > -1) data.alerts[idx] = item;
+    logActivity('Updated Alert', 'Trigger', entity);
+    toast(`Updated alert: ${entity}`);
+  } else {
+    data.alerts.push(item);
+    logActivity('New Alert', 'Trigger', `${item.type}: ${entity}`);
+    toast(`Alert added: ${entity}`, 'success');
+  }
+  save('alerts');
+  closeModal('alerts');
+  renderAlerts();
+}
+
+// ---- MARK CONTACTED ----
+function markContacted(tableKey, id) {
+  const arr = data[tableKey];
+  const item = arr.find(x => x.id === id);
+  if (!item) return;
+  item.status = 'Contacted';
+  item.lastContact = new Date().toISOString().split('T')[0];
+  save(tableKey);
+  const label = item.company || item.name;
+  logActivity('Marked Contacted', tableKey.charAt(0).toUpperCase() + tableKey.slice(1), label);
+  toast(`Marked Contacted: ${label}`, 'success');
+  renderTable(tableKey);
+  updatePerformance();
+}
+
+// ---- DELETE ----
+function deleteRecord(tableKey, id) {
+  const arr = data[tableKey];
+  const item = arr.find(x => x.id === id);
+  if (!item) return;
+  if (!confirm(`Delete "${item.company || item.name || item.entity}"?`)) return;
+  data[tableKey] = arr.filter(x => x.id !== id);
+  save(tableKey);
+  const label = item.company || item.name || item.entity;
+  logActivity('Deleted', tableKey.charAt(0).toUpperCase() + tableKey.slice(1), label);
+  toast(`Deleted: ${label}`, 'info');
+  renderTable(tableKey);
+  updatePerformance();
+}
+
+// ---- ADD NOTE ----
+function addNote(tableKey, id) {
+  const arr = data[tableKey];
+  const item = arr.find(x => x.id === id);
+  if (!item) return;
+  document.getElementById('note-table').value = tableKey;
+  document.getElementById('note-id').value = id;
+  document.getElementById('note-text').value = item.notes || '';
+  document.getElementById('modal-note').classList.add('active');
+}
+
+function saveNote() {
+  const tableKey = document.getElementById('note-table').value;
+  const id = document.getElementById('note-id').value;
+  const text = document.getElementById('note-text').value.trim();
+  const item = data[tableKey].find(x => x.id === id);
+  if (!item) return;
+  item.notes = text;
+  save(tableKey);
+  const label = item.company || item.name;
+  logActivity('Note Added', tableKey.charAt(0).toUpperCase() + tableKey.slice(1), label);
+  toast('Note saved', 'success');
+  closeModal('note');
+  renderTable(tableKey);
+}
+
+function renderTable(key) {
+  if (key === 'employer') renderEmployer();
+  else if (key === 'individual') renderIndividual();
+  else if (key === 'wealth') renderWealth();
+  else if (key === 'network') renderNetwork();
+  else if (key === 'alerts') renderAlerts();
+}
+
+// ---- CHANGE STATUS (Alerts) ----
+function changeAlertStatus(id, status) {
+  const item = data.alerts.find(x => x.id === id);
+  if (!item) return;
+  item.status = status;
+  save('alerts');
+  logActivity('Status Changed', 'Trigger', `${item.entity} -> ${status}`);
+  toast(`Status: ${status}`, 'success');
+  renderAlerts();
+}
+
+// ---- RENDER EMPLOYER ----
+function renderEmployer() {
+  const tbody = document.getElementById('employer-tbody');
+  const arr = data.employer;
+  document.getElementById('employer-count').textContent = `${arr.length} companies`;
+  tbody.innerHTML = arr.map((item, i) => {
+    const searchStr = Object.values(item).join(' ').toLowerCase();
+    const hide = searchTerm && !searchStr.includes(searchTerm) ? ' search-hidden' : '';
+    return `<tr class="data-row${hide}" data-search="${esc(searchStr)}">
+      <td class="row-num">${i + 1}</td>
+      <td><span class="cell-company">${esc(item.company)}</span></td>
+      <td>${esc(item.industry)}</td>
+      <td>${esc(item.employees)}</td>
+      <td>${esc(item.location)}</td>
+      <td style="max-width:140px;font-size:11px;color:rgba(0,212,255,0.45);">${esc(item.signal)}</td>
+      <td>${esc(item.contact)}</td>
+      <td style="font-size:11px;color:rgba(0,212,255,0.45);">${esc(item.title)}</td>
+      <td class="cell-email">${item.email ? `<a href="mailto:${esc(item.email)}" style="color:#00d4ff;">${esc(item.email)}</a>` : ''}</td>
+      <td class="cell-phone">${esc(item.phone)}</td>
+      <td>${statusBadge(item.status)}</td>
+      <td style="font-size:11px;color:rgba(0,212,255,0.45);">${item.lastContact || ''}</td>
+      <td class="cell-notes" title="${esc(item.notes)}">${esc(item.notes)}</td>
+      <td>
+        <div class="action-btns">
+          <button class="btn-sm" onclick="openModal('employer','${item.id}')">[EDIT]</button>
+          <button class="btn-sm success" onclick="markContacted('employer','${item.id}')">[CALL]</button>
+          <button class="btn-sm" onclick="addNote('employer','${item.id}')">[NOTE]</button>
+          <button class="btn-sm danger" onclick="deleteRecord('employer','${item.id}')">[DEL]</button>
+        </div>
+      </td>
+    </tr>`;
+  }).join('') || '<tr><td colspan="14"><div class="empty-state"><div class="empty-state-icon">[EMP]</div><div class="empty-state-text">No employer prospects yet</div></div></td></tr>';
+}
+
+// ---- RENDER INDIVIDUAL ----
+function renderIndividual() {
+  const tbody = document.getElementById('individual-tbody');
+  const arr = data.individual;
+  document.getElementById('individual-count').textContent = `${arr.length} prospects`;
+  tbody.innerHTML = arr.map((item, i) => {
+    const typeCls = item.type === 'HENRY' ? 'badge-henry' : 'badge-rollover';
+    const searchStr = Object.values(item).join(' ').toLowerCase();
+    const hide = searchTerm && !searchStr.includes(searchTerm) ? ' search-hidden' : '';
+    return `<tr class="data-row${hide}" data-search="${esc(searchStr)}">
+      <td class="row-num">${i + 1}</td>
+      <td><span class="cell-name">${esc(item.name)}</span></td>
+      <td><span class="badge ${typeCls}">${esc(item.type)}</span></td>
+      <td>${esc(item.jobTitle)}</td>
+      <td>${esc(item.company)}</td>
+      <td>${esc(item.location)}</td>
+      <td class="cell-email">${item.email ? `<a href="mailto:${esc(item.email)}" style="color:#00d4ff;">${esc(item.email)}</a>` : ''}</td>
+      <td class="cell-phone">${esc(item.phone)}</td>
+      <td style="font-size:11px;">${item.linkedin ? `<a href="${esc(item.linkedin)}" target="_blank" style="color:#00d4ff;">[LNK]</a>` : ''}</td>
+      <td>${statusBadge(item.status)}</td>
+      <td style="font-size:11px;color:rgba(0,212,255,0.45);">${item.lastContact || ''}</td>
+      <td class="cell-notes" title="${esc(item.notes)}">${esc(item.notes)}</td>
+      <td>
+        <div class="action-btns">
+          <button class="btn-sm" onclick="openModal('individual','${item.id}')">[EDIT]</button>
+          <button class="btn-sm success" onclick="markContacted('individual','${item.id}')">[CALL]</button>
+          <button class="btn-sm" onclick="addNote('individual','${item.id}')">[NOTE]</button>
+          <button class="btn-sm danger" onclick="deleteRecord('individual','${item.id}')">[DEL]</button>
+        </div>
+      </td>
+    </tr>`;
+  }).join('') || '<tr><td colspan="13"><div class="empty-state"><div class="empty-state-icon">[IND]</div><div class="empty-state-text">No individual prospects yet</div></div></td></tr>';
+}
+
+// ---- RENDER WEALTH ----
+function renderWealth() {
+  const tbody = document.getElementById('wealth-tbody');
+  const arr = data.wealth;
+  document.getElementById('wealth-count').textContent = `${arr.length} prospects`;
+
+  // AUM Ticker
+  const total = arr.reduce((s, x) => s + parseAssets(x.assets), 0);
+  document.getElementById('aum-total').textContent = formatMoney(total);
+  document.getElementById('aum-count').textContent = arr.length;
+  document.getElementById('aum-avg').textContent = arr.length ? formatMoney(total / arr.length) : '$0';
+
+  tbody.innerHTML = arr.map((item, i) => {
+    const searchStr = Object.values(item).join(' ').toLowerCase();
+    const hide = searchTerm && !searchStr.includes(searchTerm) ? ' search-hidden' : '';
+    return `<tr class="data-row${hide}" data-search="${esc(searchStr)}">
+      <td class="row-num">${i + 1}</td>
+      <td><span class="cell-name">${esc(item.name)}</span></td>
+      <td style="font-size:11px;color:rgba(0,212,255,0.45);">${esc(item.source)}</td>
+      <td style="color:#00d4ff;font-weight:700;text-shadow:0 0 8px rgba(0,212,255,0.5);">${esc(item.assets)}</td>
+      <td>${esc(item.location)}</td>
+      <td class="cell-email">${item.email ? `<a href="mailto:${esc(item.email)}" style="color:#00d4ff;">${esc(item.email)}</a>` : ''}</td>
+      <td class="cell-phone">${esc(item.phone)}</td>
+      <td style="font-size:11px;">${item.linkedin ? `<a href="${esc(item.linkedin)}" target="_blank" style="color:#00d4ff;">[LNK]</a>` : ''}</td>
+      <td>${statusBadge(item.status)}</td>
+      <td style="font-size:11px;color:rgba(0,212,255,0.45);">${item.lastContact || ''}</td>
+      <td style="font-size:11px;color:rgba(0,212,255,0.6);max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="${esc(item.angle)}">${esc(item.angle)}</td>
+      <td class="cell-notes" title="${esc(item.notes)}">${esc(item.notes)}</td>
+      <td>
+        <div class="action-btns">
+          <button class="btn-sm" onclick="openModal('wealth','${item.id}')">[EDIT]</button>
+          <button class="btn-sm success" onclick="markContacted('wealth','${item.id}')">[CALL]</button>
+          <button class="btn-sm" onclick="addNote('wealth','${item.id}')">[NOTE]</button>
+          <button class="btn-sm danger" onclick="deleteRecord('wealth','${item.id}')">[DEL]</button>
+        </div>
+      </td>
+    </tr>`;
+  }).join('') || '<tr><td colspan="13"><div class="empty-state"><div class="empty-state-icon">[WLT]</div><div class="empty-state-text">No wealth prospects yet</div></div></td></tr>';
+}
+
+// ---- RENDER NETWORK ----
+function renderNetwork() {
+  const tbody = document.getElementById('network-tbody');
+  const arr = data.network;
+  document.getElementById('network-count').textContent = `${arr.length} entries`;
+
+  const typeMap = {
+    'Event': 'badge-event',
+    'Recurring Group': 'badge-group',
+    'Virtual Community': 'badge-virtual',
+    'Referral Partner': 'badge-referral'
+  };
+  const typeIcon = {
+    'Event': '[EVT]', 'Recurring Group': '[GRP]', 'Virtual Community': '[VRT]', 'Referral Partner': '[REF]'
+  };
+
+  if (!arr.length) {
+    tbody.innerHTML = `<tr id="network-empty"><td colspan="12"><div class="empty-state"><div class="empty-state-icon">[NET]</div><div class="empty-state-text">No network events yet</div><div class="empty-state-sub">Ready to receive data -- click "+ Add Event" or wait for Monday agent sync</div></div></td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML = arr.map((item, i) => {
+    const cls = typeMap[item.type] || 'badge-group';
+    const icon = typeIcon[item.type] || '[GRP]';
+    const searchStr = Object.values(item).join(' ').toLowerCase();
+    const hide = searchTerm && !searchStr.includes(searchTerm) ? ' search-hidden' : '';
+    return `<tr class="data-row${hide}" data-search="${esc(searchStr)}">
+      <td class="row-num">${i + 1}</td>
+      <td><span class="cell-name">${esc(item.name)}</span></td>
+      <td><span class="badge ${cls}">${icon} ${esc(item.type)}</span></td>
+      <td style="font-size:11px;">${esc(item.date)}</td>
+      <td style="font-size:11px;">${esc(item.location)}</td>
+      <td style="font-size:11px;color:rgba(0,212,255,0.45);">${esc(item.who)}</td>
+      <td style="font-size:11px;">${esc(item.cost)}</td>
+      <td style="font-size:11px;color:rgba(0,212,255,0.45);">${esc(item.how)}</td>
+      <td style="font-size:11px;color:rgba(0,212,255,0.6);max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="${esc(item.angle)}">${esc(item.angle)}</td>
+      <td><span class="badge badge-new" style="font-size:9px;">${esc(item.status)}</span></td>
+      <td class="cell-notes" title="${esc(item.notes)}">${esc(item.notes)}</td>
+      <td>
+        <div class="action-btns">
+          <button class="btn-sm" onclick="openModal('network','${item.id}')">[EDIT]</button>
+          <button class="btn-sm danger" onclick="deleteRecord('network','${item.id}')">[DEL]</button>
+        </div>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+// ---- RENDER ALERTS ----
+function renderAlerts() {
+  const tbody = document.getElementById('alerts-tbody');
+  const arr = data.alerts;
+  document.getElementById('alerts-count').textContent = `${arr.length} alerts`;
+
+  const typeMap = {
+    'Layoff': 'badge-layoff',
+    'Funding Round': 'badge-funding',
+    'Expansion': 'badge-expansion',
+    'Leadership Change': 'badge-leadership',
+    'Retirement': 'badge-retirement',
+    'Hospital/Healthcare': 'badge-healthcare'
+  };
+  const typeIcon = {
+    'Layoff': '[RED]', 'Funding Round': '[GRN]', 'Expansion': '[BLU]', 'Leadership Change': '[YLW]', 'Retirement': '[ORG]', 'Hospital/Healthcare': '[PRP]'
+  };
+
+  if (!arr.length) {
+    tbody.innerHTML = `<tr id="alerts-empty"><td colspan="9"><div class="empty-state"><div class="empty-state-icon">[ALT]</div><div class="empty-state-text">No trigger alerts yet</div><div class="empty-state-sub">Ready to receive data -- click "+ Add Alert" or wait for daily trigger agent sync</div></div></td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML = arr.map((item, i) => {
+    const cls = typeMap[item.type] || 'badge-expansion';
+    const icon = typeIcon[item.type] || '[BLU]';
+    const urgencyCls = item.urgency === 'Act Today' ? 'urgency-today' : item.urgency === 'This Week' ? 'urgency-week' : 'urgency-month';
+    const urgencyIcon = item.urgency === 'Act Today' ? '[!!!]' : item.urgency === 'This Week' ? '[!!]' : '[!]';
+    const searchStr = Object.values(item).join(' ').toLowerCase();
+    const hide = searchTerm && !searchStr.includes(searchTerm) ? ' search-hidden' : '';
+    return `<tr class="data-row${hide}" data-search="${esc(searchStr)}">
+      <td class="row-num">${i + 1}</td>
+      <td style="font-size:11px;color:rgba(0,212,255,0.45);white-space:nowrap;">${item.date || ''}</td>
+      <td><span class="badge ${cls}">${icon} ${esc(item.type)}</span></td>
+      <td><strong style="color:#00d4ff;">${esc(item.entity)}</strong></td>
+      <td style="font-size:11px;color:rgba(0,212,255,0.6);max-width:180px;">${esc(item.what)}</td>
+      <td style="font-size:11px;color:rgba(0,212,255,0.7);">${esc(item.opportunity)}</td>
+      <td class="${urgencyCls}" style="font-weight:700;white-space:nowrap;font-family:'Courier New',monospace;">${urgencyIcon} ${esc(item.urgency)}</td>
+      <td>
+        <select class="form-select" style="padding:3px 8px;font-size:10px;width:auto;" onchange="changeAlertStatus('${item.id}',this.value)">
+          ${['New','Reviewed','Outreach Drafted','Contacted','Pass'].map(s => `<option value="${s}"${item.status===s?' selected':''}>${s}</option>`).join('')}
+        </select>
+      </td>
+      <td>
+        <div class="action-btns">
+          <button class="btn-sm" onclick="openModal('alerts','${item.id}')">[EDIT]</button>
+          <button class="btn-sm danger" onclick="deleteRecord('alerts','${item.id}')">[DEL]</button>
+        </div>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+// ---- RENDER ACTIVITY ----
+function renderActivity() {
+  const body = document.getElementById('activity-log-body');
+  const arr = data.activity || [];
+  document.getElementById('activity-count').textContent = `${arr.length} entries`;
+  const emptyEl = document.getElementById('activity-empty');
+
+  if (!arr.length) {
+    if (!emptyEl) {
+      body.innerHTML = '<div class="empty-state" id="activity-empty"><div class="empty-state-icon">[LOG]</div><div class="empty-state-text">No activity yet</div><div class="empty-state-sub">Actions across all tabs will appear here automatically</div></div>';
+    }
+    return;
+  }
+
+  body.innerHTML = arr.slice(0, 100).map(entry => {
+    const d = new Date(entry.ts);
+    const ts = fmtTimestamp(d);
+    const searchStr = (entry.action + ' ' + entry.category + ' ' + entry.detail).toLowerCase();
+    const hide = searchTerm && !searchStr.includes(searchTerm) ? ' search-hidden' : '';
+    return `<div class="activity-entry data-row${hide}" data-search="${esc(searchStr)}">
+      <span class="act-time">${esc(ts)}</span>
+      <span class="act-action">${esc(entry.action)}</span>
+      <span class="act-category">${esc(entry.category)}</span>
+      <span class="act-detail">${esc(entry.detail)}</span>
+    </div>`;
+  }).join('');
+}
+
+function clearActivityLog() {
+  if (!confirm('Clear all activity log entries?')) return;
+  data.activity = [];
+  save('activity');
+  renderActivity();
+  toast('Activity log cleared', 'info');
+}
+
+// ---- PERFORMANCE DASHBOARD ----
+const GRADES = ['A', 'B', 'C', 'D'];
+let currentGradeIdx = 0;
+
+function cycleGrade() {
+  currentGradeIdx = (currentGradeIdx + 1) % GRADES.length;
+  const g = GRADES[currentGradeIdx];
+  const el = document.getElementById('grade-display');
+  el.textContent = g;
+  el.className = `grade-display ${g}`;
+  if (!data.performance) data.performance = {};
+  data.performance.grade = g;
+  save('performance');
+  logActivity('Grade Set', 'Performance', `Weekly Grade: ${g}`);
+  toast(`Weekly grade set to: ${g}`, 'success');
+}
+
+function saveNotes() {
+  const text = document.getElementById('weekly-notes').value;
+  if (!data.performance) data.performance = {};
+  data.performance.notes = text;
+  data.performance.notesUpdated = new Date().toISOString();
+  save('performance');
+  document.getElementById('notes-updated').textContent = 'Last saved: ' + fmtTimestamp();
+  logActivity('Notes Saved', 'Performance', 'Weekly notes updated');
+  toast('Notes saved', 'success');
+}
+
+function updatePerformance() {
+  const all = [...data.employer, ...data.individual, ...data.wealth];
+  const total = all.length;
+  const contacted = all.filter(x => x.status !== 'New').length;
+  const meetings = all.filter(x => x.status === 'Meeting Set').length;
+  const proposals = all.filter(x => x.status === 'Proposal Sent').length;
+  const won = all.filter(x => x.status === 'Closed Won').length;
+  const aumTotal = data.wealth.reduce((s, x) => s + parseAssets(x.assets), 0);
+
+  document.getElementById('perf-total').textContent = total;
+  document.getElementById('perf-contacted').textContent = contacted;
+  document.getElementById('perf-meetings').textContent = meetings;
+  document.getElementById('perf-proposals').textContent = proposals;
+  document.getElementById('perf-won').textContent = won;
+  document.getElementById('perf-aum').textContent = formatMoney(aumTotal);
+
+  // Conversion rates
+  const contactRate = total ? ((contacted / total) * 100).toFixed(0) : 0;
+  const meetingRate = contacted ? ((meetings / contacted) * 100).toFixed(0) : 0;
+  const closeRate = meetings ? ((won / meetings) * 100).toFixed(0) : 0;
+
+  document.getElementById('rate-contact').textContent = contactRate + '%';
+  document.getElementById('rate-meeting').textContent = meetingRate + '%';
+  document.getElementById('rate-close').textContent = closeRate + '%';
+
+  // Funnel
+  renderFunnel(total, contacted, meetings, proposals, won);
+
+  // Store perf
+  if (!data.performance) data.performance = {};
+  Object.assign(data.performance, { total, contacted, meetings, proposals, won, aum: aumTotal });
+  save('performance');
+}
+
+function renderFunnel(total, contacted, meetings, proposals, won) {
+  const steps = [
+    { label: 'Total', value: total, color: '#00d4ff' },
+    { label: 'Contacted', value: contacted, color: '#0099cc' },
+    { label: 'Meeting', value: meetings, color: '#22c55e' },
+    { label: 'Proposal', value: proposals, color: '#a855f7' },
+    { label: 'Closed', value: won, color: '#16a34a' }
+  ];
+  const max = total || 1;
+  document.getElementById('funnel-display').innerHTML = steps.map((s, i) => {
+    const pct = Math.max(20, (s.value / max) * 100);
+    return (i > 0 ? '<div class="funnel-arrow">></div>' : '') +
+      `<div class="funnel-step">
+        <div class="funnel-bar" style="background:${s.color};min-width:${Math.max(70, pct)}px;box-shadow:0 0 12px ${s.color}80;">${s.value}</div>
+        <div class="funnel-step-label">${s.label}</div>
+      </div>`;
+  }).join('');
+}
+
+// ---- SEARCH ----
+function applySearch() {
+  const term = searchTerm.toLowerCase().trim();
+  document.querySelectorAll('.data-row').forEach(row => {
+    const val = (row.dataset.search || '').toLowerCase();
+    row.classList.toggle('search-hidden', !!(term && !val.includes(term)));
+  });
+}
+
+document.getElementById('global-search').addEventListener('input', function() {
+  searchTerm = this.value.toLowerCase();
+  // Re-render all tables to apply search
+  renderEmployer();
+  renderIndividual();
+  renderWealth();
+  renderNetwork();
+  renderAlerts();
+  renderActivity();
+});
+
+// ---- ADD NEW CONTEXT-AWARE ----
+function addNewContextual() {
+  const map = ['performance', 'employer', 'individual', 'wealth', 'network', 'alerts', null];
+  const key = map[currentTab];
+  if (key === 'performance') { document.getElementById('weekly-notes').focus(); toast('Edit notes below or click grade to change it', 'info'); return; }
+  if (key === null) { toast('Activity log is auto-populated', 'info'); return; }
+  openModal(key);
+}
+
+// ---- EXPORT CSV ----
+function exportCSV(type) {
+  let headers, rows;
+  if (type === 'employer') {
+    headers = ['#','Company','Industry','Employees','Location','Growth Signal','Contact','Title','Email','Phone','Status','Last Contact','Notes'];
+    rows = data.employer.map((x, i) => [i+1, x.company, x.industry, x.employees, x.location, x.signal, x.contact, x.title, x.email, x.phone, x.status, x.lastContact, x.notes]);
+  } else if (type === 'individual') {
+    headers = ['#','Name','Type','Job Title','Company','Location','Email','Phone','LinkedIn','Status','Last Contact','Notes'];
+    rows = data.individual.map((x, i) => [i+1, x.name, x.type, x.jobTitle, x.company, x.location, x.email, x.phone, x.linkedin, x.status, x.lastContact, x.notes]);
+  } else if (type === 'wealth') {
+    headers = ['#','Name','Wealth Source','Est. Investable Assets','Location','Email','Phone','LinkedIn','Status','Last Contact','Outreach Angle','Notes'];
+    rows = data.wealth.map((x, i) => [i+1, x.name, x.source, x.assets, x.location, x.email, x.phone, x.linkedin, x.status, x.lastContact, x.angle, x.notes]);
+  } else if (type === 'network') {
+    headers = ['#','Name','Type','Date/Frequency','Location/Platform','Who Attends','Cost','How to Join','AJ\'s Angle','Status','Notes'];
+    rows = data.network.map((x, i) => [i+1, x.name, x.type, x.date, x.location, x.who, x.cost, x.how, x.angle, x.status, x.notes]);
+  } else if (type === 'alerts') {
+    headers = ['#','Date','Alert Type','Company/Person','What Happened','Opportunity','Urgency','Status'];
+    rows = data.alerts.map((x, i) => [i+1, x.date, x.type, x.entity, x.what, x.opportunity, x.urgency, x.status]);
+  } else if (type === 'activity') {
+    headers = ['Timestamp','Action','Category','Detail'];
+    rows = (data.activity || []).map(x => [x.ts, x.action, x.category, x.detail]);
+  } else return;
+
+  const csvContent = [headers, ...rows].map(r => r.map(c => `"${String(c||'').replace(/"/g,'""')}"`).join(',')).join('\n');
+  const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `jarvis_${type}_${new Date().toISOString().split('T')[0]}.csv`;
+  a.click();
+  URL.revokeObjectURL(url);
+  toast(`Exported ${type} data as CSV`, 'success');
+  logActivity('CSV Export', type.charAt(0).toUpperCase() + type.slice(1), `Exported ${rows.length} rows`);
+}
+
+// ---- KEYBOARD SHORTCUTS ----
+document.addEventListener('keydown', function(e) {
+  // Ctrl+1-7 for tabs
+  if (e.ctrlKey && e.key >= '1' && e.key <= '7') {
+    e.preventDefault();
+    switchTab(parseInt(e.key) - 1);
+  }
+  // Escape closes modals
+  if (e.key === 'Escape') {
+    document.querySelectorAll('.modal-overlay.active').forEach(m => m.classList.remove('active'));
+  }
+  // Ctrl+N for add new
+  if (e.ctrlKey && e.key === 'n') {
+    e.preventDefault();
+    addNewContextual();
+  }
+  // Ctrl+F focuses search
+  if (e.ctrlKey && e.key === 'f') {
+    e.preventDefault();
+    document.getElementById('global-search').focus();
+  }
+});
+
+// Close modal on overlay click
+document.querySelectorAll('.modal-overlay').forEach(overlay => {
+  overlay.addEventListener('click', function(e) {
+    if (e.target === this) this.classList.remove('active');
+  });
+});
+
+// ---- API INTEGRATION ----
+async function tryApiSync() {
+  const endpoints = ['employer', 'individual', 'wealth', 'network', 'alerts'];
+  for (const ep of endpoints) {
+    try {
+      const res = await fetch(`http://localhost:8765/api/${ep}`, { signal: AbortSignal.timeout(2000) });
+      if (res.ok) {
+        const apiData = await res.json();
+        if (Array.isArray(apiData) && apiData.length) {
+          // Merge: add items not already in local data (by id)
+          const existing = new Set(data[ep].map(x => x.id));
+          let added = 0;
+          apiData.forEach(item => {
+            if (!existing.has(item.id)) {
+              data[ep].push(item);
+              added++;
+            }
+          });
+          if (added) {
+            save(ep);
+            toast(`Synced ${added} new ${ep} records from server`, 'info');
+          }
+        }
+      }
+    } catch(e) {
+      // Fail silently — server not available
+    }
+  }
+}
+
+// ---- INIT ----
+function init() {
+  loadAll();
+
+  // Seed defaults if empty
+  if (!data.employer || !data.employer.length) {
+    data.employer = DEFAULT_EMPLOYERS;
+    save('employer');
+  }
+  if (!data.individual || !data.individual.length) {
+    data.individual = DEFAULT_INDIVIDUALS;
+    save('individual');
+  }
+  if (!data.wealth || !data.wealth.length) {
+    data.wealth = DEFAULT_WEALTH;
+    save('wealth');
+  }
+  if (!data.network) { data.network = []; save('network'); }
+  if (!data.alerts) { data.alerts = []; save('alerts'); }
+  if (!data.activity) { data.activity = []; save('activity'); }
+  if (!data.performance) data.performance = { grade: 'A', notes: '', notesUpdated: '' };
+
+  // Restore grade
+  const g = (data.performance && data.performance.grade) || 'A';
+  currentGradeIdx = Math.max(0, GRADES.indexOf(g));
+  const gradeEl = document.getElementById('grade-display');
+  gradeEl.textContent = g;
+  gradeEl.className = `grade-display ${g}`;
+
+  // Restore notes
+  if (data.performance.notes) {
+    document.getElementById('weekly-notes').value = data.performance.notes;
+    if (data.performance.notesUpdated) {
+      document.getElementById('notes-updated').textContent = 'Last saved: ' + fmtTimestamp(new Date(data.performance.notesUpdated));
+    }
+  }
+
+  // Render all
+  renderEmployer();
+  renderIndividual();
+  renderWealth();
+  renderNetwork();
+  renderAlerts();
+  renderActivity();
+  updatePerformance();
+
+  // Clock
+  updateClock();
+  setInterval(updateClock, 1000);
+
+  // API sync (non-blocking, fail silent)
+  setTimeout(tryApiSync, 1000);
+
+  console.log('JARVIS Command Center initialized [SYSTEM ONLINE]');
+}
+
+init();
+</script>
+
+<script>
+function toggleBG() {
+  var isLight = document.body.classList.toggle("light-mode");
+  var btn = document.getElementById("bgToggle");
+  if (isLight) {
+    document.body.style.background = "#ffffff";
+    document.body.style.color = "#111111";
+    if(btn){ btn.textContent="[DARK MODE]"; }
+    localStorage.setItem("jarvis_bg","light");
+  } else {
+    document.body.style.background = "#000000";
+    document.body.style.color = "#ffffff";
+    if(btn){ btn.textContent="[LIGHT MODE]"; }
+    localStorage.setItem("jarvis_bg","dark");
+  }
+}
+(function(){ 
+  if(localStorage.getItem("jarvis_bg")==="light"){ 
+    window.addEventListener("DOMContentLoaded", function(){ toggleBG(); });
+  }
+})();
+</script>
+
+</body>
+</html>

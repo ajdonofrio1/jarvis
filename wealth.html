@@ -1,0 +1,3043 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>J.A.R.V.I.S | Wealth Management System — AJ Donofrio · Barnum Financial Group</title>
+<style>
+  :root {
+    --cyan: #00d4ff;
+    --cyan-dim: rgba(0,212,255,0.4);
+    --cyan-faint: rgba(0,212,255,0.08);
+    --cyan-glow: 0 0 10px #00d4ff, 0 0 20px #00d4ff;
+    --cyan-glow-sm: 0 0 6px #00d4ff, 0 0 12px #00d4ff;
+    --bg: #000000;
+    --bg-card: #000000;
+    --bg-card2: #050a0f;
+    --bg-header: #001a20;
+    --green: #00ff88;
+    --yellow: #ffdd00;
+    --orange: #ff8800;
+    --purple: #cc44ff;
+    --red: #ff2244;
+    --bright-green: #00ff44;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Courier New', Courier, monospace;
+    background: #000000;
+    color: var(--cyan);
+    min-height: 100vh;
+    font-size: 13px;
+    line-height: 1.5;
+    overflow-x: hidden;
+  }
+
+  /* ANIMATED GRID BACKGROUND */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      repeating-linear-gradient(0deg, rgba(0,212,255,0.04) 0px, rgba(0,212,255,0.04) 1px, transparent 1px, transparent 40px),
+      repeating-linear-gradient(90deg, rgba(0,212,255,0.04) 0px, rgba(0,212,255,0.04) 1px, transparent 1px, transparent 40px);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  body > * { position: relative; z-index: 1; }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: #000; }
+  ::-webkit-scrollbar-thumb { background: rgba(0,212,255,0.3); }
+  ::-webkit-scrollbar-thumb:hover { background: var(--cyan); }
+
+  /* ===================== HEADER ===================== */
+  .header {
+    background: #000000;
+    border-bottom: 2px solid var(--cyan);
+    box-shadow: 0 2px 20px rgba(0,212,255,0.3), 0 4px 40px rgba(0,212,255,0.1);
+    padding: 0 24px;
+    position: sticky;
+    top: 0;
+    z-index: 200;
+    overflow: hidden;
+  }
+
+  /* SCAN LINE */
+  .header::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 60%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(0,212,255,0.08), transparent);
+    animation: scanLine 4s linear infinite;
+    pointer-events: none;
+  }
+
+  @keyframes scanLine {
+    0%   { left: -60%; }
+    100% { left: 160%; }
+  }
+
+  .header-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 80px;
+    max-width: 1800px;
+    margin: 0 auto;
+    gap: 20px;
+  }
+
+  .header-left {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .logo {
+    font-size: 28px;
+    font-weight: 900;
+    letter-spacing: 0.3em;
+    color: var(--cyan);
+    text-shadow: var(--cyan-glow);
+    font-family: 'Courier New', monospace;
+    line-height: 1;
+  }
+
+  .header-subtitle {
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    color: rgba(0,212,255,0.6);
+    text-transform: uppercase;
+  }
+
+  .header-center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .aum-display {
+    font-size: 22px;
+    font-weight: 900;
+    color: var(--cyan);
+    text-shadow: var(--cyan-glow);
+    letter-spacing: 0.1em;
+    font-family: 'Courier New', monospace;
+  }
+
+  .aum-label {
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    color: rgba(0,212,255,0.5);
+    text-transform: uppercase;
+  }
+
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-shrink: 0;
+  }
+
+  .header-meta {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 4px;
+  }
+
+  .live-clock {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--cyan);
+    font-family: 'Courier New', monospace;
+    letter-spacing: 0.05em;
+  }
+
+  .system-status {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    color: var(--green);
+    text-shadow: 0 0 6px var(--green);
+  }
+
+  .pulse-dot {
+    width: 8px;
+    height: 8px;
+    background: var(--green);
+    border-radius: 50%;
+    box-shadow: 0 0 6px var(--green), 0 0 12px var(--green);
+    animation: pulseDot 1.5s ease-in-out infinite;
+    flex-shrink: 0;
+  }
+
+  @keyframes pulseDot {
+    0%, 100% { opacity: 1; box-shadow: 0 0 6px var(--green), 0 0 12px var(--green); }
+    50% { opacity: 0.4; box-shadow: 0 0 2px var(--green); }
+  }
+
+  /* ===================== BUTTONS ===================== */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 14px;
+    font-size: 11px;
+    font-weight: 700;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s;
+    letter-spacing: 0.1em;
+    text-decoration: none;
+    white-space: nowrap;
+    font-family: 'Courier New', monospace;
+    text-transform: uppercase;
+    clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+  }
+
+  .btn-cyan {
+    background: transparent;
+    color: var(--cyan);
+    border: 1px solid var(--cyan);
+    clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+    box-shadow: inset 0 0 0 1px var(--cyan);
+    outline: 1px solid var(--cyan);
+    outline-offset: -1px;
+  }
+  .btn-cyan:hover {
+    background: rgba(0,212,255,0.1);
+    box-shadow: var(--cyan-glow);
+    color: #fff;
+  }
+
+  .btn-ghost {
+    background: transparent;
+    color: rgba(0,212,255,0.6);
+    outline: 1px solid rgba(0,212,255,0.3);
+    outline-offset: -1px;
+  }
+  .btn-ghost:hover {
+    outline-color: var(--cyan);
+    color: var(--cyan);
+    background: rgba(0,212,255,0.05);
+    box-shadow: var(--cyan-glow-sm);
+  }
+
+  .btn-sm {
+    padding: 4px 10px;
+    font-size: 10px;
+  }
+
+  .btn-danger {
+    background: transparent;
+    color: var(--red);
+    outline: 1px solid rgba(255,34,68,0.4);
+    outline-offset: -1px;
+  }
+  .btn-danger:hover { background: rgba(255,34,68,0.1); outline-color: var(--red); box-shadow: 0 0 8px var(--red); }
+
+  .btn-success {
+    background: transparent;
+    color: var(--green);
+    outline: 1px solid rgba(0,255,136,0.3);
+    outline-offset: -1px;
+  }
+  .btn-success:hover { background: rgba(0,255,136,0.08); outline-color: var(--green); box-shadow: 0 0 8px var(--green); }
+
+  /* ===================== MAIN ===================== */
+  .main {
+    max-width: 1800px;
+    margin: 0 auto;
+    padding: 20px 24px;
+  }
+
+  /* ===================== STATS BAR ===================== */
+  .stats-bar {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+
+  .stat-card {
+    background: #000;
+    border: 1px solid rgba(0,212,255,0.3);
+    padding: 16px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    position: relative;
+    overflow: hidden;
+    clip-path: polygon(12px 0%, 100% 0%, calc(100% - 12px) 100%, 0% 100%);
+    animation: cardGlow 3s ease-in-out infinite;
+  }
+
+  .stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: var(--cyan);
+    box-shadow: var(--cyan-glow);
+  }
+
+  @keyframes cardGlow {
+    0%, 100% { box-shadow: 0 0 8px rgba(0,212,255,0.2); border-color: rgba(0,212,255,0.3); }
+    50%       { box-shadow: 0 0 16px rgba(0,212,255,0.4); border-color: rgba(0,212,255,0.6); }
+  }
+
+  .stat-label {
+    font-size: 9px;
+    color: rgba(0,212,255,0.5);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    font-weight: 700;
+  }
+
+  .stat-value {
+    font-size: 30px;
+    font-weight: 900;
+    color: var(--cyan);
+    text-shadow: var(--cyan-glow);
+    letter-spacing: 0.05em;
+    line-height: 1.1;
+    font-family: 'Courier New', monospace;
+  }
+
+  .stat-sub {
+    font-size: 9px;
+    color: rgba(0,212,255,0.35);
+    margin-top: 2px;
+    letter-spacing: 0.05em;
+  }
+
+  /* ===================== TOOLBAR ===================== */
+  .toolbar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+  }
+
+  .toolbar-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex: 1;
+  }
+
+  .search-wrap {
+    position: relative;
+    flex: 1;
+    max-width: 320px;
+  }
+
+  .search-icon {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: rgba(0,212,255,0.4);
+    font-size: 11px;
+    pointer-events: none;
+    letter-spacing: 0;
+  }
+
+  input[type="text"], input[type="email"], input[type="tel"], input[type="url"],
+  input[type="number"], select, textarea {
+    background: #000;
+    border: 1px solid rgba(0,212,255,0.3);
+    color: var(--cyan);
+    font-family: 'Courier New', monospace;
+    font-size: 12px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+
+  input[type="text"]:focus, input[type="email"]:focus, input[type="tel"]:focus,
+  input[type="url"]:focus, input[type="number"]:focus, select:focus, textarea:focus {
+    outline: none;
+    border-color: var(--cyan);
+    box-shadow: var(--cyan-glow-sm);
+  }
+
+  input::placeholder, textarea::placeholder {
+    color: rgba(0,212,255,0.25);
+  }
+
+  .search-input {
+    width: 100%;
+    padding: 7px 10px 7px 28px;
+  }
+
+  select {
+    padding: 7px 28px 7px 10px;
+    appearance: none;
+    -webkit-appearance: none;
+    cursor: pointer;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath fill='%2300d4ff' d='M0 0l5 6 5-6z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 8px center;
+    min-width: 140px;
+  }
+
+  option { background: #000; color: var(--cyan); }
+
+  /* ===================== SECTION HEADERS ===================== */
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+
+  .section-title {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--cyan);
+    text-shadow: var(--cyan-glow-sm);
+  }
+
+  .section-line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, rgba(0,212,255,0.4), transparent);
+  }
+
+  /* ===================== TABLE ===================== */
+  .table-wrap {
+    background: #000;
+    border: 1px solid rgba(0,212,255,0.2);
+    overflow: hidden;
+    margin-bottom: 20px;
+    box-shadow: 0 0 20px rgba(0,212,255,0.05);
+  }
+
+  .table-scroll { overflow-x: auto; }
+
+  .prospect-table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: auto;
+  }
+
+  .prospect-table thead {
+    background: #001a20;
+    border-bottom: 2px solid var(--cyan);
+  }
+
+  .prospect-table th {
+    padding: 10px 12px;
+    text-align: left;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--cyan);
+    white-space: nowrap;
+    position: relative;
+    font-family: 'Courier New', monospace;
+    text-shadow: var(--cyan-glow-sm);
+  }
+
+  .prospect-table th::after {
+    content: '';
+    position: absolute;
+    right: 0; top: 25%; height: 50%; width: 1px;
+    background: rgba(0,212,255,0.2);
+  }
+
+  .prospect-table th:last-child::after { display: none; }
+
+  .prospect-table tbody tr {
+    border-bottom: 1px solid rgba(0,212,255,0.08);
+    transition: all 0.15s;
+  }
+
+  .prospect-table tbody tr:nth-child(even) { background: #050a0f; }
+  .prospect-table tbody tr:nth-child(odd)  { background: #000000; }
+
+  .prospect-table tbody tr:last-child { border-bottom: none; }
+
+  .prospect-table tbody tr:hover {
+    background: rgba(0,212,255,0.06);
+    box-shadow: inset 2px 0 0 var(--cyan), inset 0 0 20px rgba(0,212,255,0.05);
+  }
+
+  .prospect-table td {
+    padding: 10px 12px;
+    color: rgba(0,212,255,0.8);
+    font-size: 12px;
+    vertical-align: top;
+    font-family: 'Courier New', monospace;
+    border-left: none;
+  }
+
+  .prospect-table tbody tr td:first-child {
+    border-left: 2px solid rgba(0,212,255,0.3);
+  }
+
+  .row-num {
+    color: rgba(0,212,255,0.3);
+    font-size: 10px;
+    font-weight: 700;
+    text-align: center;
+    width: 30px;
+  }
+
+  .prospect-name {
+    font-weight: 700;
+    color: #ffffff;
+    min-width: 180px;
+    text-shadow: 0 0 4px rgba(0,212,255,0.2);
+  }
+
+  .draft-badge {
+    display: inline-block;
+    background: rgba(255,34,68,0.1);
+    border: 1px solid rgba(255,34,68,0.3);
+    color: var(--red);
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    padding: 2px 6px;
+    margin-top: 4px;
+    width: fit-content;
+    white-space: nowrap;
+  }
+
+  .assets-value {
+    color: var(--cyan);
+    font-weight: 700;
+    font-size: 13px;
+    text-shadow: var(--cyan-glow-sm);
+  }
+
+  .contact-link {
+    color: rgba(0,212,255,0.6);
+    text-decoration: none;
+    display: block;
+    font-size: 11px;
+    transition: color 0.15s;
+  }
+  .contact-link:hover { color: var(--cyan); text-shadow: var(--cyan-glow-sm); }
+
+  .angle-text {
+    color: rgba(0,212,255,0.5);
+    font-size: 11px;
+    max-width: 160px;
+    line-height: 1.4;
+  }
+
+  .notes-preview {
+    color: rgba(0,212,255,0.4);
+    font-size: 11px;
+    max-width: 120px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .last-contact-text {
+    color: rgba(0,212,255,0.5);
+    font-size: 11px;
+    white-space: nowrap;
+  }
+
+  .text-muted { color: rgba(0,212,255,0.25); }
+
+  /* ===================== STATUS BADGES ===================== */
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 8px;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    white-space: nowrap;
+    border: 1px solid transparent;
+    text-transform: uppercase;
+    font-family: 'Courier New', monospace;
+    clip-path: polygon(6px 0%, 100% 0%, calc(100% - 6px) 100%, 0% 100%);
+  }
+
+  .badge-new      { background: rgba(0,212,255,0.1);  color: var(--cyan);       border-color: rgba(0,212,255,0.4);   box-shadow: 0 0 6px rgba(0,212,255,0.3); }
+  .badge-contacted{ background: rgba(255,221,0,0.1);   color: var(--yellow);    border-color: rgba(255,221,0,0.4);   box-shadow: 0 0 6px rgba(255,221,0,0.3); }
+  .badge-followup { background: rgba(255,136,0,0.1);   color: var(--orange);    border-color: rgba(255,136,0,0.4);   box-shadow: 0 0 6px rgba(255,136,0,0.3); }
+  .badge-meeting  { background: rgba(0,255,136,0.1);   color: var(--green);     border-color: rgba(0,255,136,0.4);   box-shadow: 0 0 6px rgba(0,255,136,0.3); }
+  .badge-proposal { background: rgba(204,68,255,0.1);  color: var(--purple);    border-color: rgba(204,68,255,0.4);  box-shadow: 0 0 6px rgba(204,68,255,0.3); }
+  .badge-closed   { background: rgba(0,255,68,0.1);    color: var(--bright-green); border-color: rgba(0,255,68,0.4); box-shadow: 0 0 6px rgba(0,255,68,0.3); }
+  .badge-lost     { background: rgba(255,34,68,0.1);   color: var(--red);       border-color: rgba(255,34,68,0.4);   box-shadow: 0 0 6px rgba(255,34,68,0.3); }
+
+  /* ===================== ACTIONS ===================== */
+  .actions-cell {
+    white-space: nowrap;
+    min-width: 200px;
+  }
+
+  .actions-cell .btn {
+    margin-right: 4px;
+    margin-bottom: 4px;
+  }
+
+  /* ===================== GRID 2 ===================== */
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 20px;
+  }
+
+  /* ===================== FUNNEL ===================== */
+  .funnel-card {
+    background: #000;
+    border: 1px solid rgba(0,212,255,0.2);
+    padding: 20px;
+    box-shadow: 0 0 20px rgba(0,212,255,0.05);
+  }
+
+  .funnel {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    margin-top: 16px;
+  }
+
+  .funnel-stage {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    position: relative;
+  }
+
+  .funnel-bar-wrap { flex: 1; position: relative; }
+
+  .funnel-bar {
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 14px;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s;
+    margin: 0 auto;
+    clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+  }
+
+  .funnel-stage-name {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-family: 'Courier New', monospace;
+    text-transform: uppercase;
+  }
+
+  .funnel-count {
+    font-size: 18px;
+    font-weight: 800;
+    position: relative;
+    z-index: 1;
+    font-family: 'Courier New', monospace;
+  }
+
+  .funnel-pct {
+    font-size: 10px;
+    color: rgba(0,212,255,0.4);
+    position: relative;
+    z-index: 1;
+  }
+
+  .funnel-arrow {
+    text-align: center;
+    color: rgba(0,212,255,0.3);
+    font-size: 12px;
+    line-height: 1;
+    padding: 2px 0;
+  }
+
+  /* ===================== ACTIVITY LOG ===================== */
+  .activity-card {
+    background: #000;
+    border: 1px solid rgba(0,212,255,0.2);
+    padding: 20px;
+    overflow: hidden;
+  }
+
+  .activity-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    max-height: 420px;
+    overflow-y: auto;
+    padding-right: 4px;
+  }
+
+  .activity-item {
+    display: flex;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(0,212,255,0.08);
+    align-items: flex-start;
+    animation: fadeIn 0.3s ease;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-4px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .activity-item:last-child { border-bottom: none; }
+
+  .activity-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-top: 4px;
+    flex-shrink: 0;
+  }
+
+  .activity-dot-gold   { background: var(--cyan);  box-shadow: 0 0 6px var(--cyan); }
+  .activity-dot-blue   { background: var(--cyan);  box-shadow: 0 0 6px var(--cyan); }
+  .activity-dot-green  { background: var(--green); box-shadow: 0 0 6px var(--green); }
+  .activity-dot-orange { background: var(--orange); box-shadow: 0 0 6px var(--orange); }
+  .activity-dot-purple { background: var(--purple); box-shadow: 0 0 6px var(--purple); }
+  .activity-dot-red    { background: var(--red);   box-shadow: 0 0 6px var(--red); }
+
+  .activity-content { flex: 1; min-width: 0; }
+
+  .activity-text {
+    font-size: 12px;
+    color: rgba(0,212,255,0.8);
+    line-height: 1.4;
+    font-family: 'Courier New', monospace;
+  }
+
+  .activity-time {
+    font-size: 10px;
+    color: var(--cyan);
+    margin-top: 2px;
+    font-family: 'Courier New', monospace;
+    text-shadow: var(--cyan-glow-sm);
+  }
+
+  /* ===================== MODALS ===================== */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.85);
+    backdrop-filter: blur(6px);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    animation: overlayIn 0.2s ease;
+  }
+
+  @keyframes overlayIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+
+  .modal {
+    background: #000000;
+    border: 1px solid var(--cyan);
+    box-shadow: var(--cyan-glow), 0 20px 60px rgba(0,0,0,0.8);
+    width: 100%;
+    max-width: 700px;
+    max-height: 90vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    animation: modalIn 0.25s ease;
+    clip-path: polygon(16px 0%, 100% 0%, calc(100% - 16px) 100%, 0% 100%);
+    position: relative;
+  }
+
+  .modal::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+    box-shadow: var(--cyan-glow);
+    animation: modalTopBar 2s linear infinite;
+  }
+
+  @keyframes modalTopBar {
+    0%   { opacity: 0.5; }
+    50%  { opacity: 1; }
+    100% { opacity: 0.5; }
+  }
+
+  @keyframes modalIn {
+    from { opacity: 0; transform: scale(0.96) translateY(10px); }
+    to   { opacity: 1; transform: scale(1) translateY(0); }
+  }
+
+  .modal-header {
+    padding: 20px 24px;
+    border-bottom: 1px solid rgba(0,212,255,0.2);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #000;
+  }
+
+  .modal-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--cyan);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-shadow: var(--cyan-glow-sm);
+    font-family: 'Courier New', monospace;
+  }
+
+  .modal-title-icon { color: var(--cyan); font-size: 16px; }
+
+  .modal-close {
+    width: 28px;
+    height: 28px;
+    border: 1px solid rgba(0,212,255,0.3);
+    background: transparent;
+    color: rgba(0,212,255,0.5);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    transition: all 0.2s;
+    line-height: 1;
+    font-family: 'Courier New', monospace;
+  }
+  .modal-close:hover { border-color: var(--red); color: var(--red); background: rgba(255,34,68,0.1); }
+
+  .modal-body {
+    padding: 20px 24px;
+    overflow-y: auto;
+    flex: 1;
+  }
+
+  .modal-footer {
+    padding: 16px 24px;
+    border-top: 1px solid rgba(0,212,255,0.2);
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    background: #000;
+  }
+
+  /* ===================== FORM ===================== */
+  .form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .form-group.full { grid-column: 1 / -1; }
+
+  .form-label {
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(0,212,255,0.5);
+    font-family: 'Courier New', monospace;
+  }
+
+  .form-control {
+    padding: 8px 12px;
+    width: 100%;
+  }
+
+  textarea.form-control {
+    resize: vertical;
+    min-height: 70px;
+  }
+
+  /* ===================== EDIT ROW ===================== */
+  .editing-row td {
+    background: rgba(0,212,255,0.04) !important;
+  }
+
+  .inline-edit {
+    padding: 4px 8px;
+    width: 100%;
+    min-width: 80px;
+  }
+
+  /* ===================== EMPTY STATE ===================== */
+  .empty-state {
+    text-align: center;
+    padding: 50px 20px;
+    color: rgba(0,212,255,0.3);
+    font-family: 'Courier New', monospace;
+  }
+
+  .empty-state .icon { font-size: 24px; margin-bottom: 12px; opacity: 0.4; letter-spacing: 0.1em; }
+  .empty-state p { font-size: 13px; }
+
+  /* ===================== INLINE EDIT ===================== */
+  .editing-row input, .editing-row select {
+    font-size: 11px;
+  }
+
+  /* ===================== LINKEDIN ===================== */
+  .linkedin-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    color: rgba(0,212,255,0.6);
+    text-decoration: none;
+    font-size: 11px;
+    font-family: 'Courier New', monospace;
+  }
+  .linkedin-link:hover { color: var(--cyan); text-shadow: var(--cyan-glow-sm); }
+
+  /* ===================== CONFIRM ===================== */
+  .confirm-text {
+    color: rgba(0,212,255,0.7);
+    font-size: 13px;
+    line-height: 1.6;
+    padding: 10px 0;
+    font-family: 'Courier New', monospace;
+  }
+
+  /* ===================== NOTES ===================== */
+  .notes-area { min-height: 120px; }
+
+  .notes-history {
+    margin-top: 16px;
+    border-top: 1px solid rgba(0,212,255,0.15);
+    padding-top: 16px;
+  }
+
+  .notes-history-title {
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(0,212,255,0.4);
+    margin-bottom: 10px;
+    font-family: 'Courier New', monospace;
+  }
+
+  .note-entry {
+    background: #050a0f;
+    border: 1px solid rgba(0,212,255,0.15);
+    border-left: 2px solid var(--cyan);
+    padding: 10px 12px;
+    margin-bottom: 8px;
+  }
+
+  .note-entry-text {
+    color: rgba(0,212,255,0.8);
+    font-size: 12px;
+    line-height: 1.5;
+    font-family: 'Courier New', monospace;
+  }
+
+  .note-entry-time {
+    font-size: 10px;
+    color: var(--cyan);
+    margin-top: 4px;
+    font-family: 'Courier New', monospace;
+    text-shadow: var(--cyan-glow-sm);
+  }
+
+  /* ===================== RESPONSIVE ===================== */
+  @media (max-width: 1200px) {
+    .stats-bar { grid-template-columns: repeat(3, 1fr); }
+    .grid-2 { grid-template-columns: 1fr; }
+    .header-center { display: none; }
+  }
+
+  /* ===================== CYAN LINE ===================== */
+  .cyan-line {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+    margin: 20px 0;
+    opacity: 0.3;
+    box-shadow: 0 0 4px rgba(0,212,255,0.3);
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header">
+  <div class="header-inner">
+    <div class="header-left">
+      <div class="logo">J.A.R.V.I.S</div>
+      <div class="header-subtitle">WEALTH MANAGEMENT SYSTEM | AJ DONOFRIO | BARNUM FINANCIAL GROUP</div>
+    </div>
+    <div class="header-center">
+      <div class="aum-label">// AUM POTENTIAL //</div>
+      <div class="aum-display" id="headerAUM">$0</div>
+    </div>
+    <div class="header-right">
+      <div class="header-meta">
+        <div class="live-clock" id="liveClock">--:--:--</div>
+        <div class="system-status">
+          <span class="pulse-dot"></span>
+          SYSTEM ONLINE
+        </div>
+      </div>
+      <a href="home.html" style="display:inline-block;color:#00d4ff;border:1px solid #00d4ff;padding:6px 16px;font-family:'Courier New',monospace;font-size:11px;letter-spacing:2px;text-decoration:none;text-transform:uppercase;clip-path:polygon(6px 0%,100% 0%,calc(100% - 6px) 100%,0% 100%);transition:all 0.2s;margin-right:8px;" onmouseover="this.style.background='rgba(0,212,255,0.15)';this.style.boxShadow='0 0 15px rgba(0,212,255,0.4)'" onmouseout="this.style.background='transparent';this.style.boxShadow='none'">[HOME]</a>
+      <button class="btn btn-ghost" onclick="exportCSV()">[ EXPORT CSV ]</button>
+      <button id="bgToggle" onclick="toggleBG()" style="display:inline-block;color:#00d4ff;border:1px solid #00d4ff;padding:6px 16px;font-family:'Courier New',monospace;font-size:11px;letter-spacing:2px;background:transparent;cursor:pointer;text-transform:uppercase;clip-path:polygon(6px 0%,100% 0%,calc(100% - 6px) 100%,0% 100%);transition:all 0.2s;margin-right:8px;" onmouseover="this.style.boxShadow='0 0 15px rgba(0,212,255,0.4)'" onmouseout="this.style.boxShadow='none'">[LIGHT MODE]</button>
+      <button class="btn btn-cyan" onclick="openAddModal()">[ + ADD PROSPECT ]</button>
+    </div>
+  </div>
+</header>
+
+<!-- MAIN -->
+<main class="main">
+
+  <!-- STATS BAR -->
+  <div class="stats-bar" id="statsBar">
+    <div class="stat-card">
+      <div class="stat-label">// TOTAL PROSPECTS</div>
+      <div class="stat-value" id="statTotal">0</div>
+      <div class="stat-sub">ALL TRACKED LEADS</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">// IN PIPELINE</div>
+      <div class="stat-value" id="statPipeline">0</div>
+      <div class="stat-sub">ACTIVE OPPORTUNITIES</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">// MEETINGS SET</div>
+      <div class="stat-value" id="statMeetings">0</div>
+      <div class="stat-sub">SCHEDULED CONSULTATIONS</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">// CLOSED</div>
+      <div class="stat-value" id="statClosed">0</div>
+      <div class="stat-sub">WON CLIENTS</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">// AUM POTENTIAL</div>
+      <div class="stat-value" id="statAUM">$0</div>
+      <div class="stat-sub">EST. INVESTABLE ASSETS</div>
+    </div>
+  </div>
+
+  <!-- TOOLBAR -->
+  <div class="toolbar">
+    <div class="toolbar-left">
+      <div class="search-wrap">
+        <span class="search-icon">[&gt;]</span>
+        <input type="text" class="search-input" id="searchInput" placeholder="SEARCH PROSPECTS..." oninput="filterTable()">
+      </div>
+      <select id="statusFilter" onchange="filterTable()">
+        <option value="">ALL STATUSES</option>
+        <option value="New">[*] New</option>
+        <option value="Contacted">[~] Contacted</option>
+        <option value="Follow-Up">[!] Follow-Up</option>
+        <option value="Meeting Set">[+] Meeting Set</option>
+        <option value="Proposal Sent">[P] Proposal Sent</option>
+        <option value="Closed">[X] Closed</option>
+        <option value="Lost">[-] Lost</option>
+      </select>
+      <select id="sortBy" onchange="filterTable()">
+        <option value="">SORT BY...</option>
+        <option value="name">Name A-Z</option>
+        <option value="assets_desc">Assets (High-Low)</option>
+        <option value="assets_asc">Assets (Low-High)</option>
+        <option value="status">Status</option>
+        <option value="date">Last Contact</option>
+      </select>
+    </div>
+    <div style="display:flex;gap:8px;">
+      <button class="btn btn-ghost btn-sm" onclick="clearFilters()">[ X CLEAR ]</button>
+      <span style="color:rgba(0,212,255,0.4);font-size:11px;display:flex;align-items:center;font-family:'Courier New',monospace;" id="resultCount"></span>
+    </div>
+  </div>
+
+  <!-- CLIENT PORTFOLIO SECTION -->
+  <div class="section-header">
+    <span class="section-title">// CLIENT PORTFOLIO //</span>
+    <div class="section-line"></div>
+  </div>
+
+  <div id="clientPortfolioSection" style="margin-bottom:32px;">
+
+    <!-- Input Cards -->
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:24px;">
+
+      <!-- AUM Input -->
+      <div style="background:#000;border:1px solid rgba(0,212,255,0.4);clip-path:polygon(0 0,calc(100% - 10px) 0,100% 10px,100% 100%,0 100%);padding:16px;box-shadow:0 0 10px rgba(0,212,255,0.2);">
+        <div style="font-size:10px;letter-spacing:2px;color:rgba(0,212,255,0.6);margin-bottom:8px;">// CURRENT AUM</div>
+        <div style="display:flex;align-items:center;gap:6px;">
+          <span style="color:#00d4ff;font-size:16px;">$</span>
+          <input type="number" id="portAUM" placeholder="0"
+            style="background:transparent;border:none;border-bottom:1px solid #00d4ff;color:#00d4ff;font-family:'Courier New',monospace;font-size:16px;width:100%;outline:none;padding:2px 4px;"
+            oninput="updatePortfolio()" />
+        </div>
+      </div>
+
+      <!-- Clients Input -->
+      <div style="background:#000;border:1px solid rgba(0,212,255,0.4);clip-path:polygon(0 0,calc(100% - 10px) 0,100% 10px,100% 100%,0 100%);padding:16px;box-shadow:0 0 10px rgba(0,212,255,0.2);">
+        <div style="font-size:10px;letter-spacing:2px;color:rgba(0,212,255,0.6);margin-bottom:8px;">// ACTIVE CLIENTS</div>
+        <input type="number" id="portClients" placeholder="0"
+          style="background:transparent;border:none;border-bottom:1px solid #00d4ff;color:#00d4ff;font-family:'Courier New',monospace;font-size:16px;width:100%;outline:none;padding:2px 4px;"
+          oninput="updatePortfolio()" />
+      </div>
+
+      <!-- Avg Account Size (auto-calculated) -->
+      <div style="background:#000;border:1px solid rgba(0,212,255,0.25);clip-path:polygon(0 0,calc(100% - 10px) 0,100% 10px,100% 100%,0 100%);padding:16px;box-shadow:0 0 6px rgba(0,212,255,0.1);">
+        <div style="font-size:10px;letter-spacing:2px;color:rgba(0,212,255,0.6);margin-bottom:8px;">// AVG ACCOUNT SIZE <span style="font-size:9px;opacity:0.5">(AUTO)</span></div>
+        <div id="portAvgDisplay" style="color:#00d4ff;font-size:16px;font-family:'Courier New',monospace;padding:2px 4px;">$—</div>
+      </div>
+
+      <!-- Growth Rate Input -->
+      <div style="background:#000;border:1px solid rgba(0,212,255,0.4);clip-path:polygon(0 0,calc(100% - 10px) 0,100% 10px,100% 100%,0 100%);padding:16px;box-shadow:0 0 10px rgba(0,212,255,0.2);">
+        <div style="font-size:10px;letter-spacing:2px;color:rgba(0,212,255,0.6);margin-bottom:8px;">// TARGET GROWTH RATE</div>
+        <div style="display:flex;align-items:center;gap:6px;">
+          <input type="number" id="portGrowth" value="40" min="1" max="200"
+            style="background:transparent;border:none;border-bottom:1px solid #00d4ff;color:#00d4ff;font-family:'Courier New',monospace;font-size:16px;width:60px;outline:none;padding:2px 4px;"
+            oninput="updatePortfolio()" />
+          <span style="color:rgba(0,212,255,0.6);font-size:14px;">%</span>
+        </div>
+      </div>
+
+      <!-- Save Button -->
+      <div style="display:flex;align-items:center;justify-content:center;">
+        <button onclick="savePortfolio()"
+          style="background:transparent;border:1px solid #00d4ff;color:#00d4ff;font-family:'Courier New',monospace;font-size:12px;letter-spacing:2px;padding:12px 20px;cursor:pointer;clip-path:polygon(0 0,calc(100% - 8px) 0,100% 8px,100% 100%,0 100%);box-shadow:0 0 10px #00d4ff;transition:all 0.2s;"
+          onmouseover="this.style.background='rgba(0,212,255,0.15)'"
+          onmouseout="this.style.background='transparent'">
+          [ SAVE ]
+        </button>
+      </div>
+    </div>
+
+    <!-- Stat Cards Row -->
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:24px;">
+      <div style="background:#000;border:1px solid rgba(0,212,255,0.4);clip-path:polygon(0 0,calc(100% - 14px) 0,100% 14px,100% 100%,0 100%);padding:20px;text-align:center;box-shadow:0 0 16px rgba(0,212,255,0.25);">
+        <div style="font-size:10px;letter-spacing:3px;color:rgba(0,212,255,0.5);margin-bottom:10px;">ACTIVE CLIENTS</div>
+        <div id="statClients" style="font-size:28px;font-weight:700;color:#00d4ff;font-family:'Courier New',monospace;text-shadow:0 0 10px #00d4ff,0 0 20px #00d4ff;">96</div>
+      </div>
+      <div style="background:#000;border:1px solid rgba(0,212,255,0.4);clip-path:polygon(0 0,calc(100% - 14px) 0,100% 14px,100% 100%,0 100%);padding:20px;text-align:center;box-shadow:0 0 16px rgba(0,212,255,0.25);">
+        <div style="font-size:10px;letter-spacing:3px;color:rgba(0,212,255,0.5);margin-bottom:10px;">CURRENT AUM</div>
+        <div id="statPortAUM" style="font-size:28px;font-weight:700;color:#00d4ff;font-family:'Courier New',monospace;text-shadow:0 0 10px #00d4ff,0 0 20px #00d4ff;">$4,605,843</div>
+      </div>
+      <div style="background:#000;border:1px solid rgba(0,212,255,0.4);clip-path:polygon(0 0,calc(100% - 14px) 0,100% 14px,100% 100%,0 100%);padding:20px;text-align:center;box-shadow:0 0 16px rgba(0,212,255,0.25);">
+        <div style="font-size:10px;letter-spacing:3px;color:rgba(0,212,255,0.5);margin-bottom:10px;">AVG ACCOUNT SIZE</div>
+        <div id="statAvg" style="font-size:28px;font-weight:700;color:#00d4ff;font-family:'Courier New',monospace;text-shadow:0 0 10px #00d4ff,0 0 20px #00d4ff;">$47,977</div>
+      </div>
+    </div>
+
+    <!-- Progress Bar -->
+    <div style="margin-bottom:8px;">
+      <div style="font-size:10px;letter-spacing:3px;color:rgba(0,212,255,0.6);margin-bottom:8px;">PROGRESS TO 10-YEAR TARGET</div>
+      <div style="background:rgba(0,212,255,0.08);border:1px solid rgba(0,212,255,0.3);clip-path:polygon(0 0,calc(100% - 8px) 0,100% 8px,100% 100%,0 100%);height:24px;position:relative;overflow:hidden;">
+        <div id="portProgress" style="height:100%;width:6.78%;background:linear-gradient(90deg,#00d4ff,#00ffff);box-shadow:0 0 12px #00d4ff,0 0 24px #00d4ff;transition:width 0.5s ease;"></div>
+        <div id="portProgressLabel" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:11px;font-family:'Courier New',monospace;color:#000;font-weight:700;white-space:nowrap;mix-blend-mode:difference;">6.78% — $4,605,843 / $67,972,524</div>
+      </div>
+    </div>
+
+  </div><!-- end #clientPortfolioSection -->
+
+  <!-- FEE INCOME SECTION -->
+  <div class="section-header" style="margin-top:8px;">
+    <span class="section-title">// FEE INCOME //</span>
+    <div class="section-line"></div>
+  </div>
+
+  <div id="feeIncomeSection" style="margin-bottom:32px;">
+
+    <!-- Fee Input Row -->
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:24px;">
+
+      <!-- Annual WRAP Fee -->
+      <div style="background:#000;border:1px solid rgba(0,212,255,0.4);clip-path:polygon(0 0,calc(100% - 10px) 0,100% 10px,100% 100%,0 100%);padding:16px;box-shadow:0 0 10px rgba(0,212,255,0.2);">
+        <div style="font-size:10px;letter-spacing:2px;color:rgba(0,212,255,0.6);margin-bottom:8px;">// ANNUAL WRAP FEE</div>
+        <div style="display:flex;align-items:center;gap:6px;">
+          <span style="color:#00d4ff;font-size:16px;">$</span>
+          <input type="number" id="feeAnnual" placeholder="43295"
+            style="background:transparent;border:none;border-bottom:1px solid #00d4ff;color:#00d4ff;font-family:'Courier New',monospace;font-size:16px;width:100%;outline:none;padding:2px 4px;"
+            oninput="onFeeAnnualChange()" />
+        </div>
+      </div>
+
+      <!-- Monthly WRAP Fee -->
+      <div style="background:#000;border:1px solid rgba(0,212,255,0.4);clip-path:polygon(0 0,calc(100% - 10px) 0,100% 10px,100% 100%,0 100%);padding:16px;box-shadow:0 0 10px rgba(0,212,255,0.2);">
+        <div style="font-size:10px;letter-spacing:2px;color:rgba(0,212,255,0.6);margin-bottom:8px;">// MONTHLY WRAP FEE <span style="font-size:9px;opacity:0.5">(AUTO / EDITABLE)</span></div>
+        <div style="display:flex;align-items:center;gap:6px;">
+          <span style="color:#00d4ff;font-size:16px;">$</span>
+          <input type="number" id="feeMonthly" placeholder="3608"
+            style="background:transparent;border:none;border-bottom:1px solid #00d4ff;color:#00d4ff;font-family:'Courier New',monospace;font-size:16px;width:100%;outline:none;padding:2px 4px;"
+            oninput="onFeeMonthlyChange()" />
+        </div>
+      </div>
+
+      <!-- Fee as % of AUM -->
+      <div style="background:#000;border:1px solid rgba(0,212,255,0.25);clip-path:polygon(0 0,calc(100% - 10px) 0,100% 10px,100% 100%,0 100%);padding:16px;box-shadow:0 0 6px rgba(0,212,255,0.1);">
+        <div style="font-size:10px;letter-spacing:2px;color:rgba(0,212,255,0.6);margin-bottom:8px;">// FEE AS % OF AUM <span style="font-size:9px;opacity:0.5">(AUTO)</span></div>
+        <div id="feePctDisplay" style="color:#00d4ff;font-size:20px;font-family:'Courier New',monospace;padding:2px 4px;text-shadow:0 0 8px #00d4ff;">0.9400%</div>
+      </div>
+
+      <!-- Save Button -->
+      <div style="display:flex;align-items:center;justify-content:center;">
+        <button onclick="saveFees()"
+          style="background:transparent;border:1px solid #00d4ff;color:#00d4ff;font-family:'Courier New',monospace;font-size:12px;letter-spacing:2px;padding:12px 20px;cursor:pointer;clip-path:polygon(0 0,calc(100% - 8px) 0,100% 8px,100% 100%,0 100%);box-shadow:0 0 10px #00d4ff;transition:all 0.2s;"
+          onmouseover="this.style.background='rgba(0,212,255,0.15)'"
+          onmouseout="this.style.background='transparent'">
+          [ SAVE ]
+        </button>
+      </div>
+    </div>
+
+    <!-- Fee Stat Cards Row -->
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px;">
+      <div style="background:#000;border:1px solid rgba(0,212,255,0.4);clip-path:polygon(0 0,calc(100% - 14px) 0,100% 14px,100% 100%,0 100%);padding:20px;text-align:center;box-shadow:0 0 16px rgba(0,212,255,0.25);">
+        <div style="font-size:10px;letter-spacing:3px;color:rgba(0,212,255,0.5);margin-bottom:10px;">ANNUAL FEE INCOME</div>
+        <div id="feeStatAnnual" style="font-size:26px;font-weight:700;color:#00d4ff;font-family:'Courier New',monospace;text-shadow:0 0 10px #00d4ff,0 0 20px #00d4ff;">$43,295</div>
+      </div>
+      <div style="background:#000;border:1px solid rgba(0,212,255,0.4);clip-path:polygon(0 0,calc(100% - 14px) 0,100% 14px,100% 100%,0 100%);padding:20px;text-align:center;box-shadow:0 0 16px rgba(0,212,255,0.25);">
+        <div style="font-size:10px;letter-spacing:3px;color:rgba(0,212,255,0.5);margin-bottom:10px;">MONTHLY FEE INCOME</div>
+        <div id="feeStatMonthly" style="font-size:26px;font-weight:700;color:#00d4ff;font-family:'Courier New',monospace;text-shadow:0 0 10px #00d4ff,0 0 20px #00d4ff;">$3,608</div>
+      </div>
+      <div style="background:#000;border:1px solid rgba(0,212,255,0.4);clip-path:polygon(0 0,calc(100% - 14px) 0,100% 14px,100% 100%,0 100%);padding:20px;text-align:center;box-shadow:0 0 16px rgba(0,212,255,0.25);">
+        <div style="font-size:10px;letter-spacing:3px;color:rgba(0,212,255,0.5);margin-bottom:10px;">FEE AS % AUM</div>
+        <div id="feeStatPct" style="font-size:26px;font-weight:700;color:#00d4ff;font-family:'Courier New',monospace;text-shadow:0 0 10px #00d4ff,0 0 20px #00d4ff;">0.9400%</div>
+      </div>
+      <div style="background:#000;border:1px solid rgba(0,212,255,0.4);clip-path:polygon(0 0,calc(100% - 14px) 0,100% 14px,100% 100%,0 100%);padding:20px;text-align:center;box-shadow:0 0 16px rgba(0,212,255,0.25);">
+        <div style="font-size:10px;letter-spacing:3px;color:rgba(0,212,255,0.5);margin-bottom:10px;">YR 10 ANNUAL FEE</div>
+        <div id="feeStatYr10" style="font-size:26px;font-weight:700;color:#00d4ff;font-family:'Courier New',monospace;text-shadow:0 0 10px #00d4ff,0 0 20px #00d4ff;">$638,943</div>
+      </div>
+    </div>
+
+  </div><!-- end #feeIncomeSection -->
+
+  <!-- ============================================================ -->
+  <!-- 10-YEAR PROJECTION TABLES — AJ DONOFRIO SPREADSHEET FORMAT -->
+  <!-- ============================================================ -->
+
+  <!-- GROUP 1: GROWTH PROJECTIONS -->
+  <div class="section-header" style="margin-top:8px;">
+    <span class="section-title">// [[ GROWTH PROJECTIONS ]] //</span>
+    <div class="section-line"></div>
+  </div>
+
+  <style>
+    .proj-group { margin-bottom: 48px; }
+    .proj-tables-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      margin-bottom: 32px;
+    }
+    @media (max-width: 1100px) {
+      .proj-tables-row { grid-template-columns: 1fr; }
+    }
+    .proj-table-wrap {
+      background: #000;
+      border: 1px solid rgba(0,212,255,0.45);
+      clip-path: polygon(0 0, calc(100% - 16px) 0, 100% 16px, 100% 100%, 0 100%);
+      box-shadow: 0 0 18px rgba(0,212,255,0.2), inset 0 0 30px rgba(0,212,255,0.03);
+      overflow: hidden;
+    }
+    .proj-table-title {
+      background: #001a20;
+      border-bottom: 2px solid #00d4ff;
+      padding: 10px 14px;
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      color: #00d4ff;
+      text-transform: uppercase;
+      text-shadow: 0 0 10px #00d4ff, 0 0 20px rgba(0,212,255,0.4);
+      font-family: 'Courier New', monospace;
+    }
+    .proj-tbl {
+      width: 100%;
+      border-collapse: collapse;
+      font-family: 'Courier New', monospace;
+      font-size: 11px;
+    }
+    .proj-tbl thead tr {
+      background: #001a20;
+      border-bottom: 1px solid rgba(0,212,255,0.5);
+    }
+    .proj-tbl thead th {
+      padding: 8px 10px;
+      text-align: left;
+      letter-spacing: 0.15em;
+      color: #00d4ff;
+      font-size: 9px;
+      text-transform: uppercase;
+      border-right: 1px solid rgba(0,212,255,0.15);
+      white-space: nowrap;
+    }
+    .proj-tbl thead th:last-child { border-right: none; }
+    .proj-tbl thead th.right { text-align: right; }
+    /* Row tiers */
+    .proj-row-intro { opacity: 0.62; font-style: italic; border-left: 3px solid rgba(0,212,255,0.35); }
+    .proj-row-current { background: #001a20 !important; font-weight: 700; border-left: 3px solid #00d4ff; box-shadow: inset 0 0 20px rgba(0,212,255,0.07); }
+    .proj-row-y3, .proj-row-y4, .proj-row-y5 { border-left: 3px solid rgba(0,212,255,0.5); }
+    .proj-row-y6, .proj-row-y7, .proj-row-y8 { border-left: 3px solid #00d4ff; }
+    .proj-row-y9 { border-left: 3px solid rgba(255,255,255,0.6); }
+    .proj-row-y10 {
+      background: #06080a !important;
+      border-left: 4px solid #fff;
+      font-weight: 700;
+      box-shadow: inset 0 0 40px rgba(255,255,255,0.04), 0 0 20px rgba(255,255,255,0.06);
+    }
+    .proj-tbl tbody tr td {
+      padding: 7px 10px;
+      border-right: 1px solid rgba(0,212,255,0.08);
+      border-bottom: 1px solid rgba(0,212,255,0.06);
+    }
+    .proj-tbl tbody tr td:last-child { border-right: none; }
+    .td-right { text-align: right; }
+    /* Text colors by tier */
+    .c-intro    { color: rgba(0,212,255,0.55); }
+    .c-current  { color: #00d4ff; }
+    .c-y3       { color: #00d4ff; }
+    .c-y6       { color: #00eeff; }
+    .c-y9       { color: #fff; text-shadow: 0 0 8px rgba(255,255,255,0.5); }
+    .c-y10      { color: #fff; text-shadow: 0 0 16px #fff, 0 0 30px rgba(255,255,255,0.4); }
+    .c-green    { color: rgba(0,255,136,0.8); }
+    .badge-current {
+      display: inline-block;
+      font-size: 8px;
+      letter-spacing: 0.1em;
+      background: rgba(0,212,255,0.15);
+      border: 1px solid rgba(0,212,255,0.5);
+      color: #00d4ff;
+      padding: 1px 5px;
+      margin-left: 6px;
+      vertical-align: middle;
+    }
+    .badge-target {
+      display: inline-block;
+      font-size: 8px;
+      letter-spacing: 0.1em;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.4);
+      color: #fff;
+      padding: 1px 5px;
+      margin-left: 6px;
+      vertical-align: middle;
+    }
+    /* Milestone callout boxes */
+    .milestone-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin: 0 0 32px 0;
+    }
+    @media (max-width: 760px) { .milestone-row { grid-template-columns: 1fr; } }
+    .milestone-box {
+      background: #000;
+      border: 1px solid rgba(0,212,255,0.4);
+      border-left: 3px solid #00d4ff;
+      clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 0 100%);
+      padding: 16px 18px;
+      box-shadow: 0 0 14px rgba(0,212,255,0.18);
+    }
+    .milestone-box.gold {
+      border-color: rgba(255,221,0,0.5);
+      border-left-color: #ffdd00;
+      box-shadow: 0 0 14px rgba(255,221,0,0.15);
+    }
+    .milestone-label {
+      font-size: 9px;
+      letter-spacing: 0.15em;
+      color: rgba(0,212,255,0.55);
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      font-family: 'Courier New', monospace;
+    }
+    .milestone-value {
+      font-size: 16px;
+      font-weight: 700;
+      color: #00d4ff;
+      font-family: 'Courier New', monospace;
+      text-shadow: 0 0 10px #00d4ff;
+    }
+    .milestone-box.gold .milestone-label { color: rgba(255,221,0,0.6); }
+    .milestone-box.gold .milestone-value { color: #ffdd00; text-shadow: 0 0 10px #ffdd00; }
+    .milestone-sub {
+      font-size: 10px;
+      color: rgba(0,212,255,0.5);
+      font-family: 'Courier New', monospace;
+      margin-top: 4px;
+    }
+    .milestone-box.gold .milestone-sub { color: rgba(255,221,0,0.5); }
+  </style>
+
+  <!-- GROUP 1 TABLES ROW -->
+  <div class="proj-group">
+    <div class="proj-tables-row">
+
+      <!-- TABLE 1: PROJECTED AUM — 10 YEAR GROWTH -->
+      <div class="proj-table-wrap">
+        <div class="proj-table-title">PROJECTED AUM&nbsp;&nbsp;|&nbsp;&nbsp;10 YEAR GROWTH</div>
+        <div style="overflow-x:auto;">
+          <table class="proj-tbl">
+            <thead>
+              <tr>
+                <th>YEAR</th>
+                <th class="right">AUM</th>
+                <th class="right">YOY GROWTH</th>
+                <th class="right">GROWTH&nbsp;%</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Intro Year -->
+              <tr class="proj-row-intro">
+                <td class="c-intro">INTRO YEAR <span style="font-size:9px;">(PARTIAL)</span></td>
+                <td class="td-right c-intro">$2,664,157</td>
+                <td class="td-right c-intro">—</td>
+                <td class="td-right c-intro">—</td>
+              </tr>
+              <!-- Year 2 CURRENT -->
+              <tr class="proj-row-current">
+                <td class="c-current">YEAR 2<span class="badge-current">CURRENT</span></td>
+                <td class="td-right c-current">$4,605,843</td>
+                <td class="td-right c-green">+$1,941,686</td>
+                <td class="td-right c-green">+72.9%</td>
+              </tr>
+              <!-- Year 3 -->
+              <tr class="proj-row-y3">
+                <td class="c-y3">YEAR 3</td>
+                <td class="td-right c-y3">$6,448,180</td>
+                <td class="td-right c-green">+$1,842,337</td>
+                <td class="td-right c-green">+40%</td>
+              </tr>
+              <!-- Year 4 -->
+              <tr class="proj-row-y3">
+                <td class="c-y3">YEAR 4</td>
+                <td class="td-right c-y3">$9,027,452</td>
+                <td class="td-right c-green">+$2,579,272</td>
+                <td class="td-right c-green">+40%</td>
+              </tr>
+              <!-- Year 5 -->
+              <tr class="proj-row-y3">
+                <td class="c-y3">YEAR 5</td>
+                <td class="td-right c-y3">$12,638,433</td>
+                <td class="td-right c-green">+$3,610,981</td>
+                <td class="td-right c-green">+40%</td>
+              </tr>
+              <!-- Year 6 -->
+              <tr class="proj-row-y6">
+                <td class="c-y6">YEAR 6</td>
+                <td class="td-right c-y6">$17,693,806</td>
+                <td class="td-right c-green">+$5,055,373</td>
+                <td class="td-right c-green">+40%</td>
+              </tr>
+              <!-- Year 7 -->
+              <tr class="proj-row-y6">
+                <td class="c-y6">YEAR 7</td>
+                <td class="td-right c-y6">$24,771,328</td>
+                <td class="td-right c-green">+$7,077,522</td>
+                <td class="td-right c-green">+40%</td>
+              </tr>
+              <!-- Year 8 -->
+              <tr class="proj-row-y6">
+                <td class="c-y6">YEAR 8</td>
+                <td class="td-right c-y6">$34,679,859</td>
+                <td class="td-right c-green">+$9,908,531</td>
+                <td class="td-right c-green">+40%</td>
+              </tr>
+              <!-- Year 9 -->
+              <tr class="proj-row-y9">
+                <td class="c-y9">YEAR 9</td>
+                <td class="td-right c-y9">$48,551,803</td>
+                <td class="td-right c-green">+$13,871,944</td>
+                <td class="td-right c-green">+40%</td>
+              </tr>
+              <!-- Year 10 TARGET -->
+              <tr class="proj-row-y10">
+                <td class="c-y10">YEAR 10<span class="badge-target">TARGET</span></td>
+                <td class="td-right c-y10">$67,972,524</td>
+                <td class="td-right c-green">+$19,420,721</td>
+                <td class="td-right c-green">+40%</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- TABLE 2: PROJECTED ANNUAL WRAP FEE GROWTH -->
+      <div class="proj-table-wrap">
+        <div class="proj-table-title">PROJECTED ANNUAL WRAP FEE&nbsp;&nbsp;|&nbsp;&nbsp;GROWTH</div>
+        <div style="overflow-x:auto;">
+          <table class="proj-tbl">
+            <thead>
+              <tr>
+                <th>YEAR</th>
+                <th class="right">ANNUAL FEE</th>
+                <th class="right">YOY GROWTH</th>
+                <th class="right">MONTHLY EQUIV</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="proj-row-intro">
+                <td class="c-intro">INTRO YEAR <span style="font-size:9px;">(PARTIAL)</span></td>
+                <td class="td-right c-intro">$25,043</td>
+                <td class="td-right c-intro">—</td>
+                <td class="td-right c-intro">$2,087</td>
+              </tr>
+              <tr class="proj-row-current">
+                <td class="c-current">YEAR 2<span class="badge-current">CURRENT</span></td>
+                <td class="td-right c-current">$43,295</td>
+                <td class="td-right c-green">+$18,252</td>
+                <td class="td-right c-current">$3,608</td>
+              </tr>
+              <tr class="proj-row-y3">
+                <td class="c-y3">YEAR 3</td>
+                <td class="td-right c-y3">$60,613</td>
+                <td class="td-right c-green">+$17,318</td>
+                <td class="td-right c-y3">$5,051</td>
+              </tr>
+              <tr class="proj-row-y3">
+                <td class="c-y3">YEAR 4</td>
+                <td class="td-right c-y3">$84,858</td>
+                <td class="td-right c-green">+$24,245</td>
+                <td class="td-right c-y3">$7,072</td>
+              </tr>
+              <tr class="proj-row-y3">
+                <td class="c-y3">YEAR 5</td>
+                <td class="td-right c-y3">$118,801</td>
+                <td class="td-right c-green">+$33,943</td>
+                <td class="td-right c-y3">$9,900</td>
+              </tr>
+              <tr class="proj-row-y6">
+                <td class="c-y6">YEAR 6</td>
+                <td class="td-right c-y6">$166,322</td>
+                <td class="td-right c-green">+$47,521</td>
+                <td class="td-right c-y6">$13,860</td>
+              </tr>
+              <tr class="proj-row-y6">
+                <td class="c-y6">YEAR 7</td>
+                <td class="td-right c-y6">$232,851</td>
+                <td class="td-right c-green">+$66,529</td>
+                <td class="td-right c-y6">$19,404</td>
+              </tr>
+              <tr class="proj-row-y6">
+                <td class="c-y6">YEAR 8</td>
+                <td class="td-right c-y6">$325,991</td>
+                <td class="td-right c-green">+$93,140</td>
+                <td class="td-right c-y6">$27,166</td>
+              </tr>
+              <tr class="proj-row-y9">
+                <td class="c-y9">YEAR 9</td>
+                <td class="td-right c-y9">$456,388</td>
+                <td class="td-right c-green">+$130,397</td>
+                <td class="td-right c-y9">$38,032</td>
+              </tr>
+              <tr class="proj-row-y10">
+                <td class="c-y10">YEAR 10<span class="badge-target">TARGET</span></td>
+                <td class="td-right c-y10">$638,943</td>
+                <td class="td-right c-green">+$182,555</td>
+                <td class="td-right c-y10">$53,245</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- TABLE 3: PROJECTED MONTHLY WRAP FEE GROWTH -->
+      <div class="proj-table-wrap">
+        <div class="proj-table-title">PROJECTED MONTHLY WRAP FEE&nbsp;&nbsp;|&nbsp;&nbsp;GROWTH</div>
+        <div style="overflow-x:auto;">
+          <table class="proj-tbl">
+            <thead>
+              <tr>
+                <th>YEAR</th>
+                <th class="right">MONTHLY FEE</th>
+                <th class="right">YOY GROWTH</th>
+                <th class="right">ANNUAL EQUIV</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="proj-row-intro">
+                <td class="c-intro">INTRO YEAR <span style="font-size:9px;">(PARTIAL)</span></td>
+                <td class="td-right c-intro">$2,087</td>
+                <td class="td-right c-intro">—</td>
+                <td class="td-right c-intro">$25,043</td>
+              </tr>
+              <tr class="proj-row-current">
+                <td class="c-current">YEAR 2<span class="badge-current">CURRENT</span></td>
+                <td class="td-right c-current">$3,608</td>
+                <td class="td-right c-green">+$1,521</td>
+                <td class="td-right c-current">$43,295</td>
+              </tr>
+              <tr class="proj-row-y3">
+                <td class="c-y3">YEAR 3</td>
+                <td class="td-right c-y3">$5,051</td>
+                <td class="td-right c-green">+$1,443</td>
+                <td class="td-right c-y3">$60,613</td>
+              </tr>
+              <tr class="proj-row-y3">
+                <td class="c-y3">YEAR 4</td>
+                <td class="td-right c-y3">$7,072</td>
+                <td class="td-right c-green">+$2,021</td>
+                <td class="td-right c-y3">$84,858</td>
+              </tr>
+              <tr class="proj-row-y3">
+                <td class="c-y3">YEAR 5</td>
+                <td class="td-right c-y3">$9,900</td>
+                <td class="td-right c-green">+$2,828</td>
+                <td class="td-right c-y3">$118,801</td>
+              </tr>
+              <tr class="proj-row-y6">
+                <td class="c-y6">YEAR 6</td>
+                <td class="td-right c-y6">$13,860</td>
+                <td class="td-right c-green">+$3,960</td>
+                <td class="td-right c-y6">$166,322</td>
+              </tr>
+              <tr class="proj-row-y6">
+                <td class="c-y6">YEAR 7</td>
+                <td class="td-right c-y6">$19,404</td>
+                <td class="td-right c-green">+$5,544</td>
+                <td class="td-right c-y6">$232,851</td>
+              </tr>
+              <tr class="proj-row-y6">
+                <td class="c-y6">YEAR 8</td>
+                <td class="td-right c-y6">$27,166</td>
+                <td class="td-right c-green">+$7,762</td>
+                <td class="td-right c-y6">$325,991</td>
+              </tr>
+              <tr class="proj-row-y9">
+                <td class="c-y9">YEAR 9</td>
+                <td class="td-right c-y9">$38,032</td>
+                <td class="td-right c-green">+$10,866</td>
+                <td class="td-right c-y9">$456,388</td>
+              </tr>
+              <tr class="proj-row-y10">
+                <td class="c-y10">YEAR 10<span class="badge-target">TARGET</span></td>
+                <td class="td-right c-y10">$53,245</td>
+                <td class="td-right c-green">+$15,213</td>
+                <td class="td-right c-y10">$638,943</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div><!-- end proj-tables-row GROUP 1 -->
+
+    <!-- MILESTONE CALLOUTS (after Table 2) -->
+    <div class="milestone-row">
+      <div class="milestone-box">
+        <div class="milestone-label">⬡ AUM MILESTONE</div>
+        <div class="milestone-value">YEAR 4 — $10M+</div>
+        <div class="milestone-sub">First year AUM exceeds $10,000,000</div>
+      </div>
+      <div class="milestone-box">
+        <div class="milestone-label">⬡ FEE MILESTONE</div>
+        <div class="milestone-value">YEAR 5 — $100K+</div>
+        <div class="milestone-sub">First year annual fee exceeds $100,000</div>
+      </div>
+      <div class="milestone-box gold">
+        <div class="milestone-label">◈ YEAR 10 TARGET</div>
+        <div class="milestone-value">$67,972,524</div>
+        <div class="milestone-sub">$638,943/yr fee &nbsp;|&nbsp; $53,245/mo</div>
+      </div>
+    </div>
+
+  </div><!-- end proj-group GROUP 1 -->
+
+  <!-- GROUP 2: TOTAL OPPORTUNITY PROJECTIONS -->
+  <div class="section-header" style="margin-top:8px;">
+    <span class="section-title">// [[ TOTAL OPPORTUNITY PROJECTIONS ]] //</span>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="proj-group">
+    <div class="proj-tables-row">
+
+      <!-- TABLE 4: TOTAL OPP — PROJECTED AUM -->
+      <div class="proj-table-wrap">
+        <div class="proj-table-title">TOTAL OPP&nbsp;&nbsp;|&nbsp;&nbsp;PROJECTED AUM — 10 YEAR GROWTH</div>
+        <div style="overflow-x:auto;">
+          <table class="proj-tbl">
+            <thead>
+              <tr>
+                <th>YEAR</th>
+                <th class="right">AUM</th>
+                <th class="right">YOY GROWTH</th>
+                <th class="right">GROWTH&nbsp;%</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="proj-row-intro">
+                <td class="c-intro">INTRO YEAR <span style="font-size:9px;">(PARTIAL)</span></td>
+                <td class="td-right c-intro">$2,664,157</td>
+                <td class="td-right c-intro">—</td>
+                <td class="td-right c-intro">—</td>
+              </tr>
+              <tr class="proj-row-current">
+                <td class="c-current">YEAR 2<span class="badge-current">CURRENT</span></td>
+                <td class="td-right c-current">$4,605,843</td>
+                <td class="td-right c-green">+$1,941,686</td>
+                <td class="td-right c-green">+72.9%</td>
+              </tr>
+              <tr class="proj-row-y3">
+                <td class="c-y3">YEAR 3</td>
+                <td class="td-right c-y3">$6,448,180</td>
+                <td class="td-right c-green">+$1,842,337</td>
+                <td class="td-right c-green">+40%</td>
+              </tr>
+              <tr class="proj-row-y3">
+                <td class="c-y3">YEAR 4</td>
+                <td class="td-right c-y3">$9,027,452</td>
+                <td class="td-right c-green">+$2,579,272</td>
+                <td class="td-right c-green">+40%</td>
+              </tr>
+              <tr class="proj-row-y3">
+                <td class="c-y3">YEAR 5</td>
+                <td class="td-right c-y3">$12,638,433</td>
+                <td class="td-right c-green">+$3,610,981</td>
+                <td class="td-right c-green">+40%</td>
+              </tr>
+              <tr class="proj-row-y6">
+                <td class="c-y6">YEAR 6</td>
+                <td class="td-right c-y6">$17,693,806</td>
+                <td class="td-right c-green">+$5,055,373</td>
+                <td class="td-right c-green">+40%</td>
+              </tr>
+              <tr class="proj-row-y6">
+                <td class="c-y6">YEAR 7</td>
+                <td class="td-right c-y6">$24,771,328</td>
+                <td class="td-right c-green">+$7,077,522</td>
+                <td class="td-right c-green">+40%</td>
+              </tr>
+              <tr class="proj-row-y6">
+                <td class="c-y6">YEAR 8</td>
+                <td class="td-right c-y6">$34,679,859</td>
+                <td class="td-right c-green">+$9,908,531</td>
+                <td class="td-right c-green">+40%</td>
+              </tr>
+              <tr class="proj-row-y9">
+                <td class="c-y9">YEAR 9</td>
+                <td class="td-right c-y9">$48,551,803</td>
+                <td class="td-right c-green">+$13,871,944</td>
+                <td class="td-right c-green">+40%</td>
+              </tr>
+              <tr class="proj-row-y10">
+                <td class="c-y10">YEAR 10<span class="badge-target">TARGET</span></td>
+                <td class="td-right c-y10">$67,972,524</td>
+                <td class="td-right c-green">+$19,420,721</td>
+                <td class="td-right c-green">+40%</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- TABLE 5: TOTAL OPP — PROJECTED ANNUAL WRAP FEE -->
+      <div class="proj-table-wrap">
+        <div class="proj-table-title">TOTAL OPP&nbsp;&nbsp;|&nbsp;&nbsp;PROJECTED ANNUAL WRAP FEE GROWTH</div>
+        <div style="overflow-x:auto;">
+          <table class="proj-tbl">
+            <thead>
+              <tr>
+                <th>YEAR</th>
+                <th class="right">ANNUAL FEE</th>
+                <th class="right">YOY GROWTH</th>
+                <th class="right">MONTHLY EQUIV</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="proj-row-intro">
+                <td class="c-intro">INTRO YEAR <span style="font-size:9px;">(PARTIAL)</span></td>
+                <td class="td-right c-intro">$25,043</td>
+                <td class="td-right c-intro">—</td>
+                <td class="td-right c-intro">$2,087</td>
+              </tr>
+              <tr class="proj-row-current">
+                <td class="c-current">YEAR 2<span class="badge-current">CURRENT</span></td>
+                <td class="td-right c-current">$43,295</td>
+                <td class="td-right c-green">+$18,252</td>
+                <td class="td-right c-current">$3,608</td>
+              </tr>
+              <tr class="proj-row-y3">
+                <td class="c-y3">YEAR 3</td>
+                <td class="td-right c-y3">$60,613</td>
+                <td class="td-right c-green">+$17,318</td>
+                <td class="td-right c-y3">$5,051</td>
+              </tr>
+              <tr class="proj-row-y3">
+                <td class="c-y3">YEAR 4</td>
+                <td class="td-right c-y3">$84,858</td>
+                <td class="td-right c-green">+$24,245</td>
+                <td class="td-right c-y3">$7,072</td>
+              </tr>
+              <tr class="proj-row-y3">
+                <td class="c-y3">YEAR 5</td>
+                <td class="td-right c-y3">$118,801</td>
+                <td class="td-right c-green">+$33,943</td>
+                <td class="td-right c-y3">$9,900</td>
+              </tr>
+              <tr class="proj-row-y6">
+                <td class="c-y6">YEAR 6</td>
+                <td class="td-right c-y6">$166,322</td>
+                <td class="td-right c-green">+$47,521</td>
+                <td class="td-right c-y6">$13,860</td>
+              </tr>
+              <tr class="proj-row-y6">
+                <td class="c-y6">YEAR 7</td>
+                <td class="td-right c-y6">$232,851</td>
+                <td class="td-right c-green">+$66,529</td>
+                <td class="td-right c-y6">$19,404</td>
+              </tr>
+              <tr class="proj-row-y6">
+                <td class="c-y6">YEAR 8</td>
+                <td class="td-right c-y6">$325,991</td>
+                <td class="td-right c-green">+$93,140</td>
+                <td class="td-right c-y6">$27,166</td>
+              </tr>
+              <tr class="proj-row-y9">
+                <td class="c-y9">YEAR 9</td>
+                <td class="td-right c-y9">$456,388</td>
+                <td class="td-right c-green">+$130,397</td>
+                <td class="td-right c-y9">$38,032</td>
+              </tr>
+              <tr class="proj-row-y10">
+                <td class="c-y10">YEAR 10<span class="badge-target">TARGET</span></td>
+                <td class="td-right c-y10">$638,943</td>
+                <td class="td-right c-green">+$182,555</td>
+                <td class="td-right c-y10">$53,245</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- TABLE 6: TOTAL OPP — PROJECTED MONTHLY WRAP FEE -->
+      <div class="proj-table-wrap">
+        <div class="proj-table-title">TOTAL OPP&nbsp;&nbsp;|&nbsp;&nbsp;PROJECTED MONTHLY WRAP FEE GROWTH</div>
+        <div style="overflow-x:auto;">
+          <table class="proj-tbl">
+            <thead>
+              <tr>
+                <th>YEAR</th>
+                <th class="right">MONTHLY FEE</th>
+                <th class="right">YOY GROWTH</th>
+                <th class="right">ANNUAL EQUIV</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="proj-row-intro">
+                <td class="c-intro">INTRO YEAR <span style="font-size:9px;">(PARTIAL)</span></td>
+                <td class="td-right c-intro">$2,087</td>
+                <td class="td-right c-intro">—</td>
+                <td class="td-right c-intro">$25,043</td>
+              </tr>
+              <tr class="proj-row-current">
+                <td class="c-current">YEAR 2<span class="badge-current">CURRENT</span></td>
+                <td class="td-right c-current">$3,608</td>
+                <td class="td-right c-green">+$1,521</td>
+                <td class="td-right c-current">$43,295</td>
+              </tr>
+              <tr class="proj-row-y3">
+                <td class="c-y3">YEAR 3</td>
+                <td class="td-right c-y3">$5,051</td>
+                <td class="td-right c-green">+$1,443</td>
+                <td class="td-right c-y3">$60,613</td>
+              </tr>
+              <tr class="proj-row-y3">
+                <td class="c-y3">YEAR 4</td>
+                <td class="td-right c-y3">$7,072</td>
+                <td class="td-right c-green">+$2,021</td>
+                <td class="td-right c-y3">$84,858</td>
+              </tr>
+              <tr class="proj-row-y3">
+                <td class="c-y3">YEAR 5</td>
+                <td class="td-right c-y3">$9,900</td>
+                <td class="td-right c-green">+$2,828</td>
+                <td class="td-right c-y3">$118,801</td>
+              </tr>
+              <tr class="proj-row-y6">
+                <td class="c-y6">YEAR 6</td>
+                <td class="td-right c-y6">$13,860</td>
+                <td class="td-right c-green">+$3,960</td>
+                <td class="td-right c-y6">$166,322</td>
+              </tr>
+              <tr class="proj-row-y6">
+                <td class="c-y6">YEAR 7</td>
+                <td class="td-right c-y6">$19,404</td>
+                <td class="td-right c-green">+$5,544</td>
+                <td class="td-right c-y6">$232,851</td>
+              </tr>
+              <tr class="proj-row-y6">
+                <td class="c-y6">YEAR 8</td>
+                <td class="td-right c-y6">$27,166</td>
+                <td class="td-right c-green">+$7,762</td>
+                <td class="td-right c-y6">$325,991</td>
+              </tr>
+              <tr class="proj-row-y9">
+                <td class="c-y9">YEAR 9</td>
+                <td class="td-right c-y9">$38,032</td>
+                <td class="td-right c-green">+$10,866</td>
+                <td class="td-right c-y9">$456,388</td>
+              </tr>
+              <tr class="proj-row-y10">
+                <td class="c-y10">YEAR 10<span class="badge-target">TARGET</span></td>
+                <td class="td-right c-y10">$53,245</td>
+                <td class="td-right c-green">+$15,213</td>
+                <td class="td-right c-y10">$638,943</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div><!-- end proj-tables-row GROUP 2 -->
+  </div><!-- end proj-group GROUP 2 -->
+
+  <!-- PROSPECT TABLE -->
+  <div class="section-header">
+    <span class="section-title">// PROSPECT PIPELINE //</span>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="table-wrap table-scroll" id="tableWrap">
+    <table class="prospect-table" id="prospectTable">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>NAME</th>
+          <th>WEALTH SOURCE</th>
+          <th>EST. ASSETS</th>
+          <th>LOCATION</th>
+          <th>EMAIL</th>
+          <th>PHONE</th>
+          <th>LINKEDIN</th>
+          <th>STATUS</th>
+          <th>LAST CONTACT</th>
+          <th>OUTREACH ANGLE</th>
+          <th>NOTES</th>
+          <th>ACTIONS</th>
+        </tr>
+      </thead>
+      <tbody id="tableBody"></tbody>
+    </table>
+  </div>
+
+  <!-- FUNNEL + ACTIVITY LOG -->
+  <div class="grid-2">
+
+    <!-- FUNNEL -->
+    <div>
+      <div class="section-header">
+        <span class="section-title">// PIPELINE FUNNEL //</span>
+        <div class="section-line"></div>
+      </div>
+      <div class="funnel-card">
+        <div class="funnel" id="funnelViz"></div>
+      </div>
+    </div>
+
+    <!-- ACTIVITY LOG -->
+    <div>
+      <div class="section-header">
+        <span class="section-title">// ACTIVITY LOG //</span>
+        <div class="section-line"></div>
+      </div>
+      <div class="activity-card">
+        <div class="activity-list" id="activityLog"></div>
+      </div>
+    </div>
+
+  </div>
+
+</main>
+
+<!-- ADD/EDIT PROSPECT MODAL -->
+<div class="modal-overlay" id="prospectModal" style="display:none;" onclick="handleOverlayClick(event,'prospectModal')">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-header">
+      <div class="modal-title">
+        <span class="modal-title-icon">[*]</span>
+        <span id="modalTitle">ADD NEW PROSPECT</span>
+      </div>
+      <button class="modal-close" onclick="closeModal('prospectModal')">X</button>
+    </div>
+    <div class="modal-body">
+      <form id="prospectForm" onsubmit="saveProspect(event)">
+        <div class="form-grid">
+          <div class="form-group full">
+            <label class="form-label">PROSPECT NAME *</label>
+            <input type="text" class="form-control" id="fName" required placeholder="e.g. Prospect -- Business Owner (Manufacturing)">
+          </div>
+          <div class="form-group">
+            <label class="form-label">WEALTH SOURCE</label>
+            <select class="form-control" id="fWealthSource">
+              <option value="">Select source...</option>
+              <option>Business Sale</option>
+              <option>Career/401k</option>
+              <option>Career</option>
+              <option>Real Estate</option>
+              <option>Equity Event</option>
+              <option>Inheritance</option>
+              <option>Severance/Pension</option>
+              <option>Career/Pension</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">EST. INVESTABLE ASSETS</label>
+            <input type="text" class="form-control" id="fAssets" placeholder="e.g. $1.5M">
+          </div>
+          <div class="form-group">
+            <label class="form-label">LOCATION</label>
+            <input type="text" class="form-control" id="fLocation" placeholder="City, State">
+          </div>
+          <div class="form-group">
+            <label class="form-label">STATUS</label>
+            <select class="form-control" id="fStatus">
+              <option value="New">[*] New</option>
+              <option value="Contacted">[~] Contacted</option>
+              <option value="Follow-Up">[!] Follow-Up</option>
+              <option value="Meeting Set">[+] Meeting Set</option>
+              <option value="Proposal Sent">[P] Proposal Sent</option>
+              <option value="Closed">[X] Closed</option>
+              <option value="Lost">[-] Lost</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">EMAIL</label>
+            <input type="email" class="form-control" id="fEmail" placeholder="email@example.com">
+          </div>
+          <div class="form-group">
+            <label class="form-label">PHONE</label>
+            <input type="tel" class="form-control" id="fPhone" placeholder="(555) 000-0000">
+          </div>
+          <div class="form-group">
+            <label class="form-label">LINKEDIN URL</label>
+            <input type="url" class="form-control" id="fLinkedin" placeholder="https://linkedin.com/in/...">
+          </div>
+          <div class="form-group">
+            <label class="form-label">LAST CONTACT DATE</label>
+            <input type="text" class="form-control" id="fLastContact" placeholder="e.g. 2025-01-15">
+          </div>
+          <div class="form-group full">
+            <label class="form-label">OUTREACH ANGLE</label>
+            <input type="text" class="form-control" id="fAngle" placeholder="e.g. Succession planning, tax-efficient exit">
+          </div>
+          <div class="form-group full">
+            <label class="form-label">NOTES</label>
+            <textarea class="form-control notes-area" id="fNotes" placeholder="Initial notes about this prospect..."></textarea>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('prospectModal')">[ CANCEL ]</button>
+      <button class="btn btn-cyan" onclick="saveProspect()">[ SAVE PROSPECT ]</button>
+    </div>
+  </div>
+</div>
+
+<!-- NOTES MODAL -->
+<div class="modal-overlay" id="notesModal" style="display:none;" onclick="handleOverlayClick(event,'notesModal')">
+  <div class="modal" onclick="event.stopPropagation()" style="max-width:560px">
+    <div class="modal-header">
+      <div class="modal-title">
+        <span class="modal-title-icon">[N]</span>
+        <span>NOTES -- <span id="notesProspectName"></span></span>
+      </div>
+      <button class="modal-close" onclick="closeModal('notesModal')">X</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label">ADD NEW NOTE</label>
+        <textarea class="form-control notes-area" id="newNoteText" placeholder="Enter your note here..."></textarea>
+      </div>
+      <div class="notes-history" id="notesHistory"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('notesModal')">[ CLOSE ]</button>
+      <button class="btn btn-cyan" onclick="saveNote()">[ + ADD NOTE ]</button>
+    </div>
+  </div>
+</div>
+
+<!-- DELETE CONFIRM MODAL -->
+<div class="modal-overlay" id="deleteModal" style="display:none;" onclick="handleOverlayClick(event,'deleteModal')">
+  <div class="modal" onclick="event.stopPropagation()" style="max-width:420px">
+    <div class="modal-header">
+      <div class="modal-title">
+        <span style="color:var(--red);font-size:14px;">[!]</span>
+        <span style="color:var(--red);">CONFIRM DELETE</span>
+      </div>
+      <button class="modal-close" onclick="closeModal('deleteModal')">X</button>
+    </div>
+    <div class="modal-body">
+      <p class="confirm-text">CONFIRM DELETE: <strong id="deleteProspectName" style="color:var(--cyan);"></strong><br>This action cannot be undone.</p>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('deleteModal')">[ CANCEL ]</button>
+      <button class="btn btn-danger" id="confirmDeleteBtn">[ DELETE PROSPECT ]</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ============================================================
+// DATA & STATE
+// ============================================================
+const STORAGE_KEY = 'jarvis_prospects_v2';
+const LOG_KEY = 'jarvis_activity_v2';
+
+const DEFAULT_PROSPECTS = [
+  {
+    id: uid(), name: 'Prospect -- Business Owner (Manufacturing)',
+    wealthSource: 'Business Sale', assets: '$2M+', location: 'Chicago, IL',
+    email: '', phone: '', linkedin: '', status: 'New',
+    lastContact: '', angle: 'Succession planning, tax-efficient exit',
+    notes: [], noteText: '', created: now()
+  },
+  {
+    id: uid(), name: 'Prospect -- Retiring CFO (Healthcare)',
+    wealthSource: 'Career/401k', assets: '$800K', location: 'Dallas, TX',
+    email: '', phone: '', linkedin: '', status: 'New',
+    lastContact: '', angle: 'Rollover + retirement income planning',
+    notes: [], noteText: '', created: now()
+  },
+  {
+    id: uid(), name: 'Prospect -- Real Estate Investor',
+    wealthSource: 'Real Estate', assets: '$1.5M', location: 'Phoenix, AZ',
+    email: '', phone: '', linkedin: '', status: 'New',
+    lastContact: '', angle: 'Diversification, estate planning',
+    notes: [], noteText: '', created: now()
+  },
+  {
+    id: uid(), name: 'Prospect -- Senior Partner (Law Firm)',
+    wealthSource: 'Career', assets: '$1.2M', location: 'New York, NY',
+    email: '', phone: '', linkedin: '', status: 'New',
+    lastContact: '', angle: 'Tax efficiency, disability protection',
+    notes: [], noteText: '', created: now()
+  },
+  {
+    id: uid(), name: 'Prospect -- Tech Executive (Post-IPO)',
+    wealthSource: 'Equity Event', assets: '$3M+', location: 'Austin, TX',
+    email: '', phone: '', linkedin: '', status: 'New',
+    lastContact: '', angle: 'RSU/equity liquidation planning',
+    notes: [], noteText: '', created: now()
+  },
+  {
+    id: uid(), name: 'Prospect -- Physician (15yr Practice)',
+    wealthSource: 'Career', assets: '$900K', location: 'Boston, MA',
+    email: '', phone: '', linkedin: '', status: 'New',
+    lastContact: '', angle: 'Malpractice protection + wealth accumulation',
+    notes: [], noteText: '', created: now()
+  },
+  {
+    id: uid(), name: 'Prospect -- Inherited Wealth Recipient',
+    wealthSource: 'Inheritance', assets: '$1.8M', location: 'Miami, FL',
+    email: '', phone: '', linkedin: '', status: 'New',
+    lastContact: '', angle: 'Estate preservation, investment guidance',
+    notes: [], noteText: '', created: now()
+  },
+  {
+    id: uid(), name: 'Prospect -- Early Retiree (Corporate Buyout)',
+    wealthSource: 'Severance/Pension', assets: '$650K', location: 'Atlanta, GA',
+    email: '', phone: '', linkedin: '', status: 'New',
+    lastContact: '', angle: 'Pension lump sum rollover, income planning',
+    notes: [], noteText: '', created: now()
+  },
+  {
+    id: uid(), name: 'Prospect -- Small Business Owner (Exit)',
+    wealthSource: 'Business Sale', assets: '$1.1M', location: 'Denver, CO',
+    email: '', phone: '', linkedin: '', status: 'New',
+    lastContact: '', angle: 'Post-exit investment strategy',
+    notes: [], noteText: '', created: now()
+  },
+  {
+    id: uid(), name: 'Prospect -- Senior Engineer (Defense)',
+    wealthSource: 'Career/Pension', assets: '$550K', location: 'San Diego, CA',
+    email: '', phone: '', linkedin: '', status: 'New',
+    lastContact: '', angle: 'Pension optimization, legacy planning',
+    notes: [], noteText: '', created: now()
+  }
+];
+
+let prospects = [];
+let activityLog = [];
+let editingId = null;
+let notesTargetId = null;
+let deleteTargetId = null;
+
+// ============================================================
+// UTILITIES
+// ============================================================
+function uid() {
+  return 'p_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+}
+
+function now() {
+  return new Date().toISOString();
+}
+
+function fmtDateTime(iso) {
+  if (!iso) return '--';
+  const d = new Date(iso);
+  return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+    + ' ' + d.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+}
+
+function fmtDate(iso) {
+  if (!iso) return '--';
+  const d = new Date(iso);
+  return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+}
+
+function parseAssets(str) {
+  if (!str) return 0;
+  const s = str.replace(/[^0-9.MKBk]/g, '');
+  let num = parseFloat(s) || 0;
+  if (str.toUpperCase().includes('M')) num *= 1000000;
+  else if (str.toUpperCase().includes('K')) num *= 1000;
+  else if (str.toUpperCase().includes('B')) num *= 1000000000;
+  return num;
+}
+
+function formatAUM(total) {
+  if (total >= 1000000) return '$' + (total / 1000000).toFixed(1) + 'M+';
+  if (total >= 1000) return '$' + (total / 1000).toFixed(0) + 'K';
+  return '$' + total.toLocaleString();
+}
+
+function escHtml(str) {
+  if (!str) return '';
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ============================================================
+// STORAGE
+// ============================================================
+function saveData() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(prospects));
+  localStorage.setItem(LOG_KEY, JSON.stringify(activityLog));
+  updateLastUpdated();
+}
+
+function loadData() {
+  try {
+    const p = localStorage.getItem(STORAGE_KEY);
+    const l = localStorage.getItem(LOG_KEY);
+    prospects = p ? JSON.parse(p) : null;
+    activityLog = l ? JSON.parse(l) : [];
+    if (!prospects || prospects.length === 0) {
+      prospects = JSON.parse(JSON.stringify(DEFAULT_PROSPECTS));
+      logActivity('system', '>> JARVIS Dashboard initialized with 10 sample prospects', 'gold');
+      saveData();
+    }
+  } catch(e) {
+    prospects = JSON.parse(JSON.stringify(DEFAULT_PROSPECTS));
+    activityLog = [];
+  }
+}
+
+// ============================================================
+// LIVE CLOCK
+// ============================================================
+function updateClock() {
+  const el = document.getElementById('liveClock');
+  if (el) {
+    const now = new Date();
+    el.textContent = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false });
+  }
+}
+setInterval(updateClock, 1000);
+updateClock();
+
+// ============================================================
+// ACTIVITY LOG
+// ============================================================
+function logActivity(type, text, dotClass) {
+  const entry = { id: uid(), type, text, time: now(), dotClass: dotClass || 'gold' };
+  activityLog.unshift(entry);
+  if (activityLog.length > 50) activityLog = activityLog.slice(0, 50);
+}
+
+function renderActivityLog() {
+  const el = document.getElementById('activityLog');
+  const shown = activityLog.slice(0, 20);
+  if (shown.length === 0) {
+    el.innerHTML = '<div class="empty-state"><div class="icon">[ NO ACTIVITY ]</div><p>No activity yet</p></div>';
+    return;
+  }
+  el.innerHTML = shown.map(a => `
+    <div class="activity-item">
+      <div class="activity-dot activity-dot-${a.dotClass || 'gold'}"></div>
+      <div class="activity-content">
+        <div class="activity-text">${escHtml(a.text)}</div>
+        <div class="activity-time">${fmtDateTime(a.time)}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+// ============================================================
+// STATS
+// ============================================================
+function updateStats() {
+  const total = prospects.length;
+  const pipeline = prospects.filter(p => !['Closed','Lost'].includes(p.status)).length;
+  const meetings = prospects.filter(p => p.status === 'Meeting Set').length;
+  const closed = prospects.filter(p => p.status === 'Closed').length;
+  const aum = prospects.reduce((s, p) => s + parseAssets(p.assets), 0);
+  const aumStr = formatAUM(aum);
+
+  document.getElementById('statTotal').textContent = total;
+  document.getElementById('statPipeline').textContent = pipeline;
+  document.getElementById('statMeetings').textContent = meetings;
+  document.getElementById('statClosed').textContent = closed;
+  document.getElementById('statAUM').textContent = aumStr;
+
+  // Update header AUM
+  const headerAUM = document.getElementById('headerAUM');
+  if (headerAUM) headerAUM.textContent = aumStr;
+}
+
+// ============================================================
+// FUNNEL
+// ============================================================
+const FUNNEL_STAGES = [
+  { key: 'New',          label: '[*] NEW',         color: '#00d4ff' },
+  { key: 'Contacted',    label: '[~] CONTACTED',   color: '#ffdd00' },
+  { key: 'Follow-Up',    label: '[!] FOLLOW-UP',   color: '#ff8800' },
+  { key: 'Meeting Set',  label: '[+] MEETING SET', color: '#00ff88' },
+  { key: 'Proposal Sent',label: '[P] PROPOSAL',    color: '#cc44ff' },
+  { key: 'Closed',       label: '[X] CLOSED',      color: '#00ff44' },
+];
+
+function renderFunnel() {
+  const el = document.getElementById('funnelViz');
+  const total = prospects.length || 1;
+  const maxWidth = 100;
+  const minWidth = 30;
+
+  const counts = FUNNEL_STAGES.map(s => ({
+    ...s,
+    count: prospects.filter(p => p.status === s.key).length
+  }));
+
+  const maxCount = Math.max(...counts.map(s => s.count), 1);
+
+  let html = '';
+  counts.forEach((stage, i) => {
+    const pct = Math.round((stage.count / total) * 100);
+    const width = minWidth + ((stage.count / maxCount) * (maxWidth - minWidth));
+
+    html += `
+      <div class="funnel-stage" style="width:100%">
+        <div class="funnel-bar-wrap">
+          <div class="funnel-bar" style="
+            width: ${width}%;
+            background: ${stage.color}15;
+            border: 1px solid ${stage.color}55;
+            box-shadow: 0 0 8px ${stage.color}44;
+          ">
+            <div class="funnel-stage-name" style="color:${stage.color};text-shadow:0 0 8px ${stage.color};">${stage.label}</div>
+            <div style="display:flex;align-items:center;gap:8px;">
+              <span class="funnel-pct">${pct}%</span>
+              <span class="funnel-count" style="color:${stage.color};text-shadow:0 0 8px ${stage.color};">${stage.count}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+    if (i < counts.length - 1) {
+      html += `<div class="funnel-arrow">v</div>`;
+    }
+  });
+
+  el.innerHTML = html;
+}
+
+// ============================================================
+// STATUS BADGE
+// ============================================================
+const STATUS_META = {
+  'New':           { cls: 'badge-new',      icon: '[*]' },
+  'Contacted':     { cls: 'badge-contacted', icon: '[~]' },
+  'Follow-Up':     { cls: 'badge-followup',  icon: '[!]' },
+  'Meeting Set':   { cls: 'badge-meeting',   icon: '[+]' },
+  'Proposal Sent': { cls: 'badge-proposal',  icon: '[P]' },
+  'Closed':        { cls: 'badge-closed',    icon: '[X]' },
+  'Lost':          { cls: 'badge-lost',      icon: '[-]' },
+};
+
+function statusBadge(status) {
+  const m = STATUS_META[status] || STATUS_META['New'];
+  return `<span class="badge ${m.cls}">${m.icon} ${status}</span>`;
+}
+
+function statusDotClass(status) {
+  const map = {
+    'New': 'blue', 'Contacted': 'orange', 'Follow-Up': 'orange',
+    'Meeting Set': 'green', 'Proposal Sent': 'purple',
+    'Closed': 'gold', 'Lost': 'red'
+  };
+  return map[status] || 'gold';
+}
+
+// ============================================================
+// TABLE RENDER
+// ============================================================
+let filteredIds = [];
+
+function filterTable() {
+  const search = document.getElementById('searchInput').value.toLowerCase();
+  const statusF = document.getElementById('statusFilter').value;
+  const sortBy = document.getElementById('sortBy').value;
+
+  let filtered = prospects.filter(p => {
+    const matchSearch = !search ||
+      p.name.toLowerCase().includes(search) ||
+      (p.wealthSource || '').toLowerCase().includes(search) ||
+      (p.location || '').toLowerCase().includes(search) ||
+      (p.angle || '').toLowerCase().includes(search) ||
+      (p.assets || '').toLowerCase().includes(search);
+    const matchStatus = !statusF || p.status === statusF;
+    return matchSearch && matchStatus;
+  });
+
+  if (sortBy === 'name') filtered.sort((a,b) => a.name.localeCompare(b.name));
+  else if (sortBy === 'assets_desc') filtered.sort((a,b) => parseAssets(b.assets) - parseAssets(a.assets));
+  else if (sortBy === 'assets_asc') filtered.sort((a,b) => parseAssets(a.assets) - parseAssets(b.assets));
+  else if (sortBy === 'status') {
+    const order = ['New','Contacted','Follow-Up','Meeting Set','Proposal Sent','Closed','Lost'];
+    filtered.sort((a,b) => order.indexOf(a.status) - order.indexOf(b.status));
+  } else if (sortBy === 'date') {
+    filtered.sort((a,b) => (b.lastContact || '').localeCompare(a.lastContact || ''));
+  }
+
+  filteredIds = filtered.map(p => p.id);
+  renderTable(filtered);
+
+  const ct = document.getElementById('resultCount');
+  if (search || statusF) {
+    ct.textContent = `${filtered.length} RESULT${filtered.length !== 1 ? 'S' : ''}`;
+  } else {
+    ct.textContent = '';
+  }
+}
+
+function renderTable(list) {
+  const tbody = document.getElementById('tableBody');
+  if (!list) list = prospects;
+
+  if (list.length === 0) {
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="13">
+          <div class="empty-state">
+            <div class="icon">[ NO RESULTS ]</div>
+            <p>No prospects match your filters</p>
+          </div>
+        </td>
+      </tr>`;
+    return;
+  }
+
+  tbody.innerHTML = list.map((p, i) => {
+    const isEditing = editingId === p.id;
+    const isNew = p.status === 'New';
+    const noteCount = (p.notes || []).length;
+    const lastNote = noteCount > 0 ? p.notes[noteCount-1].text : (p.noteText || '');
+
+    if (isEditing) {
+      return `
+        <tr class="editing-row" data-id="${p.id}">
+          <td class="row-num">${i+1}</td>
+          <td><input type="text" class="inline-edit" id="ei_name" value="${escHtml(p.name)}" style="min-width:180px"></td>
+          <td>
+            <select class="inline-edit" id="ei_wealth">
+              ${['Business Sale','Career/401k','Career','Real Estate','Equity Event','Inheritance','Severance/Pension','Career/Pension','Other']
+                .map(w => `<option ${p.wealthSource===w?'selected':''}>${w}</option>`).join('')}
+            </select>
+          </td>
+          <td><input type="text" class="inline-edit" id="ei_assets" value="${escHtml(p.assets)}" style="min-width:80px"></td>
+          <td><input type="text" class="inline-edit" id="ei_location" value="${escHtml(p.location)}" style="min-width:100px"></td>
+          <td><input type="email" class="inline-edit" id="ei_email" value="${escHtml(p.email)}" style="min-width:140px"></td>
+          <td><input type="tel" class="inline-edit" id="ei_phone" value="${escHtml(p.phone)}" style="min-width:110px"></td>
+          <td><input type="url" class="inline-edit" id="ei_linkedin" value="${escHtml(p.linkedin)}" style="min-width:120px"></td>
+          <td>
+            <select class="inline-edit" id="ei_status">
+              ${Object.keys(STATUS_META).map(s => `<option ${p.status===s?'selected':''}>${s}</option>`).join('')}
+            </select>
+          </td>
+          <td><input type="text" class="inline-edit" id="ei_lastcontact" value="${escHtml(p.lastContact)}" placeholder="YYYY-MM-DD" style="min-width:100px"></td>
+          <td><input type="text" class="inline-edit" id="ei_angle" value="${escHtml(p.angle)}" style="min-width:150px"></td>
+          <td class="text-muted" style="font-size:11px">${noteCount} NOTE${noteCount!==1?'S':''}</td>
+          <td class="actions-cell">
+            <button class="btn btn-cyan btn-sm" onclick="saveInlineEdit('${p.id}')">[ SAVE ]</button>
+            <button class="btn btn-ghost btn-sm" onclick="cancelEdit()">[ X ]</button>
+          </td>
+        </tr>`;
+    }
+
+    return `
+      <tr data-id="${p.id}">
+        <td class="row-num">${i+1}</td>
+        <td class="prospect-name">
+          <div>${escHtml(p.name)}</div>
+          ${isNew ? '<div class="draft-badge">DRAFT -- AWAITING APPROVAL</div>' : ''}
+        </td>
+        <td style="color:rgba(0,212,255,0.5);font-size:11px">${escHtml(p.wealthSource) || '<span class="text-muted">--</span>'}</td>
+        <td class="assets-value">${escHtml(p.assets) || '<span class="text-muted" style="font-size:11px">--</span>'}</td>
+        <td style="color:rgba(0,212,255,0.5);font-size:11px;white-space:nowrap">${escHtml(p.location) || '<span class="text-muted">--</span>'}</td>
+        <td>
+          ${p.email
+            ? `<a href="mailto:${escHtml(p.email)}" class="contact-link">[M] ${escHtml(p.email)}</a>`
+            : '<span class="text-muted" style="font-size:11px">--</span>'}
+        </td>
+        <td>
+          ${p.phone
+            ? `<a href="tel:${escHtml(p.phone)}" class="contact-link">[T] ${escHtml(p.phone)}</a>`
+            : '<span class="text-muted" style="font-size:11px">--</span>'}
+        </td>
+        <td>
+          ${p.linkedin
+            ? `<a href="${escHtml(p.linkedin)}" target="_blank" class="linkedin-link">[LI] LinkedIn</a>`
+            : '<span class="text-muted" style="font-size:11px">--</span>'}
+        </td>
+        <td>${statusBadge(p.status)}</td>
+        <td class="last-contact-text">${p.lastContact ? fmtDate(p.lastContact) : '<span class="text-muted">--</span>'}</td>
+        <td class="angle-text">${escHtml(p.angle) || '<span class="text-muted">--</span>'}</td>
+        <td>
+          <div class="notes-preview" title="${escHtml(lastNote)}">${lastNote ? escHtml(lastNote) : '<span class="text-muted">--</span>'}</div>
+          ${noteCount > 0 ? `<div style="font-size:10px;color:rgba(0,212,255,0.35);margin-top:2px">${noteCount} NOTE${noteCount!==1?'S':''}</div>` : ''}
+        </td>
+        <td class="actions-cell">
+          <button class="btn btn-ghost btn-sm" onclick="startEdit('${p.id}')">[ EDIT ]</button>
+          <button class="btn btn-success btn-sm" onclick="markContacted('${p.id}')">[ CONTACTED ]</button>
+          <button class="btn btn-ghost btn-sm" onclick="openNotesModal('${p.id}')">[ NOTE ]</button>
+          <button class="btn btn-danger btn-sm" onclick="confirmDelete('${p.id}')">[ DEL ]</button>
+        </td>
+      </tr>`;
+  }).join('');
+}
+
+// ============================================================
+// CRUD
+// ============================================================
+function startEdit(id) {
+  editingId = id;
+  renderAll();
+  const row = document.querySelector(`tr[data-id="${id}"]`);
+  if (row) row.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+function cancelEdit() {
+  editingId = null;
+  filterTable();
+}
+
+function saveInlineEdit(id) {
+  const p = prospects.find(x => x.id === id);
+  if (!p) return;
+
+  const oldStatus = p.status;
+  p.name = document.getElementById('ei_name').value.trim() || p.name;
+  p.wealthSource = document.getElementById('ei_wealth').value;
+  p.assets = document.getElementById('ei_assets').value.trim();
+  p.location = document.getElementById('ei_location').value.trim();
+  p.email = document.getElementById('ei_email').value.trim();
+  p.phone = document.getElementById('ei_phone').value.trim();
+  p.linkedin = document.getElementById('ei_linkedin').value.trim();
+  p.status = document.getElementById('ei_status').value;
+  p.lastContact = document.getElementById('ei_lastcontact').value.trim();
+  p.angle = document.getElementById('ei_angle').value.trim();
+
+  if (oldStatus !== p.status) {
+    logActivity('status',
+      `Status changed: "${p.name.substring(0,35)}" -> ${STATUS_META[p.status]?.icon || ''} ${p.status}`,
+      statusDotClass(p.status)
+    );
+  } else {
+    logActivity('edit', `Updated prospect: "${p.name.substring(0,40)}"`, 'blue');
+  }
+
+  editingId = null;
+  saveData();
+  renderAll();
+}
+
+function markContacted(id) {
+  const p = prospects.find(x => x.id === id);
+  if (!p) return;
+  const old = p.status;
+  if (p.status === 'New') p.status = 'Contacted';
+  p.lastContact = new Date().toISOString().split('T')[0];
+  logActivity('contact',
+    `Marked contacted: "${p.name.substring(0,40)}" -- Last Contact: Today`,
+    'orange'
+  );
+  if (old !== p.status) {
+    logActivity('status',
+      `Status: "${p.name.substring(0,35)}" -> [~] Contacted`,
+      'orange'
+    );
+  }
+  saveData();
+  renderAll();
+}
+
+function confirmDelete(id) {
+  const p = prospects.find(x => x.id === id);
+  if (!p) return;
+  deleteTargetId = id;
+  document.getElementById('deleteProspectName').textContent = p.name;
+  document.getElementById('confirmDeleteBtn').onclick = () => deleteProspect(id);
+  openModal('deleteModal');
+}
+
+function deleteProspect(id) {
+  const p = prospects.find(x => x.id === id);
+  if (p) {
+    logActivity('delete', `Deleted prospect: "${p.name.substring(0,45)}"`, 'red');
+  }
+  prospects = prospects.filter(x => x.id !== id);
+  saveData();
+  closeModal('deleteModal');
+  renderAll();
+}
+
+// ============================================================
+// ADD/EDIT MODAL
+// ============================================================
+function openAddModal(editId) {
+  editingId = null;
+  document.getElementById('modalTitle').textContent = editId ? 'EDIT PROSPECT' : 'ADD NEW PROSPECT';
+  const p = editId ? prospects.find(x => x.id === editId) : null;
+
+  document.getElementById('fName').value = p ? p.name : '';
+  document.getElementById('fWealthSource').value = p ? p.wealthSource : '';
+  document.getElementById('fAssets').value = p ? p.assets : '';
+  document.getElementById('fLocation').value = p ? p.location : '';
+  document.getElementById('fStatus').value = p ? p.status : 'New';
+  document.getElementById('fEmail').value = p ? p.email : '';
+  document.getElementById('fPhone').value = p ? p.phone : '';
+  document.getElementById('fLinkedin').value = p ? p.linkedin : '';
+  document.getElementById('fLastContact').value = p ? p.lastContact : '';
+  document.getElementById('fAngle').value = p ? p.angle : '';
+  document.getElementById('fNotes').value = p ? (p.noteText || '') : '';
+
+  openModal('prospectModal');
+}
+
+function saveProspect() {
+  const name = document.getElementById('fName').value.trim();
+  if (!name) { alert('Prospect name is required.'); return; }
+
+  const newP = {
+    id: uid(),
+    name,
+    wealthSource: document.getElementById('fWealthSource').value,
+    assets: document.getElementById('fAssets').value.trim(),
+    location: document.getElementById('fLocation').value.trim(),
+    status: document.getElementById('fStatus').value,
+    email: document.getElementById('fEmail').value.trim(),
+    phone: document.getElementById('fPhone').value.trim(),
+    linkedin: document.getElementById('fLinkedin').value.trim(),
+    lastContact: document.getElementById('fLastContact').value.trim(),
+    angle: document.getElementById('fAngle').value.trim(),
+    noteText: document.getElementById('fNotes').value.trim(),
+    notes: [],
+    created: now()
+  };
+
+  if (document.getElementById('fNotes').value.trim()) {
+    newP.notes.push({ text: document.getElementById('fNotes').value.trim(), time: now() });
+  }
+
+  prospects.unshift(newP);
+  logActivity('add', `New prospect added: "${newP.name.substring(0,45)}"`, 'gold');
+  saveData();
+  closeModal('prospectModal');
+  renderAll();
+}
+
+// ============================================================
+// NOTES MODAL
+// ============================================================
+function openNotesModal(id) {
+  notesTargetId = id;
+  const p = prospects.find(x => x.id === id);
+  if (!p) return;
+  document.getElementById('notesProspectName').textContent = p.name.substring(0, 40) + (p.name.length > 40 ? '...' : '');
+  document.getElementById('newNoteText').value = '';
+  renderNotesHistory(p);
+  openModal('notesModal');
+}
+
+function renderNotesHistory(p) {
+  const el = document.getElementById('notesHistory');
+  const allNotes = [...(p.notes || [])];
+  if (p.noteText && !allNotes.find(n => n.text === p.noteText)) {
+    allNotes.unshift({ text: p.noteText, time: p.created });
+  }
+
+  if (allNotes.length === 0) {
+    el.innerHTML = '<div class="notes-history-title">// NOTE HISTORY</div><p style="color:rgba(0,212,255,0.3);font-size:12px;font-family:\'Courier New\',monospace">No notes yet</p>';
+    return;
+  }
+
+  el.innerHTML = `
+    <div class="notes-history-title">// NOTE HISTORY (${allNotes.length})</div>
+    ${[...allNotes].reverse().map(n => `
+      <div class="note-entry">
+        <div class="note-entry-text">${escHtml(n.text)}</div>
+        <div class="note-entry-time">${fmtDateTime(n.time)}</div>
+      </div>
+    `).join('')}
+  `;
+}
+
+function saveNote() {
+  const text = document.getElementById('newNoteText').value.trim();
+  if (!text) { alert('Please enter a note.'); return; }
+
+  const p = prospects.find(x => x.id === notesTargetId);
+  if (!p) return;
+  if (!p.notes) p.notes = [];
+  p.notes.push({ text, time: now() });
+
+  logActivity('note', `Note added to "${p.name.substring(0,35)}": "${text.substring(0,60)}${text.length>60?'...':''}"`, 'purple');
+  saveData();
+  document.getElementById('newNoteText').value = '';
+  renderNotesHistory(p);
+  renderAll();
+}
+
+// ============================================================
+// MODAL HELPERS
+// ============================================================
+function openModal(id) {
+  document.getElementById(id).style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal(id) {
+  document.getElementById(id).style.display = 'none';
+  document.body.style.overflow = '';
+}
+
+function handleOverlayClick(e, id) {
+  if (e.target === document.getElementById(id)) closeModal(id);
+}
+
+// ============================================================
+// EXPORT CSV
+// ============================================================
+function exportCSV() {
+  const cols = ['Name','Wealth Source','Est. Assets','Location','Email','Phone','LinkedIn','Status','Last Contact','Outreach Angle','Notes'];
+  const rows = [cols.join(',')];
+  prospects.forEach(p => {
+    const allNotes = (p.notes||[]).map(n=>n.text).join(' | ');
+    const note = allNotes || p.noteText || '';
+    rows.push([
+      `"${(p.name||'').replace(/"/g,'""')}"`,
+      `"${(p.wealthSource||'').replace(/"/g,'""')}"`,
+      `"${(p.assets||'').replace(/"/g,'""')}"`,
+      `"${(p.location||'').replace(/"/g,'""')}"`,
+      `"${(p.email||'').replace(/"/g,'""')}"`,
+      `"${(p.phone||'').replace(/"/g,'""')}"`,
+      `"${(p.linkedin||'').replace(/"/g,'""')}"`,
+      `"${(p.status||'').replace(/"/g,'""')}"`,
+      `"${(p.lastContact||'').replace(/"/g,'""')}"`,
+      `"${(p.angle||'').replace(/"/g,'""')}"`,
+      `"${note.replace(/"/g,'""')}"`,
+    ].join(','));
+  });
+
+  const blob = new Blob([rows.join('\n')], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `JARVIS_Prospects_${new Date().toISOString().split('T')[0]}.csv`;
+  a.click();
+  URL.revokeObjectURL(url);
+
+  logActivity('export', `CSV exported (${prospects.length} prospects)`, 'gold');
+  saveData();
+  renderActivityLog();
+}
+
+// ============================================================
+// FILTERS
+// ============================================================
+function clearFilters() {
+  document.getElementById('searchInput').value = '';
+  document.getElementById('statusFilter').value = '';
+  document.getElementById('sortBy').value = '';
+  filterTable();
+}
+
+// ============================================================
+// LAST UPDATED
+// ============================================================
+function updateLastUpdated() {
+  // Clock handles this now
+}
+
+// ============================================================
+// RENDER ALL
+// ============================================================
+function renderAll() {
+  updateStats();
+  filterTable();
+  renderFunnel();
+  renderActivityLog();
+}
+
+// ============================================================
+// KEYBOARD SHORTCUTS
+// ============================================================
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    ['prospectModal','notesModal','deleteModal'].forEach(id => {
+      if (document.getElementById(id).style.display !== 'none') closeModal(id);
+    });
+    if (editingId) cancelEdit();
+  }
+  if ((e.ctrlKey || e.metaKey) && e.key === 'n') {
+    e.preventDefault();
+    openAddModal();
+  }
+});
+
+// ============================================================
+// INIT
+// ============================================================
+loadData();
+renderAll();
+
+// ============================================================
+// CLIENT PORTFOLIO MODULE
+// ============================================================
+(function() {
+  const STORAGE_KEY = 'jarvis_portfolio';
+
+  function fmtCurrency(n) {
+    if (!n && n !== 0) return '$—';
+    if (n >= 1e9) return '$' + (n / 1e9).toFixed(2) + 'B';
+    if (n >= 1e6) return '$' + (n / 1e6).toFixed(2) + 'M';
+    if (n >= 1e3) return '$' + (n / 1e3).toFixed(1) + 'K';
+    return '$' + n.toLocaleString('en-US', {minimumFractionDigits: 0, maximumFractionDigits: 0});
+  }
+
+  function fmtDelta(n) {
+    return '+' + fmtCurrency(n);
+  }
+
+  function loadPortfolio() {
+    try {
+      const stored = localStorage.getItem(STORAGE_KEY);
+      const data = stored ? JSON.parse(stored) : {};
+      // Always use AJ's real numbers as defaults — never show blank
+      const aum     = (data.aum     && data.aum > 0)     ? data.aum     : 4605843;
+      const clients = (data.clients && data.clients > 0) ? data.clients : 96;
+      const growth  = (data.growth  && data.growth > 0)  ? data.growth  : 40;
+      const annualFee  = (data.annualFee  && data.annualFee > 0)  ? data.annualFee  : 43295;
+      const monthlyFee = (data.monthlyFee && data.monthlyFee > 0) ? data.monthlyFee : 3608;
+      document.getElementById('portAUM').value     = aum;
+      document.getElementById('portClients').value = clients;
+      document.getElementById('portGrowth').value  = growth;
+      // Force save defaults to localStorage so they persist
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({aum, clients, growth, annualFee, monthlyFee}));
+      updatePortfolio();
+      // Load fee data into fee module if available
+      if (window._feeModuleSetDefaults) window._feeModuleSetDefaults(annualFee, monthlyFee);
+    } catch(e) { /* ignore */ }
+  }
+
+  window.savePortfolio = function() {
+    const aum     = parseFloat(document.getElementById('portAUM').value)     || 0;
+    const clients = parseInt(document.getElementById('portClients').value)   || 0;
+    const growth  = parseFloat(document.getElementById('portGrowth').value)  || 40;
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({aum, clients, growth}));
+    const btn = document.querySelector('[onclick="savePortfolio()"]');
+    if (btn) {
+      const orig = btn.textContent;
+      btn.textContent = '[ SAVED ✓ ]';
+      btn.style.color = '#00ff88';
+      btn.style.borderColor = '#00ff88';
+      btn.style.boxShadow = '0 0 10px #00ff88';
+      setTimeout(() => {
+        btn.textContent = orig;
+        btn.style.color = '#00d4ff';
+        btn.style.borderColor = '#00d4ff';
+        btn.style.boxShadow = '0 0 10px #00d4ff';
+      }, 1500);
+    }
+  };
+
+  window.updatePortfolio = function() {
+    const aum     = parseFloat(document.getElementById('portAUM').value)     || 0;
+    const clients = parseInt(document.getElementById('portClients').value)   || 0;
+    const avg     = (clients > 0 && aum > 0) ? (aum / clients) : 0;
+
+    // Update avg display in input cards
+    document.getElementById('portAvgDisplay').textContent = avg > 0 ? fmtCurrency(avg) : '$—';
+
+    // Update stat cards
+    document.getElementById('statClients').textContent = clients > 0 ? clients.toString() : '96';
+    var aumEl = document.getElementById('statPortAUM'); if(aumEl) aumEl.textContent = aum > 0 ? fmtCurrency(aum) : '$4,605,843';
+    document.getElementById('statAvg').textContent     = avg > 0 ? fmtCurrency(avg) : '$47,977';
+    // Progress bar is static (hardcoded from AJ's data)
+  };
+
+  // Init on DOM ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', loadPortfolio);
+  } else {
+    loadPortfolio();
+  }
+})();
+
+// ============================================================
+// FEE INCOME MODULE
+// ============================================================
+(function() {
+  const FEE_KEY = 'jarvis_fees';
+
+  // Track whether monthly was manually overridden
+  let _monthlyManual = false;
+
+  function fmtComma(n) {
+    if (!n && n !== 0) return '—';
+    return '$' + Math.round(n).toLocaleString('en-US');
+  }
+
+  function fmtCommaFull(n) {
+    // For projection table — full precision with commas
+    return '$' + Math.round(n).toLocaleString('en-US');
+  }
+
+  function getCurrentAUM() {
+    const v = parseFloat(document.getElementById('portAUM').value) || 0;
+    return v;
+  }
+
+  function updateFeeDisplay() {
+    const annual  = parseFloat(document.getElementById('feeAnnual').value)  || 0;
+    const monthly = parseFloat(document.getElementById('feeMonthly').value) || 0;
+    const aum     = getCurrentAUM();
+    const feePct  = (aum > 0 && annual > 0) ? (annual / aum) : 0;
+
+    // Pct display (input row)
+    document.getElementById('feePctDisplay').textContent =
+      feePct > 0 ? feePct.toFixed(4) + '%' : '0.9400%';
+
+    // Stat cards
+    document.getElementById('feeStatAnnual').textContent  = annual  > 0 ? fmtComma(annual)  : '$43,295';
+    document.getElementById('feeStatMonthly').textContent = monthly > 0 ? fmtComma(monthly) : '$3,608';
+    document.getElementById('feeStatPct').textContent     = feePct  > 0 ? feePct.toFixed(4) + '%' : '0.9400%';
+    // Yr 10 stat is always hardcoded
+    document.getElementById('feeStatYr10').textContent = '$638,943';
+  }
+
+  window.onFeeAnnualChange = function() {
+    _monthlyManual = false;
+    const annual = parseFloat(document.getElementById('feeAnnual').value) || 0;
+    if (!_monthlyManual) {
+      document.getElementById('feeMonthly').value = annual > 0 ? Math.round(annual / 12) : '';
+    }
+    updateFeeDisplay();
+  };
+
+  window.onFeeMonthlyChange = function() {
+    _monthlyManual = true;
+    updateFeeDisplay();
+  };
+
+  window.saveFees = function() {
+    const annual  = parseFloat(document.getElementById('feeAnnual').value)  || 0;
+    const monthly = parseFloat(document.getElementById('feeMonthly').value) || 0;
+    // Also persist into portfolio key so defaults carry through
+    try {
+      const portStored = localStorage.getItem('jarvis_portfolio');
+      const portData = portStored ? JSON.parse(portStored) : {};
+      portData.annualFee  = annual;
+      portData.monthlyFee = monthly;
+      localStorage.setItem('jarvis_portfolio', JSON.stringify(portData));
+    } catch(e) {}
+    localStorage.setItem(FEE_KEY, JSON.stringify({ annual, monthly }));
+    const btn = document.querySelector('[onclick="saveFees()"]');
+    if (btn) {
+      const orig = btn.textContent;
+      btn.textContent = '[ SAVED ✓ ]';
+      btn.style.color = '#00ff88';
+      btn.style.borderColor = '#00ff88';
+      btn.style.boxShadow = '0 0 10px #00ff88';
+      setTimeout(() => {
+        btn.textContent = orig;
+        btn.style.color = '#00d4ff';
+        btn.style.borderColor = '#00d4ff';
+        btn.style.boxShadow = '0 0 10px #00d4ff';
+      }, 1500);
+    }
+  };
+
+  function loadFees(annualDefault, monthlyDefault) {
+    try {
+      const stored = localStorage.getItem(FEE_KEY);
+      const data = stored ? JSON.parse(stored) : {};
+      const annual  = data.annual  !== undefined ? data.annual  : (annualDefault  || 43295);
+      const monthly = data.monthly !== undefined ? data.monthly : (monthlyDefault || 3608);
+      document.getElementById('feeAnnual').value  = annual;
+      document.getElementById('feeMonthly').value = monthly;
+      updateFeeDisplay();
+    } catch(e) { /* ignore */ }
+  }
+
+  // Expose so portfolio module can call after it finishes loading
+  window._feeModuleSetDefaults = function(annualDefault, monthlyDefault) {
+    loadFees(annualDefault, monthlyDefault);
+  };
+
+  // Init
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => loadFees());
+  } else {
+    loadFees();
+  }
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head><title>J.A.R.V.I.S | AJ Donofrio</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #000; color: #fff; font-family: 'Courier New', monospace; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; overflow: hidden; }
+  body::before { content: ''; position: fixed; inset: 0; background: repeating-linear-gradient(0deg, transparent, transparent 40px, rgba(0,212,255,0.03) 40px, rgba(0,212,255,0.03) 41px), repeating-linear-gradient(90deg, transparent, transparent 40px, rgba(0,212,255,0.03) 40px, rgba(0,212,255,0.03) 41px); pointer-events: none; }
+  .logo { font-size: 4em; letter-spacing: 0.3em; color: #00d4ff; text-shadow: 0 0 20px #00d4ff, 0 0 40px #00d4ff; font-weight: 900; margin-bottom: 0.2em; animation: pulse 2s ease-in-out infinite; }
+  @keyframes pulse { 0%,100%{text-shadow:0 0 20px #00d4ff,0 0 40px #00d4ff} 50%{text-shadow:0 0 30px #00d4ff,0 0 80px #00a8cc} }
+  .subtitle { color: #00d4ff; opacity: 0.7; letter-spacing: 0.12em; font-size: 0.7em; margin-bottom: 0.5em; text-transform: uppercase; text-align: center; }
+  .firm { color: #00d4ff; opacity: 0.5; letter-spacing: 0.1em; font-size: 0.6em; margin-bottom: 3em; text-transform: uppercase; }
+  .status { display: flex; align-items: center; gap: 8px; color: #00d4ff; font-size: 0.8em; margin-bottom: 3em; letter-spacing: 0.1em; }
+  .dot { width: 8px; height: 8px; background: #00ff88; border-radius: 50%; box-shadow: 0 0 10px #00ff88; animation: blink 1s infinite; }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+  a { display: block; background: transparent; color: #00d4ff; padding: 1em 2.5em; margin: 0.5em; text-decoration: none; font-weight: bold; border: 1px solid #00d4ff; text-align: center; width: 340px; letter-spacing: 0.1em; text-transform: uppercase; font-size: 0.85em; transition: all 0.2s; clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%); }
+  a:hover { background: rgba(0,212,255,0.15); box-shadow: 0 0 20px rgba(0,212,255,0.4); }
+  .scan { position: fixed; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, transparent, #00d4ff, transparent); animation: scan 3s linear infinite; opacity: 0.6; }
+  @keyframes scan { 0%{top:0} 100%{top:100vh} }
+</style>
+</head>
+<body>
+  <div class="scan"></div>
+  <div class="logo">J.A.R.V.I.S</div>
+  <div class="subtitle">Financial Advisory Operating System</div>
+  <div class="firm">AJ Donofrio &middot; Barnum Financial Group</div>
+  <div class="status"><div class="dot"></div> SYSTEM ONLINE</div>
+  <a href="index.html">[ COMMAND CENTER ]</a>
+  <a href="wealth.html">[ WEALTH MANAGEMENT ]</a>
+</body>
+</html>

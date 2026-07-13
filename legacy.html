@@ -1,0 +1,2410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>J.A.R.V.I.S | AJ Donofrio &mdash; Barnum Financial Group</title>
+<style>
+  :root {
+    --bg-primary: #000000;
+    --bg-secondary: #050a0f;
+    --bg-tertiary: #070d14;
+    --bg-card: #0a1520;
+    --cyan: #00d4ff;
+    --cyan-dim: #00a8cc;
+    --cyan-dark: #004a5c;
+    --cyan-glow: rgba(0,212,255,0.15);
+    --arc-blue: #0066ff;
+    --arc-blue-dim: rgba(0,102,255,0.2);
+    --border: #0a2a35;
+    --border-cyan: #00d4ff;
+    --white: #ffffff;
+    --white-dim: #7ab8cc;
+    --green: #00ff88;
+    --green-dim: rgba(0,255,136,0.2);
+    --red: #ff3344;
+    --red-dim: rgba(255,51,68,0.2);
+    --orange: #ff8800;
+    --orange-dim: rgba(255,136,0,0.2);
+    --purple: #aa44ff;
+    --purple-dim: rgba(170,68,255,0.2);
+    --teal: #00ffcc;
+    --teal-dim: rgba(0,255,204,0.2);
+    --shadow: 0 8px 32px rgba(0,0,0,0.8);
+    --glow-sm: 0 0 10px rgba(0,212,255,0.4);
+    --glow-md: 0 0 20px rgba(0,212,255,0.5);
+    --glow-lg: 0 0 40px rgba(0,212,255,0.3);
+    --radius: 0px;
+    --transition: 0.2s ease;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Courier New', Courier, monospace;
+    background: var(--bg-primary);
+    color: var(--white);
+    min-height: 100vh;
+    font-size: 13px;
+    line-height: 1.5;
+    overflow-x: hidden;
+  }
+
+  /* -- ANIMATED BACKGROUND GRID -- */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0,212,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,212,255,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+    animation: gridPulse 8s ease-in-out infinite;
+  }
+
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: radial-gradient(ellipse at 50% 0%, rgba(0,102,255,0.08) 0%, transparent 60%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  @keyframes gridPulse {
+    0%, 100% { opacity: 0.6; }
+    50% { opacity: 1; }
+  }
+
+  /* -- HEADER -- */
+  .header {
+    background: linear-gradient(180deg, #000d1a 0%, #000000 100%);
+    border-bottom: 1px solid var(--cyan-dark);
+    padding: 0 24px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 4px 30px rgba(0,212,255,0.1), 0 1px 0 rgba(0,212,255,0.3);
+    overflow: hidden;
+  }
+
+  /* Scanning line animation */
+  .header::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent 0%, var(--cyan) 50%, transparent 100%);
+    animation: scanLine 4s linear infinite;
+    pointer-events: none;
+  }
+
+  @keyframes scanLine {
+    0% { top: 0; opacity: 1; }
+    100% { top: 100%; opacity: 0.3; }
+  }
+
+  .header-inner {
+    max-width: 1600px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 80px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .header-brand {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+
+  /* Arc reactor logo */
+  .header-logo {
+    width: 48px;
+    height: 48px;
+    background: transparent;
+    border: 2px solid var(--cyan);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 900;
+    font-size: 16px;
+    color: var(--cyan);
+    letter-spacing: 2px;
+    box-shadow: 0 0 12px var(--cyan), inset 0 0 12px rgba(0,212,255,0.1);
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+    animation: logoPulse 3s ease-in-out infinite;
+    flex-shrink: 0;
+    position: relative;
+  }
+
+  .header-logo::after {
+    content: 'J';
+    position: absolute;
+    font-size: 18px;
+    font-weight: 900;
+    color: var(--cyan);
+    text-shadow: 0 0 10px var(--cyan);
+  }
+
+  @keyframes logoPulse {
+    0%, 100% { box-shadow: 0 0 12px var(--cyan), inset 0 0 12px rgba(0,212,255,0.1); }
+    50% { box-shadow: 0 0 24px var(--cyan), 0 0 48px rgba(0,212,255,0.3), inset 0 0 20px rgba(0,212,255,0.2); }
+  }
+
+  .header-title {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .header-title .jarvis {
+    font-size: 28px;
+    font-weight: 900;
+    color: var(--cyan);
+    letter-spacing: 10px;
+    line-height: 1;
+    text-shadow: 0 0 10px var(--cyan), 0 0 20px var(--cyan), 0 0 40px rgba(0,212,255,0.5);
+    font-family: 'Courier New', monospace;
+    text-transform: uppercase;
+  }
+
+  .header-title .subtitle {
+    font-size: 10px;
+    color: var(--white-dim);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    font-family: 'Courier New', monospace;
+    opacity: 0.8;
+  }
+
+  .header-meta {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+  }
+
+  .system-status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 11px;
+    color: var(--green);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-family: 'Courier New', monospace;
+  }
+
+  .status-dot {
+    width: 8px;
+    height: 8px;
+    background: var(--green);
+    border-radius: 50%;
+    box-shadow: 0 0 6px var(--green), 0 0 12px var(--green);
+    animation: dotPulse 2s ease-in-out infinite;
+  }
+
+  @keyframes dotPulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.8); }
+  }
+
+  .header-time {
+    font-size: 12px;
+    color: var(--cyan);
+    text-align: right;
+    font-family: 'Courier New', monospace;
+    text-shadow: 0 0 6px rgba(0,212,255,0.5);
+    line-height: 1.6;
+  }
+
+  /* -- MAIN LAYOUT -- */
+  .main {
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 24px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* -- TABS -- */
+  .tabs-nav {
+    display: flex;
+    gap: 2px;
+    margin-bottom: 24px;
+    background: rgba(0,10,20,0.8);
+    padding: 4px;
+    border: 1px solid var(--cyan-dark);
+    box-shadow: 0 0 20px rgba(0,212,255,0.05);
+  }
+
+  .tab-btn {
+    flex: 1;
+    padding: 12px 16px;
+    border: none;
+    border-radius: 0;
+    background: transparent;
+    color: var(--white-dim);
+    cursor: pointer;
+    font-size: 11px;
+    font-weight: 700;
+    transition: all var(--transition);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    white-space: nowrap;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-family: 'Courier New', monospace;
+    clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+    position: relative;
+  }
+
+  .tab-btn:hover {
+    background: rgba(0,212,255,0.06);
+    color: var(--cyan);
+  }
+
+  .tab-btn.active {
+    background: linear-gradient(135deg, rgba(0,212,255,0.12) 0%, rgba(0,102,255,0.08) 100%);
+    color: var(--cyan);
+    box-shadow: inset 0 0 20px rgba(0,212,255,0.1);
+    border-bottom: 2px solid var(--cyan);
+    text-shadow: 0 0 8px var(--cyan);
+  }
+
+  .tab-btn.active::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: var(--cyan);
+    box-shadow: 0 0 6px var(--cyan);
+  }
+
+  .tab-count {
+    background: rgba(0,212,255,0.15);
+    color: var(--cyan);
+    border: 1px solid rgba(0,212,255,0.3);
+    padding: 1px 7px;
+    font-size: 10px;
+    font-weight: 700;
+    clip-path: polygon(4px 0%, 100% 0%, calc(100% - 4px) 100%, 0% 100%);
+  }
+
+  .tab-btn.active .tab-count {
+    background: rgba(0,212,255,0.25);
+    border-color: var(--cyan);
+    box-shadow: 0 0 6px rgba(0,212,255,0.3);
+  }
+
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  /* -- SECTION HEADER -- */
+  .section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .section-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--cyan);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    text-shadow: 0 0 8px rgba(0,212,255,0.5);
+    font-family: 'Courier New', monospace;
+  }
+
+  .section-title .icon {
+    font-size: 14px;
+    color: var(--cyan);
+    opacity: 0.8;
+  }
+
+  .section-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  /* -- BUTTONS -- */
+  .btn {
+    padding: 8px 18px;
+    border-radius: 0;
+    border: 1px solid var(--cyan-dark);
+    cursor: pointer;
+    font-size: 11px;
+    font-weight: 700;
+    transition: all var(--transition);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-family: 'Courier New', monospace;
+    clip-path: polygon(6px 0%, 100% 0%, calc(100% - 6px) 100%, 0% 100%);
+    position: relative;
+  }
+
+  .btn-primary {
+    background: linear-gradient(135deg, rgba(0,212,255,0.15) 0%, rgba(0,102,255,0.1) 100%);
+    color: var(--cyan);
+    border-color: var(--cyan);
+    box-shadow: 0 0 8px rgba(0,212,255,0.2);
+  }
+
+  .btn-primary:hover {
+    background: linear-gradient(135deg, rgba(0,212,255,0.25) 0%, rgba(0,102,255,0.2) 100%);
+    box-shadow: 0 0 16px rgba(0,212,255,0.4), 0 0 32px rgba(0,212,255,0.2);
+    color: var(--white);
+    transform: translateY(-1px);
+  }
+
+  .btn-secondary {
+    background: rgba(0,10,20,0.8);
+    color: var(--white-dim);
+    border-color: var(--cyan-dark);
+  }
+
+  .btn-secondary:hover {
+    border-color: var(--cyan-dim);
+    color: var(--cyan);
+    box-shadow: 0 0 10px rgba(0,212,255,0.2);
+  }
+
+  .btn-success {
+    background: var(--green-dim);
+    color: var(--green);
+    border-color: var(--green);
+  }
+
+  .btn-success:hover {
+    box-shadow: 0 0 12px rgba(0,255,136,0.4);
+  }
+
+  .btn-danger {
+    background: var(--red-dim);
+    color: var(--red);
+    border-color: var(--red);
+  }
+
+  .btn-danger:hover {
+    box-shadow: 0 0 12px rgba(255,51,68,0.4);
+  }
+
+  .btn-sm {
+    padding: 4px 12px;
+    font-size: 10px;
+  }
+
+  .btn-ghost {
+    background: transparent;
+    color: var(--white-dim);
+    border: 1px solid transparent;
+  }
+
+  .btn-ghost:hover {
+    background: rgba(0,212,255,0.06);
+    color: var(--cyan);
+    border-color: var(--cyan-dark);
+    box-shadow: 0 0 8px rgba(0,212,255,0.15);
+  }
+
+  /* -- SEARCH BAR -- */
+  .search-bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+  }
+
+  .search-input-wrap {
+    position: relative;
+    flex: 1;
+    min-width: 200px;
+  }
+
+  .search-icon {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--cyan-dim);
+    font-size: 12px;
+    pointer-events: none;
+    font-family: 'Courier New', monospace;
+  }
+
+  .search-input {
+    width: 100%;
+    padding: 9px 12px 9px 36px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--cyan-dark);
+    border-radius: 0;
+    color: var(--white);
+    font-size: 12px;
+    outline: none;
+    transition: all var(--transition);
+    font-family: 'Courier New', monospace;
+    clip-path: polygon(6px 0%, 100% 0%, calc(100% - 6px) 100%, 0% 100%);
+  }
+
+  .search-input:focus {
+    border-color: var(--cyan-dim);
+    box-shadow: 0 0 12px rgba(0,212,255,0.2);
+    background: rgba(0,212,255,0.03);
+  }
+
+  .search-input::placeholder { color: var(--white-dim); opacity: 0.5; }
+
+  .filter-select {
+    padding: 9px 12px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--cyan-dark);
+    border-radius: 0;
+    color: var(--white);
+    font-size: 12px;
+    outline: none;
+    cursor: pointer;
+    min-width: 140px;
+    font-family: 'Courier New', monospace;
+  }
+
+  .filter-select:focus {
+    border-color: var(--cyan-dim);
+    box-shadow: 0 0 10px rgba(0,212,255,0.2);
+  }
+
+  .filter-select option { background: #050a0f; color: var(--white); }
+
+  /* -- TABLE -- */
+  .table-wrap {
+    background: var(--bg-secondary);
+    border: 1px solid var(--cyan-dark);
+    border-radius: 0;
+    overflow: hidden;
+    box-shadow: 0 0 20px rgba(0,212,255,0.08), var(--shadow);
+  }
+
+  .table-scroll { overflow-x: auto; }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 900px;
+  }
+
+  thead {
+    background: rgba(0,30,50,0.8);
+    border-bottom: 1px solid var(--cyan);
+    box-shadow: 0 2px 10px rgba(0,212,255,0.2);
+  }
+
+  th {
+    padding: 12px 14px;
+    text-align: left;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--cyan);
+    white-space: nowrap;
+    cursor: pointer;
+    user-select: none;
+    font-family: 'Courier New', monospace;
+    text-shadow: 0 0 6px rgba(0,212,255,0.4);
+    border-right: 1px solid rgba(0,212,255,0.06);
+  }
+
+  th:last-child { border-right: none; }
+  th:hover { color: var(--white); text-shadow: 0 0 10px var(--cyan); }
+  th .sort-arrow { margin-left: 4px; opacity: 0.4; }
+  th.sorted .sort-arrow { opacity: 1; color: var(--white); }
+
+  tbody tr {
+    border-bottom: 1px solid rgba(0,30,50,0.8);
+    transition: all var(--transition);
+    border-left: 2px solid transparent;
+  }
+
+  tbody tr:hover {
+    background: rgba(0,212,255,0.04);
+    border-left-color: var(--cyan);
+    box-shadow: inset 0 0 20px rgba(0,212,255,0.04);
+  }
+
+  tbody tr:nth-child(even) {
+    background: rgba(0,5,10,0.4);
+  }
+
+  tbody tr:nth-child(even):hover {
+    background: rgba(0,212,255,0.04);
+  }
+
+  tbody tr:last-child { border-bottom: none; }
+
+  tbody tr.draft-row { position: relative; }
+  tbody tr.draft-row::after {
+    content: 'DRAFT - AWAITING APPROVAL';
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%) rotate(-10deg);
+    font-size: 8px;
+    font-weight: 700;
+    color: var(--orange);
+    border: 1px solid var(--orange);
+    padding: 2px 6px;
+    pointer-events: none;
+    opacity: 0.7;
+    letter-spacing: 1px;
+    white-space: nowrap;
+    background: rgba(255,136,0,0.06);
+    font-family: 'Courier New', monospace;
+  }
+
+  td {
+    padding: 10px 14px;
+    font-size: 12px;
+    color: var(--white);
+    vertical-align: middle;
+    font-family: 'Courier New', monospace;
+  }
+
+  td.notes-cell {
+    max-width: 180px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  td.actions-cell { white-space: nowrap; }
+
+  /* -- STATUS BADGES -- */
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 2px 10px;
+    border-radius: 0;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    white-space: nowrap;
+    font-family: 'Courier New', monospace;
+    text-transform: uppercase;
+    clip-path: polygon(4px 0%, 100% 0%, calc(100% - 4px) 100%, 0% 100%);
+  }
+
+  .badge-new {
+    background: rgba(0,102,255,0.15);
+    color: #4488ff;
+    border: 1px solid rgba(0,102,255,0.3);
+    box-shadow: 0 0 6px rgba(0,102,255,0.2);
+  }
+
+  .badge-contacted {
+    background: var(--teal-dim);
+    color: var(--teal);
+    border: 1px solid rgba(0,255,204,0.3);
+    box-shadow: 0 0 6px rgba(0,255,204,0.15);
+  }
+
+  .badge-followup {
+    background: var(--orange-dim);
+    color: var(--orange);
+    border: 1px solid rgba(255,136,0,0.3);
+    box-shadow: 0 0 6px rgba(255,136,0,0.2);
+  }
+
+  .badge-meeting {
+    background: var(--purple-dim);
+    color: var(--purple);
+    border: 1px solid rgba(170,68,255,0.3);
+    box-shadow: 0 0 6px rgba(170,68,255,0.2);
+  }
+
+  .badge-proposal {
+    background: rgba(0,212,255,0.1);
+    color: var(--cyan);
+    border: 1px solid rgba(0,212,255,0.3);
+    box-shadow: 0 0 6px rgba(0,212,255,0.2);
+  }
+
+  .badge-won {
+    background: var(--green-dim);
+    color: var(--green);
+    border: 1px solid rgba(0,255,136,0.3);
+    box-shadow: 0 0 6px rgba(0,255,136,0.2);
+  }
+
+  .badge-lost {
+    background: var(--red-dim);
+    color: var(--red);
+    border: 1px solid rgba(255,51,68,0.3);
+    box-shadow: 0 0 6px rgba(255,51,68,0.15);
+  }
+
+  .badge-closed {
+    background: rgba(0,255,136,0.08);
+    color: #44ffaa;
+    border: 1px solid rgba(0,255,136,0.2);
+  }
+
+  /* inline status dropdown */
+  .status-select {
+    padding: 2px 8px;
+    background: transparent;
+    border: none;
+    font-size: 10px;
+    font-weight: 700;
+    cursor: pointer;
+    outline: none;
+    -webkit-appearance: none;
+    appearance: none;
+    min-width: 100px;
+    text-align: center;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    font-family: 'Courier New', monospace;
+    clip-path: polygon(4px 0%, 100% 0%, calc(100% - 4px) 100%, 0% 100%);
+  }
+
+  .status-wrap {
+    display: inline-block;
+    padding: 1px;
+  }
+
+  .status-new .status-wrap { background: rgba(0,102,255,0.12); border: 1px solid rgba(0,102,255,0.3); }
+  .status-new .status-select { color: #4488ff; }
+  .status-contacted .status-wrap { background: var(--teal-dim); border: 1px solid rgba(0,255,204,0.3); }
+  .status-contacted .status-select { color: var(--teal); }
+  .status-followup .status-wrap { background: var(--orange-dim); border: 1px solid rgba(255,136,0,0.3); }
+  .status-followup .status-select { color: var(--orange); }
+  .status-meeting .status-wrap { background: var(--purple-dim); border: 1px solid rgba(170,68,255,0.3); }
+  .status-meeting .status-select { color: var(--purple); }
+  .status-proposal .status-wrap { background: rgba(0,212,255,0.1); border: 1px solid rgba(0,212,255,0.3); }
+  .status-proposal .status-select { color: var(--cyan); }
+  .status-won .status-wrap { background: var(--green-dim); border: 1px solid rgba(0,255,136,0.3); }
+  .status-won .status-select { color: var(--green); }
+  .status-lost .status-wrap { background: var(--red-dim); border: 1px solid rgba(255,51,68,0.3); }
+  .status-lost .status-select { color: var(--red); }
+  .status-closed .status-wrap { background: rgba(0,255,136,0.08); border: 1px solid rgba(0,255,136,0.2); }
+  .status-closed .status-select { color: #44ffaa; }
+
+  .status-select option { background: #050a0f; color: var(--white); }
+
+  /* -- EMPTY STATE -- */
+  .empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--white-dim);
+  }
+
+  .empty-state .empty-icon {
+    font-size: 36px;
+    margin-bottom: 12px;
+    color: var(--cyan-dark);
+    font-family: 'Courier New', monospace;
+    letter-spacing: 4px;
+  }
+
+  .empty-state h3 {
+    font-size: 14px;
+    margin-bottom: 6px;
+    color: var(--cyan-dim);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-family: 'Courier New', monospace;
+  }
+
+  .empty-state p {
+    font-size: 12px;
+    font-family: 'Courier New', monospace;
+  }
+
+  /* -- MODAL -- */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.85);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    backdrop-filter: blur(4px);
+  }
+
+  .modal-overlay.open { display: flex; }
+
+  .modal {
+    background: var(--bg-secondary);
+    border: 1px solid var(--cyan);
+    padding: 28px;
+    width: 100%;
+    max-width: 640px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 0 30px rgba(0,212,255,0.2), 0 0 60px rgba(0,212,255,0.1), var(--shadow);
+    animation: modalIn 0.2s ease;
+    position: relative;
+  }
+
+  .modal::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+    box-shadow: 0 0 10px var(--cyan);
+  }
+
+  @keyframes modalIn {
+    from { opacity: 0; transform: scale(0.95) translateY(-10px); }
+    to { opacity: 1; transform: scale(1) translateY(0); }
+  }
+
+  .modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--cyan-dark);
+  }
+
+  .modal-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--cyan);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    text-shadow: 0 0 8px rgba(0,212,255,0.5);
+    font-family: 'Courier New', monospace;
+  }
+
+  .modal-close {
+    background: none;
+    border: 1px solid var(--cyan-dark);
+    color: var(--white-dim);
+    font-size: 18px;
+    cursor: pointer;
+    line-height: 1;
+    padding: 4px 8px;
+    transition: all var(--transition);
+    font-family: 'Courier New', monospace;
+  }
+
+  .modal-close:hover {
+    color: var(--cyan);
+    border-color: var(--cyan);
+    box-shadow: 0 0 8px rgba(0,212,255,0.3);
+  }
+
+  .form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  .form-grid .full-width { grid-column: 1 / -1; }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .form-label {
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--cyan-dim);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-family: 'Courier New', monospace;
+  }
+
+  .form-input, .form-select, .form-textarea {
+    padding: 9px 12px;
+    background: var(--bg-tertiary);
+    border: 1px solid var(--cyan-dark);
+    border-radius: 0;
+    color: var(--white);
+    font-size: 12px;
+    outline: none;
+    transition: all var(--transition);
+    font-family: 'Courier New', monospace;
+  }
+
+  .form-input:focus, .form-select:focus, .form-textarea:focus {
+    border-color: var(--cyan-dim);
+    box-shadow: 0 0 10px rgba(0,212,255,0.2);
+    background: rgba(0,212,255,0.02);
+  }
+
+  .form-input::placeholder, .form-textarea::placeholder {
+    color: var(--white-dim);
+    opacity: 0.4;
+  }
+
+  .form-select option { background: #070d14; }
+  .form-textarea { resize: vertical; min-height: 80px; }
+
+  .modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 24px;
+    padding-top: 16px;
+    border-top: 1px solid var(--cyan-dark);
+  }
+
+  /* -- NOTE MODAL -- */
+  .note-modal .modal { max-width: 480px; }
+
+  /* -- PIPELINE / SUMMARY -- */
+  .pipeline-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+
+  .stat-card {
+    background: var(--bg-secondary);
+    border: 1px solid var(--cyan-dark);
+    padding: 20px;
+    box-shadow: 0 0 15px rgba(0,212,255,0.06);
+    position: relative;
+    overflow: hidden;
+    animation: cardGlow 4s ease-in-out infinite;
+    clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 12px 100%, 0 calc(100% - 12px));
+  }
+
+  .stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+    opacity: 0.6;
+  }
+
+  .stat-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at top left, rgba(0,212,255,0.04) 0%, transparent 60%);
+    pointer-events: none;
+  }
+
+  @keyframes cardGlow {
+    0%, 100% { box-shadow: 0 0 15px rgba(0,212,255,0.06), inset 0 0 30px rgba(0,212,255,0.01); }
+    50% { box-shadow: 0 0 25px rgba(0,212,255,0.12), inset 0 0 30px rgba(0,212,255,0.03); }
+  }
+
+  .stat-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+  }
+
+  .stat-card-title {
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--white-dim);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-family: 'Courier New', monospace;
+  }
+
+  .stat-card-icon {
+    font-size: 14px;
+    color: var(--cyan);
+    opacity: 0.6;
+    font-family: 'Courier New', monospace;
+    letter-spacing: 1px;
+  }
+
+  .stat-card-value {
+    font-size: 48px;
+    font-weight: 900;
+    color: var(--cyan);
+    line-height: 1;
+    margin-bottom: 4px;
+    text-shadow: 0 0 10px rgba(0,212,255,0.5), 0 0 20px rgba(0,212,255,0.3);
+    font-family: 'Courier New', monospace;
+  }
+
+  .stat-card-sub {
+    font-size: 11px;
+    color: var(--white-dim);
+    font-family: 'Courier New', monospace;
+    letter-spacing: 1px;
+  }
+
+  .funnel-section {
+    background: var(--bg-secondary);
+    border: 1px solid var(--cyan-dark);
+    padding: 24px;
+    margin-bottom: 24px;
+    box-shadow: 0 0 20px rgba(0,212,255,0.05);
+  }
+
+  .funnel-title {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--cyan);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    text-shadow: 0 0 8px rgba(0,212,255,0.4);
+    font-family: 'Courier New', monospace;
+  }
+
+  .funnel-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-width: 700px;
+    margin: 0 auto;
+  }
+
+  .funnel-stage {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .funnel-label {
+    font-size: 11px;
+    color: var(--white-dim);
+    width: 120px;
+    text-align: right;
+    flex-shrink: 0;
+    font-family: 'Courier New', monospace;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  .funnel-bar-wrap {
+    flex: 1;
+    height: 28px;
+    background: rgba(0,10,20,0.8);
+    border: 1px solid var(--cyan-dark);
+    overflow: hidden;
+    position: relative;
+  }
+
+  .funnel-bar {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 10px;
+    font-size: 11px;
+    font-weight: 700;
+    color: rgba(255,255,255,0.9);
+    transition: width 0.8s cubic-bezier(0.4,0,0.2,1);
+    min-width: 32px;
+    font-family: 'Courier New', monospace;
+  }
+
+  .funnel-count {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--white);
+    width: 30px;
+    text-align: left;
+    flex-shrink: 0;
+    font-family: 'Courier New', monospace;
+  }
+
+  .fb-new { background: linear-gradient(90deg, rgba(0,66,200,0.4), #0066ff); }
+  .fb-contacted { background: linear-gradient(90deg, rgba(0,128,128,0.4), #00ffcc); }
+  .fb-followup { background: linear-gradient(90deg, rgba(180,80,0,0.4), #ff8800); }
+  .fb-meeting { background: linear-gradient(90deg, rgba(100,0,180,0.4), #aa44ff); }
+  .fb-proposal { background: linear-gradient(90deg, rgba(0,100,160,0.4), #00d4ff); }
+  .fb-won { background: linear-gradient(90deg, rgba(0,120,60,0.4), #00ff88); }
+  .fb-lost { background: linear-gradient(90deg, rgba(160,0,30,0.4), #ff3344); }
+  .fb-closed { background: linear-gradient(90deg, rgba(0,120,60,0.4), #44ffaa); }
+
+  .two-col-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+
+  .activity-log {
+    background: var(--bg-secondary);
+    border: 1px solid var(--cyan-dark);
+    padding: 20px;
+  }
+
+  .activity-title {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--cyan);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    text-shadow: 0 0 8px rgba(0,212,255,0.4);
+    font-family: 'Courier New', monospace;
+  }
+
+  .activity-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+
+  .activity-item {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(0,30,50,0.6);
+  }
+
+  .activity-item:last-child { border-bottom: none; padding-bottom: 0; }
+
+  .activity-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    margin-top: 6px;
+    flex-shrink: 0;
+    box-shadow: 0 0 4px currentColor;
+  }
+
+  .activity-text { font-size: 12px; color: var(--white); font-family: 'Courier New', monospace; }
+  .activity-time { font-size: 10px; color: var(--white-dim); font-family: 'Courier New', monospace; letter-spacing: 1px; }
+
+  .category-breakdown {
+    background: var(--bg-secondary);
+    border: 1px solid var(--cyan-dark);
+    padding: 20px;
+  }
+
+  .breakdown-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(0,30,50,0.6);
+  }
+
+  .breakdown-row:last-child { border-bottom: none; }
+
+  .breakdown-label {
+    font-size: 12px;
+    color: var(--white);
+    font-family: 'Courier New', monospace;
+    letter-spacing: 1px;
+  }
+
+  .breakdown-counts {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .breakdown-total {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--cyan);
+    min-width: 30px;
+    text-align: right;
+    text-shadow: 0 0 6px rgba(0,212,255,0.4);
+    font-family: 'Courier New', monospace;
+  }
+
+  .last-updated {
+    font-size: 11px;
+    color: var(--white-dim);
+    text-align: center;
+    margin-top: 8px;
+    padding: 12px;
+    border-top: 1px solid var(--cyan-dark);
+    font-family: 'Courier New', monospace;
+    letter-spacing: 1px;
+  }
+
+  /* -- INLINE EDIT -- */
+  .editable {
+    cursor: pointer;
+    padding: 2px 4px;
+    margin: -2px -4px;
+    transition: all var(--transition);
+    border-left: 1px solid transparent;
+  }
+
+  .editable:hover {
+    background: rgba(0,212,255,0.06);
+    border-left-color: var(--cyan);
+    color: var(--cyan);
+  }
+
+  .inline-input {
+    background: var(--bg-tertiary);
+    border: 1px solid var(--cyan-dim);
+    border-radius: 0;
+    color: var(--white);
+    padding: 3px 6px;
+    font-size: 12px;
+    font-family: 'Courier New', monospace;
+    outline: none;
+    width: 100%;
+    min-width: 80px;
+    box-shadow: 0 0 8px rgba(0,212,255,0.2);
+  }
+
+  /* -- TOAST -- */
+  .toast-container {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .toast {
+    background: var(--bg-card);
+    border: 1px solid var(--cyan-dark);
+    padding: 12px 18px;
+    font-size: 12px;
+    color: var(--white);
+    box-shadow: 0 0 20px rgba(0,212,255,0.1), var(--shadow);
+    animation: toastIn 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    max-width: 320px;
+    font-family: 'Courier New', monospace;
+    letter-spacing: 1px;
+    clip-path: polygon(6px 0%, 100% 0%, calc(100% - 6px) 100%, 0% 100%);
+  }
+
+  .toast.success { border-left: 3px solid var(--green); box-shadow: 0 0 20px rgba(0,255,136,0.1); }
+  .toast.error { border-left: 3px solid var(--red); box-shadow: 0 0 20px rgba(255,51,68,0.1); }
+  .toast.info { border-left: 3px solid var(--cyan); }
+
+  @keyframes toastIn {
+    from { opacity: 0; transform: translateX(20px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+
+  /* -- CONFIRM DIALOG -- */
+  .confirm-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.8);
+    z-index: 2000;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .confirm-overlay.open { display: flex; }
+
+  .confirm-box {
+    background: var(--bg-secondary);
+    border: 1px solid var(--cyan);
+    padding: 28px;
+    max-width: 360px;
+    width: 100%;
+    box-shadow: 0 0 30px rgba(0,212,255,0.2), var(--shadow);
+  }
+
+  .confirm-box h3 {
+    font-size: 14px;
+    margin-bottom: 10px;
+    color: var(--cyan);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    font-family: 'Courier New', monospace;
+    text-shadow: 0 0 8px rgba(0,212,255,0.4);
+  }
+
+  .confirm-box p {
+    font-size: 12px;
+    color: var(--white-dim);
+    margin-bottom: 20px;
+    font-family: 'Courier New', monospace;
+  }
+
+  .confirm-actions { display: flex; gap: 10px; justify-content: flex-end; }
+
+  /* -- RESPONSIVE -- */
+  @media (max-width: 900px) {
+    .main { padding: 16px; }
+    .form-grid { grid-template-columns: 1fr; }
+    .two-col-grid { grid-template-columns: 1fr; }
+    .tabs-nav { flex-direction: column; }
+    .tab-btn { justify-content: flex-start; clip-path: none; }
+  }
+
+  @media (max-width: 600px) {
+    .header-inner { flex-direction: column; height: auto; padding: 12px 0; gap: 8px; }
+    .pipeline-grid { grid-template-columns: 1fr 1fr; }
+    .header-title .jarvis { font-size: 18px; letter-spacing: 6px; }
+  }
+
+  /* -- SCROLLBAR -- */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg-primary); }
+  ::-webkit-scrollbar-thumb { background: var(--cyan-dark); }
+  ::-webkit-scrollbar-thumb:hover { background: var(--cyan-dim); }
+
+  /* -- TOOLTIP -- */
+  [title] { cursor: help; }
+
+  /* -- HUD CORNER DECORATORS -- */
+  .hud-corner {
+    position: fixed;
+    width: 40px;
+    height: 40px;
+    z-index: 50;
+    pointer-events: none;
+    opacity: 0.3;
+  }
+
+  .hud-corner.tl { top: 85px; left: 8px; border-top: 2px solid var(--cyan); border-left: 2px solid var(--cyan); }
+  .hud-corner.tr { top: 85px; right: 8px; border-top: 2px solid var(--cyan); border-right: 2px solid var(--cyan); }
+  .hud-corner.bl { bottom: 8px; left: 8px; border-bottom: 2px solid var(--cyan); border-left: 2px solid var(--cyan); }
+  .hud-corner.br { bottom: 8px; right: 8px; border-bottom: 2px solid var(--cyan); border-right: 2px solid var(--cyan); }
+</style>
+</head>
+<body>
+
+<!-- HUD corners -->
+<div class="hud-corner tl"></div>
+<div class="hud-corner tr"></div>
+<div class="hud-corner bl"></div>
+<div class="hud-corner br"></div>
+
+<!-- ================== HEADER ================== -->
+<header class="header">
+  <div class="header-inner">
+    <div class="header-brand">
+      <div class="header-logo"></div>
+      <div class="header-title">
+        <span class="jarvis">J.A.R.V.I.S</span>
+        <span class="subtitle">Financial Advisory Operating System &nbsp;|&nbsp; AJ Donofrio &nbsp;|&nbsp; Barnum Financial Group</span>
+      </div>
+    </div>
+    <div class="header-meta">
+      <div class="system-status">
+        <div class="status-dot"></div>
+        <span>System Online</span>
+      </div>
+      <div class="header-time" id="headerTime"></div>
+    </div>
+  </div>
+</header>
+
+<!-- ================== MAIN ================== -->
+<main class="main">
+
+  <!-- TABS NAV -->
+  <nav class="tabs-nav" role="tablist">
+    <button class="tab-btn active" role="tab" onclick="switchTab('employer')" id="tab-employer">
+      [CORP] Employer Prospects <span class="tab-count" id="cnt-employer">0</span>
+    </button>
+    <button class="tab-btn" role="tab" onclick="switchTab('individual')" id="tab-individual">
+      [IND] Individual Prospects <span class="tab-count" id="cnt-individual">0</span>
+    </button>
+    <button class="tab-btn" role="tab" onclick="switchTab('wealth')" id="tab-wealth">
+      [WM] Wealth Management <span class="tab-count" id="cnt-wealth">0</span>
+    </button>
+    <button class="tab-btn" role="tab" onclick="switchTab('pipeline')" id="tab-pipeline">
+      [SUM] Pipeline Summary
+    </button>
+  </nav>
+
+  <!-- == TAB 1: EMPLOYER PROSPECTS == -->
+  <div class="tab-panel active" id="panel-employer">
+    <div class="section-header">
+      <div class="section-title"><span class="icon">&gt;&gt;</span> Employer Prospects <small style="font-size:11px;color:var(--white-dim);font-weight:400;margin-left:8px;letter-spacing:1px;">Group Whole Life + SmartStart</small></div>
+      <div class="section-actions">
+        <button class="btn btn-secondary btn-sm" onclick="exportCSV('employer')">[DL] Export CSV</button>
+        <button class="btn btn-primary" onclick="openAddModal('employer')">[+] Add Employer</button>
+      </div>
+    </div>
+    <div class="search-bar">
+      <div class="search-input-wrap">
+        <span class="search-icon">&gt;</span>
+        <input type="text" class="search-input" id="search-employer" placeholder="Search employers, contacts, locations..." oninput="renderTable('employer')">
+      </div>
+      <select class="filter-select" id="filter-employer" onchange="renderTable('employer')">
+        <option value="">All Statuses</option>
+        <option value="New">New</option>
+        <option value="Contacted">Contacted</option>
+        <option value="Follow-Up">Follow-Up</option>
+        <option value="Meeting Set">Meeting Set</option>
+        <option value="Proposal Sent">Proposal Sent</option>
+        <option value="Closed Won">Closed Won</option>
+        <option value="Closed Lost">Closed Lost</option>
+      </select>
+    </div>
+    <div class="table-wrap">
+      <div class="table-scroll">
+        <table id="table-employer">
+          <thead>
+            <tr>
+              <th onclick="sortTable('employer','company')">Company <span class="sort-arrow">&#8597;</span></th>
+              <th onclick="sortTable('employer','industry')">Industry <span class="sort-arrow">&#8597;</span></th>
+              <th onclick="sortTable('employer','employees')">Employees <span class="sort-arrow">&#8597;</span></th>
+              <th onclick="sortTable('employer','location')">Location <span class="sort-arrow">&#8597;</span></th>
+              <th>Growth Signal</th>
+              <th>Contact Name</th>
+              <th>Title</th>
+              <th>Email</th>
+              <th>Phone</th>
+              <th onclick="sortTable('employer','status')">Status <span class="sort-arrow">&#8597;</span></th>
+              <th>Notes</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="tbody-employer"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- == TAB 2: INDIVIDUAL PROSPECTS == -->
+  <div class="tab-panel" id="panel-individual">
+    <div class="section-header">
+      <div class="section-title"><span class="icon">&gt;&gt;</span> Individual Prospects <small style="font-size:11px;color:var(--white-dim);font-weight:400;margin-left:8px;letter-spacing:1px;">HENRYs + Rollover Candidates</small></div>
+      <div class="section-actions">
+        <button class="btn btn-secondary btn-sm" onclick="exportCSV('individual')">[DL] Export CSV</button>
+        <button class="btn btn-primary" onclick="openAddModal('individual')">[+] Add Individual</button>
+      </div>
+    </div>
+    <div class="search-bar">
+      <div class="search-input-wrap">
+        <span class="search-icon">&gt;</span>
+        <input type="text" class="search-input" id="search-individual" placeholder="Search name, company, job title..." oninput="renderTable('individual')">
+      </div>
+      <select class="filter-select" id="filter-type-individual" onchange="renderTable('individual')">
+        <option value="">All Types</option>
+        <option value="HENRY">HENRY</option>
+        <option value="Rollover">Rollover</option>
+      </select>
+      <select class="filter-select" id="filter-individual" onchange="renderTable('individual')">
+        <option value="">All Statuses</option>
+        <option value="New">New</option>
+        <option value="Contacted">Contacted</option>
+        <option value="Follow-Up">Follow-Up</option>
+        <option value="Meeting Set">Meeting Set</option>
+        <option value="Proposal Sent">Proposal Sent</option>
+        <option value="Closed Won">Closed Won</option>
+        <option value="Closed Lost">Closed Lost</option>
+      </select>
+    </div>
+    <div class="table-wrap">
+      <div class="table-scroll">
+        <table id="table-individual">
+          <thead>
+            <tr>
+              <th onclick="sortTable('individual','name')">Name <span class="sort-arrow">&#8597;</span></th>
+              <th onclick="sortTable('individual','type')">Type <span class="sort-arrow">&#8597;</span></th>
+              <th>Job Title</th>
+              <th>Company</th>
+              <th onclick="sortTable('individual','location')">Location <span class="sort-arrow">&#8597;</span></th>
+              <th>Email</th>
+              <th>Phone</th>
+              <th>LinkedIn</th>
+              <th onclick="sortTable('individual','status')">Status <span class="sort-arrow">&#8597;</span></th>
+              <th>Last Contact</th>
+              <th>Notes</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="tbody-individual"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- == TAB 3: WEALTH MANAGEMENT == -->
+  <div class="tab-panel" id="panel-wealth">
+    <div class="section-header">
+      <div class="section-title"><span class="icon">&gt;&gt;</span> Wealth Management Prospects</div>
+      <div class="section-actions">
+        <button class="btn btn-secondary btn-sm" onclick="exportCSV('wealth')">[DL] Export CSV</button>
+        <button class="btn btn-primary" onclick="openAddModal('wealth')">[+] Add Prospect</button>
+      </div>
+    </div>
+    <div class="search-bar">
+      <div class="search-input-wrap">
+        <span class="search-icon">&gt;</span>
+        <input type="text" class="search-input" id="search-wealth" placeholder="Search name, source, location..." oninput="renderTable('wealth')">
+      </div>
+      <select class="filter-select" id="filter-wealth" onchange="renderTable('wealth')">
+        <option value="">All Statuses</option>
+        <option value="New">New</option>
+        <option value="Contacted">Contacted</option>
+        <option value="Follow-Up">Follow-Up</option>
+        <option value="Meeting Set">Meeting Set</option>
+        <option value="Proposal Sent">Proposal Sent</option>
+        <option value="Closed">Closed</option>
+        <option value="Lost">Lost</option>
+      </select>
+    </div>
+    <div class="table-wrap">
+      <div class="table-scroll">
+        <table id="table-wealth">
+          <thead>
+            <tr>
+              <th onclick="sortTable('wealth','name')">Name <span class="sort-arrow">&#8597;</span></th>
+              <th>Net Worth Est.</th>
+              <th>Investable Assets</th>
+              <th>Source</th>
+              <th onclick="sortTable('wealth','location')">Location <span class="sort-arrow">&#8597;</span></th>
+              <th>Email</th>
+              <th>Phone</th>
+              <th onclick="sortTable('wealth','status')">Status <span class="sort-arrow">&#8597;</span></th>
+              <th>Last Contact</th>
+              <th>Notes</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="tbody-wealth"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- == TAB 4: PIPELINE SUMMARY == -->
+  <div class="tab-panel" id="panel-pipeline">
+    <div class="section-header">
+      <div class="section-title"><span class="icon">&gt;&gt;</span> Pipeline Summary</div>
+      <div class="section-actions">
+        <button class="btn btn-secondary btn-sm" onclick="refreshPipeline()">[RFL] Refresh</button>
+      </div>
+    </div>
+
+    <!-- Stat Cards -->
+    <div class="pipeline-grid" id="pipeline-stats"></div>
+
+    <!-- Funnel -->
+    <div class="funnel-section">
+      <div class="funnel-title">&#9660; Combined Pipeline Funnel &mdash; All Prospects</div>
+      <div class="funnel-wrap" id="pipeline-funnel"></div>
+    </div>
+
+    <!-- Two-column: Category Breakdown + Activity Log -->
+    <div class="two-col-grid">
+      <div class="category-breakdown">
+        <div class="activity-title">&#9642; Category Breakdown</div>
+        <div id="category-breakdown-content"></div>
+      </div>
+      <div class="activity-log">
+        <div class="activity-title">&#9654; Recent Activity</div>
+        <ul class="activity-list" id="activity-log"></ul>
+      </div>
+    </div>
+
+    <div class="last-updated" id="last-updated"></div>
+  </div>
+
+</main>
+
+<!-- ================== ADD/EDIT MODAL ================== -->
+<div class="modal-overlay" id="modal-overlay" onclick="closeModalOnBg(event)">
+  <div class="modal">
+    <div class="modal-header">
+      <h2 class="modal-title" id="modal-title">Add Prospect</h2>
+      <button class="modal-close" onclick="closeModal()">&#x2715;</button>
+    </div>
+    <div id="modal-form-content"></div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="saveModal()">[SAVE] Commit</button>
+    </div>
+  </div>
+</div>
+
+<!-- ================== NOTE MODAL ================== -->
+<div class="modal-overlay note-modal" id="note-modal-overlay" onclick="closeNoteModalOnBg(event)">
+  <div class="modal" style="max-width:480px">
+    <div class="modal-header">
+      <h2 class="modal-title">// Add / Edit Note</h2>
+      <button class="modal-close" onclick="closeNoteModal()">&#x2715;</button>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Note</label>
+      <textarea class="form-textarea" id="note-textarea" rows="5" placeholder="Enter note..."></textarea>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeNoteModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="saveNote()">[SAVE] Save Note</button>
+    </div>
+  </div>
+</div>
+
+<!-- ================== CONFIRM DIALOG ================== -->
+<div class="confirm-overlay" id="confirm-overlay">
+  <div class="confirm-box">
+    <h3 id="confirm-title">Confirm</h3>
+    <p id="confirm-msg"></p>
+    <div class="confirm-actions">
+      <button class="btn btn-ghost btn-sm" onclick="closeConfirm()">Cancel</button>
+      <button class="btn btn-danger btn-sm" id="confirm-ok">Confirm</button>
+    </div>
+  </div>
+</div>
+
+<!-- ================== TOAST ================== -->
+<div class="toast-container" id="toast-container"></div>
+
+<script>
+// =============================================================
+//  JARVIS Dashboard - Full Application Logic
+// =============================================================
+
+// -- DATA SCHEMA DEFAULTS --
+const DEFAULTS = {
+  employer: {
+    company:'', industry:'', employees:'', location:'', growthSignal:'',
+    contactName:'', title:'', email:'', phone:'', status:'New', notes:'',
+    createdAt: null, updatedAt: null, id: null
+  },
+  individual: {
+    name:'', type:'HENRY', jobTitle:'', company:'', location:'', email:'',
+    phone:'', linkedin:'', status:'New', lastContact:'', notes:'',
+    createdAt: null, updatedAt: null, id: null
+  },
+  wealth: {
+    name:'', netWorth:'', investableAssets:'', source:'', location:'', email:'',
+    phone:'', status:'New', lastContact:'', notes:'',
+    createdAt: null, updatedAt: null, id: null
+  }
+};
+
+// -- STATUS CONFIG --
+const STATUS_CONFIG = {
+  'New':           { cls:'new',       color:'#4488ff' },
+  'Contacted':     { cls:'contacted', color:'#00ffcc' },
+  'Follow-Up':     { cls:'followup',  color:'#ff8800' },
+  'Meeting Set':   { cls:'meeting',   color:'#aa44ff' },
+  'Proposal Sent': { cls:'proposal',  color:'#00d4ff' },
+  'Closed Won':    { cls:'won',       color:'#00ff88' },
+  'Closed Lost':   { cls:'lost',      color:'#ff3344' },
+  'Closed':        { cls:'closed',    color:'#44ffaa' },
+  'Lost':          { cls:'lost',      color:'#ff3344' }
+};
+
+// OUTREACH-READY statuses (show DRAFT watermark)
+const OUTREACH_STATUSES = ['Proposal Sent', 'Meeting Set'];
+
+// -- SORT STATE --
+const sortState = { employer: { col: null, dir: 1 }, individual: { col: null, dir: 1 }, wealth: { col: null, dir: 1 } };
+
+// -- NOTE MODAL STATE --
+let noteCtx = { type: null, id: null };
+
+// -- MODAL STATE --
+let modalCtx = { type: null, id: null };
+
+// -- CONFIRM STATE --
+let confirmCallback = null;
+
+// -- ACTIVITY LOG --
+const MAX_ACTIVITY = 20;
+
+// -----------------------------------------
+//  LOCAL STORAGE
+// -----------------------------------------
+function loadData(type) {
+  try {
+    const raw = localStorage.getItem('jarvis_' + type);
+    return raw ? JSON.parse(raw) : [];
+  } catch(e) { return []; }
+}
+
+function saveData(type, arr) {
+  localStorage.setItem('jarvis_' + type, JSON.stringify(arr));
+  updateTabCounts();
+  localStorage.setItem('jarvis_lastUpdated', new Date().toISOString());
+}
+
+function loadActivity() {
+  try {
+    const raw = localStorage.getItem('jarvis_activity');
+    return raw ? JSON.parse(raw) : [];
+  } catch(e) { return []; }
+}
+
+function saveActivity(log) {
+  localStorage.setItem('jarvis_activity', JSON.stringify(log.slice(0, MAX_ACTIVITY)));
+}
+
+function logActivity(msg, color) {
+  const log = loadActivity();
+  log.unshift({ msg, color: color || '#00d4ff', time: new Date().toISOString() });
+  saveActivity(log);
+}
+
+// -----------------------------------------
+//  SEED DATA
+// -----------------------------------------
+function seedIfEmpty() {
+  const now = new Date().toISOString();
+
+  if (!loadData('employer').length) {
+    const employers = [
+      { id: uid(), company: 'Metalcraft of Mayville', industry: 'Manufacturing', employees: '~200', location: 'Mayville, WI', growthSignal: 'Stable manufacturer; long-tenured workforce', contactName: '', title: 'HR Director', email: '', phone: '', status: 'New', notes: 'Family-owned precision metal manufacturer. Good GWL fit -- stable workforce.', createdAt: now, updatedAt: now },
+      { id: uid(), company: 'IEC Electronics', industry: 'Manufacturing', employees: '~150', location: 'Newark, NY', growthSignal: 'Contract electronics; defense & medical clients', contactName: '', title: 'VP HR', email: '', phone: '', status: 'New', notes: 'EMS company serving defense, medical, industrial. Contract manufacturing niche.', createdAt: now, updatedAt: now },
+      { id: uid(), company: 'OSF HealthCare Medical Group', industry: 'Healthcare', employees: '~300', location: 'Peoria, IL', growthSignal: 'Regional health system expansion', contactName: '', title: 'HR Director', email: '', phone: '', status: 'New', notes: 'Regional health system with employed physicians. High-income employee base.', createdAt: now, updatedAt: now },
+      { id: uid(), company: 'Concentra Urgent Care', industry: 'Healthcare', employees: '~400', location: 'Multi-state', growthSignal: 'Urgent care chain; rapid clinic expansion', contactName: '', title: 'Benefits Admin', email: '', phone: '', status: 'New', notes: 'Occupational health / urgent care -- large employed workforce across states.', createdAt: now, updatedAt: now },
+      { id: uid(), company: 'Rehmann Group', industry: 'Prof. Services', employees: '~200', location: 'Troy, MI', growthSignal: 'CPA/advisory firm; retained professional staff', contactName: '', title: 'HR Director', email: '', phone: '', status: 'New', notes: 'Top Midwest CPA + advisory firm. High-income professional staff. SmartStart angle.', createdAt: now, updatedAt: now },
+      { id: uid(), company: 'Sikich LLP', industry: 'Prof. Services', employees: '~300', location: 'Naperville, IL', growthSignal: 'Accounting firm; steady partner pipeline', contactName: '', title: 'COO / HR', email: '', phone: '', status: 'New', notes: 'Integrated professional services firm (accounting, tech, advisory). Partner-track employees.', createdAt: now, updatedAt: now },
+      { id: uid(), company: 'MoLo Solutions', industry: 'Logistics', employees: '~150', location: 'Chicago, IL', growthSignal: 'Freight brokerage; fast-scaling ops team', contactName: '', title: 'VP HR', email: '', phone: '', status: 'New', notes: 'Freight brokerage scaling rapidly. High-commission sales culture -- GWL + individual prospects.', createdAt: now, updatedAt: now },
+      { id: uid(), company: 'Messer Construction Co.', industry: 'Construction', employees: '~250', location: 'Cincinnati, OH', growthSignal: 'Regional contractor; long-term project pipeline', contactName: '', title: 'HR Director', email: '', phone: '', status: 'New', notes: 'Employee-owned construction. Strong retention culture. GWL candidate.', createdAt: now, updatedAt: now },
+      { id: uid(), company: 'SciSafe Inc.', industry: 'Healthcare / Biopharma', employees: '~100', location: 'Fairfield, NJ', growthSignal: 'New biorepository facility opening 2025', contactName: '', title: 'HR Director', email: '', phone: '', status: 'New', notes: 'Biorepository company opening major new NJ facility in 2025 -- hiring signal.', createdAt: now, updatedAt: now },
+      { id: uid(), company: 'Biocon Generics Inc.', industry: 'Pharma', employees: '~100', location: 'Pittsboro, NJ', growthSignal: 'New US facility -- $30M investment announced', contactName: '', title: 'HR Manager', email: '', phone: '', status: 'New', notes: '$30M US facility investment; rapid domestic workforce build-out. Strong growth signal.', createdAt: now, updatedAt: now },
+      { id: uid(), company: 'IMC Construction', industry: 'Construction', employees: '~150', location: 'Cherry Hill, NJ', growthSignal: 'ENR award winner; active expansion into new markets', contactName: '', title: 'HR Director / CFO', email: '', phone: '', status: 'New', notes: 'ENR Top 400 award. Growing NJ contractor. Benefits gap likely.', createdAt: now, updatedAt: now },
+      { id: uid(), company: 'Hopeworks', industry: 'Nonprofit', employees: '~75', location: 'Camden / Newark, NJ', growthSignal: '$650K Newark expansion grant received', contactName: '', title: 'Executive Director', email: '', phone: '', status: 'New', notes: 'Youth workforce development nonprofit. $650K expansion. SmartStart pilot fit.', createdAt: now, updatedAt: now },
+      { id: uid(), company: 'Lyzr AI', industry: 'Tech (AI)', employees: '~50', location: 'NJ / Remote', growthSignal: '$14.5M Series A -- scaling headcount fast', contactName: '', title: 'CEO / Head of People', email: '', phone: '', status: 'New', notes: 'AI startup; Series A funded. Scaling fast. High-income tech hires incoming. HENRY crossover.', createdAt: now, updatedAt: now }
+    ];
+    saveData('employer', employers);
+    logActivity('System: 13 employer prospects pre-loaded', '#00d4ff');
+  }
+
+  if (!loadData('individual').length) {
+    const individuals = [
+      // HENRYs
+      { id: uid(), name: 'Prospect - Senior SWE (Tech)', type: 'HENRY', jobTitle: 'Senior Software Engineer', company: 'FAANG / Large Tech Co.', location: 'NYC Metro / Remote', email: '', phone: '', linkedin: '', status: 'New', lastContact: '', notes: 'HHI $250-400K. Maxed 401(k), no permanent life. Cash-value GWL pitch. Strong WM crossover.', createdAt: now, updatedAt: now },
+      { id: uid(), name: 'Prospect - Biglaw Associate', type: 'HENRY', jobTitle: 'Associate Attorney', company: 'Am Law 100 Firm', location: 'Manhattan, NY', email: '', phone: '', linkedin: '', status: 'New', lastContact: '', notes: 'TC $215-350K. Student debt manageable by Y3. GWL for tax-advantaged savings. Rollover from prior 401k.', createdAt: now, updatedAt: now },
+      { id: uid(), name: 'Prospect - Early Attending Physician', type: 'HENRY', jobTitle: 'Attending Physician (Internal Medicine)', company: 'Regional Health System', location: 'Newark, NJ', email: '', phone: '', linkedin: '', status: 'New', lastContact: '', notes: 'W2 $300-500K. Student loan refinanced. No permanent life coverage yet. WM + GWL both relevant.', createdAt: now, updatedAt: now },
+      { id: uid(), name: 'Prospect - VP Sales (SaaS)', type: 'HENRY', jobTitle: 'VP of Sales', company: 'B2B SaaS Company', location: 'Chicago, IL', email: '', phone: '', linkedin: '', status: 'New', lastContact: '', notes: 'OTE $300-500K. Variable income -- needs tax-advantaged vehicles. Bonus spikes = overfunded GWL opportunity.', createdAt: now, updatedAt: now },
+      { id: uid(), name: 'Prospect - Management Consultant', type: 'HENRY', jobTitle: 'Senior Manager / Principal', company: 'Big 4 / MBB Consulting', location: 'NJ / NY', email: '', phone: '', linkedin: '', status: 'New', lastContact: '', notes: 'TC $250-400K. Frequent job changes = rollover opportunities. WM pitch on bonus year.', createdAt: now, updatedAt: now },
+      // Rollovers
+      { id: uid(), name: 'Prospect - Tech Layoff Rollover', type: 'Rollover', jobTitle: 'Former Senior Engineer / PM', company: 'Recently Laid Off (Big Tech)', location: 'SF Bay / NYC / Remote', email: '', phone: '', linkedin: '', status: 'New', lastContact: '', notes: '401(k) orphaned at former employer. $200K-$800K rollover potential. Time-sensitive -- 60-day window concern.', createdAt: now, updatedAt: now },
+      { id: uid(), name: 'Prospect - Corporate Early Retiree', type: 'Rollover', jobTitle: 'Former Director / VP (Retired)', company: 'F500 Company (Retired)', location: 'NJ / PA', email: '', phone: '', linkedin: '', status: 'New', lastContact: '', notes: 'Pension + 401(k) rollover candidate. $500K-$2M investable. Income planning, RMD strategy. Warm referral type.', createdAt: now, updatedAt: now },
+      { id: uid(), name: 'Prospect - Federal Employee (TSP Rollover)', type: 'Rollover', jobTitle: 'Former Federal Government Employee', company: 'US Federal Government (Retired/Separated)', location: 'NJ / DC Metro', email: '', phone: '', linkedin: '', status: 'New', lastContact: '', notes: 'TSP balance $300K-$1M+. Often unadvised. FERS supplement timing. Rollover to IRA + WM engagement.', createdAt: now, updatedAt: now }
+    ];
+    saveData('individual', individuals);
+    logActivity('System: 8 individual prospects pre-loaded (5 HENRYs, 3 Rollovers)', '#00d4ff');
+  }
+
+  if (!loadData('wealth').length) {
+    saveData('wealth', []);
+  }
+}
+
+// -----------------------------------------
+//  UTILITIES
+// -----------------------------------------
+function uid() {
+  return Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+}
+
+function esc(str) {
+  if (!str) return '';
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function statusClass(s) {
+  const map = {
+    'New': 'new', 'Contacted': 'contacted', 'Follow-Up': 'followup',
+    'Meeting Set': 'meeting', 'Proposal Sent': 'proposal',
+    'Closed Won': 'won', 'Closed Lost': 'lost', 'Closed': 'closed', 'Lost': 'lost'
+  };
+  return map[s] || 'new';
+}
+
+function statusColor(s) {
+  return (STATUS_CONFIG[s] || STATUS_CONFIG['New']).color;
+}
+
+function isOutreachReady(status) {
+  return OUTREACH_STATUSES.includes(status);
+}
+
+function updateTabCounts() {
+  ['employer','individual','wealth'].forEach(t => {
+    const el = document.getElementById('cnt-' + t);
+    if (el) el.textContent = loadData(t).length;
+  });
+}
+
+function toast(msg, type='info', duration=3000) {
+  const c = document.getElementById('toast-container');
+  const div = document.createElement('div');
+  div.className = 'toast ' + type;
+  const icon = type==='success' ? '[OK]' : type==='error' ? '[ERR]' : '[INF]';
+  div.innerHTML = '<span>' + icon + '</span> ' + esc(msg);
+  c.appendChild(div);
+  setTimeout(() => { div.style.opacity='0'; div.style.transform='translateX(20px)'; div.style.transition='0.3s'; setTimeout(()=>div.remove(),300); }, duration);
+}
+
+function showConfirm(title, msg, cb) {
+  document.getElementById('confirm-title').textContent = title;
+  document.getElementById('confirm-msg').textContent = msg;
+  confirmCallback = cb;
+  document.getElementById('confirm-overlay').classList.add('open');
+}
+
+function closeConfirm() {
+  document.getElementById('confirm-overlay').classList.remove('open');
+  confirmCallback = null;
+}
+
+document.getElementById('confirm-ok').onclick = () => {
+  if (confirmCallback) confirmCallback();
+  closeConfirm();
+};
+
+// -----------------------------------------
+//  TAB SWITCHING
+// -----------------------------------------
+let activeTab = 'employer';
+function switchTab(tab) {
+  activeTab = tab;
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('tab-' + tab).classList.add('active');
+  document.getElementById('panel-' + tab).classList.add('active');
+  if (tab === 'pipeline') refreshPipeline();
+  else renderTable(tab);
+}
+
+// -----------------------------------------
+//  RENDER TABLES
+// -----------------------------------------
+function renderTable(type) {
+  if (type === 'employer') renderEmployer();
+  else if (type === 'individual') renderIndividual();
+  else if (type === 'wealth') renderWealth();
+}
+
+// ---- EMPLOYER ----
+function renderEmployer() {
+  const search = (document.getElementById('search-employer')?.value || '').toLowerCase();
+  const filterStatus = document.getElementById('filter-employer')?.value || '';
+  let data = loadData('employer');
+
+  const { col, dir } = sortState.employer;
+  if (col) data = data.slice().sort((a,b) => (a[col]||'').toString().localeCompare((b[col]||'').toString()) * dir);
+
+  data = data.filter(r => {
+    const txt = [r.company,r.industry,r.employees,r.location,r.growthSignal,r.contactName,r.title,r.email,r.phone,r.notes].join(' ').toLowerCase();
+    const matchSearch = !search || txt.includes(search);
+    const matchStatus = !filterStatus || r.status === filterStatus;
+    return matchSearch && matchStatus;
+  });
+
+  const tbody = document.getElementById('tbody-employer');
+  if (!data.length) {
+    tbody.innerHTML = '<tr><td colspan="12"><div class="empty-state"><div class="empty-icon">[CORP]</div><h3>No employer prospects found</h3><p>Try adjusting your search or add a new prospect.</p></div></td></tr>';
+    return;
+  }
+
+  const statuses = ['New','Contacted','Follow-Up','Meeting Set','Proposal Sent','Closed Won','Closed Lost'];
+  tbody.innerHTML = data.map(r => {
+    const sc = statusClass(r.status);
+    const draft = isOutreachReady(r.status) ? ' draft-row' : '';
+    return '<tr class="' + draft + '" data-id="' + esc(r.id) + '" data-type="employer">' +
+      '<td><span class="editable" onclick="inlineEdit(this,\'employer\',\'' + esc(r.id) + '\',\'company\')">' + esc(r.company) + '</span></td>' +
+      '<td><span class="editable" onclick="inlineEdit(this,\'employer\',\'' + esc(r.id) + '\',\'industry\')">' + esc(r.industry) + '</span></td>' +
+      '<td><span class="editable" onclick="inlineEdit(this,\'employer\',\'' + esc(r.id) + '\',\'employees\')">' + esc(r.employees) + '</span></td>' +
+      '<td><span class="editable" onclick="inlineEdit(this,\'employer\',\'' + esc(r.id) + '\',\'location\')">' + esc(r.location) + '</span></td>' +
+      '<td style="max-width:160px;"><span class="editable" onclick="inlineEdit(this,\'employer\',\'' + esc(r.id) + '\',\'growthSignal\')" title="' + esc(r.growthSignal) + '">' + esc(r.growthSignal ? r.growthSignal.substring(0,40)+(r.growthSignal.length>40?'...':'') : '') + '</span></td>' +
+      '<td><span class="editable" onclick="inlineEdit(this,\'employer\',\'' + esc(r.id) + '\',\'contactName\')">' + (esc(r.contactName) || '<span style="color:var(--white-dim)">&#8212;</span>') + '</span></td>' +
+      '<td><span class="editable" onclick="inlineEdit(this,\'employer\',\'' + esc(r.id) + '\',\'title\')">' + (esc(r.title) || '<span style="color:var(--white-dim)">&#8212;</span>') + '</span></td>' +
+      '<td><span class="editable" onclick="inlineEdit(this,\'employer\',\'' + esc(r.id) + '\',\'email\')">' + (r.email ? '<a href="mailto:' + esc(r.email) + '" style="color:var(--cyan)">' + esc(r.email) + '</a>' : '<span style="color:var(--white-dim)">&#8212;</span>') + '</span></td>' +
+      '<td><span class="editable" onclick="inlineEdit(this,\'employer\',\'' + esc(r.id) + '\',\'phone\')">' + (esc(r.phone) || '<span style="color:var(--white-dim)">&#8212;</span>') + '</span></td>' +
+      '<td><div class="status-' + sc + '"><div class="status-wrap"><select class="status-select" onchange="changeStatus(\'employer\',\'' + esc(r.id) + '\',this.value)">' +
+        statuses.map(s => '<option ' + (s===r.status?'selected':'') + '>' + s + '</option>').join('') +
+      '</select></div></div></td>' +
+      '<td class="notes-cell" title="' + esc(r.notes) + '"><span class="editable" onclick="openNoteModal(\'employer\',\'' + esc(r.id) + '\')">' + (esc(r.notes ? r.notes.substring(0,40)+(r.notes.length>40?'...':'') : '') || '<span style="color:var(--white-dim)">Click to add</span>') + '</span></td>' +
+      '<td class="actions-cell">' +
+        '<button class="btn btn-ghost btn-sm" onclick="openEditModal(\'employer\',\'' + esc(r.id) + '\')" title="Edit">[ED]</button>' +
+        '<button class="btn btn-ghost btn-sm" onclick="markContacted(\'employer\',\'' + esc(r.id) + '\')" title="Mark Contacted">[PH]</button>' +
+        '<button class="btn btn-ghost btn-sm" onclick="openNoteModal(\'employer\',\'' + esc(r.id) + '\')" title="Add Note">[NT]</button>' +
+        '<button class="btn btn-ghost btn-sm" style="color:var(--red)" onclick="deleteProspect(\'employer\',\'' + esc(r.id) + '\')" title="Delete">[RM]</button>' +
+      '</td></tr>';
+  }).join('');
+}
+
+// ---- INDIVIDUAL ----
+function renderIndividual() {
+  const search = (document.getElementById('search-individual')?.value || '').toLowerCase();
+  const filterStatus = document.getElementById('filter-individual')?.value || '';
+  const filterType = document.getElementById('filter-type-individual')?.value || '';
+  let data = loadData('individual');
+
+  const { col, dir } = sortState.individual;
+  if (col) data = data.slice().sort((a,b) => (a[col]||'').toString().localeCompare((b[col]||'').toString()) * dir);
+
+  data = data.filter(r => {
+    const txt = [r.name,r.type,r.jobTitle,r.company,r.location,r.email,r.phone,r.notes].join(' ').toLowerCase();
+    return (!search || txt.includes(search)) && (!filterStatus || r.status===filterStatus) && (!filterType || r.type===filterType);
+  });
+
+  const tbody = document.getElementById('tbody-individual');
+  if (!data.length) {
+    tbody.innerHTML = '<tr><td colspan="12"><div class="empty-state"><div class="empty-icon">[IND]</div><h3>No individual prospects found</h3><p>Add a HENRY or rollover candidate to get started.</p></div></td></tr>';
+    return;
+  }
+
+  const statuses = ['New','Contacted','Follow-Up','Meeting Set','Proposal Sent','Closed Won','Closed Lost'];
+  tbody.innerHTML = data.map(r => {
+    const sc = statusClass(r.status);
+    const draft = isOutreachReady(r.status) ? ' draft-row' : '';
+    const typeColor = r.type === 'HENRY' ? '#aa44ff' : '#00ffcc';
+    const typeBg = r.type === 'HENRY' ? 'rgba(170,68,255,0.15)' : 'rgba(0,255,204,0.12)';
+    return '<tr class="' + draft + '" data-id="' + esc(r.id) + '" data-type="individual">' +
+      '<td><span class="editable" onclick="inlineEdit(this,\'individual\',\'' + esc(r.id) + '\',\'name\')">' + esc(r.name) + '</span></td>' +
+      '<td><span class="badge" style="background:' + typeBg + ';color:' + typeColor + ';border:1px solid ' + typeColor + '40">' + esc(r.type) + '</span></td>' +
+      '<td><span class="editable" onclick="inlineEdit(this,\'individual\',\'' + esc(r.id) + '\',\'jobTitle\')">' + (esc(r.jobTitle) || '<span style="color:var(--white-dim)">&#8212;</span>') + '</span></td>' +
+      '<td><span class="editable" onclick="inlineEdit(this,\'individual\',\'' + esc(r.id) + '\',\'company\')">' + (esc(r.company) || '<span style="color:var(--white-dim)">&#8212;</span>') + '</span></td>' +
+      '<td><span class="editable" onclick="inlineEdit(this,\'individual\',\'' + esc(r.id) + '\',\'location\')">' + (esc(r.location) || '<span style="color:var(--white-dim)">&#8212;</span>') + '</span></td>' +
+      '<td><span class="editable" onclick="inlineEdit(this,\'individual\',\'' + esc(r.id) + '\',\'email\')">' + (r.email ? '<a href="mailto:' + esc(r.email) + '" style="color:var(--cyan)">' + esc(r.email) + '</a>' : '<span style="color:var(--white-dim)">&#8212;</span>') + '</span></td>' +
+      '<td><span class="editable" onclick="inlineEdit(this,\'individual\',\'' + esc(r.id) + '\',\'phone\')">' + (esc(r.phone) || '<span style="color:var(--white-dim)">&#8212;</span>') + '</span></td>' +
+      '<td>' + (r.linkedin ? '<a href="' + esc(r.linkedin) + '" target="_blank" style="color:var(--cyan)">[LI] Profile</a>' : '<span style="color:var(--white-dim)">&#8212;</span>') + '</td>' +
+      '<td><div class="status-' + sc + '"><div class="status-wrap"><select class="status-select" onchange="changeStatus(\'individual\',\'' + esc(r.id) + '\',this.value)">' +
+        statuses.map(s => '<option ' + (s===r.status?'selected':'') + '>' + s + '</option>').join('') +
+      '</select></div></div></td>' +
+      '<td><span class="editable" onclick="inlineEdit(this,\'individual\',\'' + esc(r.id) + '\',\'lastContact\')">' + (esc(r.lastContact) || '<span style="color:var(--white-dim)">&#8212;</span>') + '</span></td>' +
+      '<td class="notes-cell" title="' + esc(r.notes) + '"><span class="editable" onclick="openNoteModal(\'individual\',\'' + esc(r.id) + '\')">' + (esc(r.notes ? r.notes.substring(0,40)+(r.notes.length>40?'...':'') : '') || '<span style="color:var(--white-dim)">Click to add</span>') + '</span></td>' +
+      '<td class="actions-cell">' +
+        '<button class="btn btn-ghost btn-sm" onclick="openEditModal(\'individual\',\'' + esc(r.id) + '\')" title="Edit">[ED]</button>' +
+        '<button class="btn btn-ghost btn-sm" onclick="markContacted(\'individual\',\'' + esc(r.id) + '\')" title="Mark Contacted">[PH]</button>' +
+        '<button class="btn btn-ghost btn-sm" onclick="openNoteModal(\'individual\',\'' + esc(r.id) + '\')" title="Add Note">[NT]</button>' +
+        '<button class="btn btn-ghost btn-sm" style="color:var(--red)" onclick="deleteProspect(\'individual\',\'' + esc(r.id) + '\')" title="Delete">[RM]</button>' +
+      '</td></tr>';
+  }).join('');
+}
+
+// ---- WEALTH ----
+function renderWealth() {
+  const search = (document.getElementById('search-wealth')?.value || '').toLowerCase();
+  const filterStatus = document.getElementById('filter-wealth')?.value || '';
+  let data = loadData('wealth');
+
+  const { col, dir } = sortState.wealth;
+  if (col) data = data.slice().sort((a,b) => (a[col]||'').toString().localeCompare((b[col]||'').toString()) * dir);
+
+  data = data.filter(r => {
+    const txt = [r.name,r.netWorth,r.investableAssets,r.source,r.location,r.email,r.phone,r.notes].join(' ').toLowerCase();
+    return (!search || txt.includes(search)) && (!filterStatus || r.status===filterStatus);
+  });
+
+  const tbody = document.getElementById('tbody-wealth');
+  if (!data.length) {
+    tbody.innerHTML = '<tr><td colspan="11"><div class="empty-state"><div class="empty-icon">[$$$]</div><h3>No wealth management prospects yet</h3><p>Add high-net-worth individuals or referrals to begin building your WM pipeline.</p></div></td></tr>';
+    return;
+  }
+
+  const statuses = ['New','Contacted','Follow-Up','Meeting Set','Proposal Sent','Closed','Lost'];
+  tbody.innerHTML = data.map(r => {
+    const sc = statusClass(r.status);
+    const draft = isOutreachReady(r.status) ? ' draft-row' : '';
+    return '<tr class="' + draft + '" data-id="' + esc(r.id) + '" data-type="wealth">' +
+      '<td><span class="editable" onclick="inlineEdit(this,\'wealth\',\'' + esc(r.id) + '\',\'name\')">' + esc(r.name) + '</span></td>' +
+      '<td><span class="editable" onclick="inlineEdit(this,\'wealth\',\'' + esc(r.id) + '\',\'netWorth\')">' + (esc(r.netWorth) || '<span style="color:var(--white-dim)">&#8212;</span>') + '</span></td>' +
+      '<td><span class="editable" onclick="inlineEdit(this,\'wealth\',\'' + esc(r.id) + '\',\'investableAssets\')">' + (esc(r.investableAssets) || '<span style="color:var(--white-dim)">&#8212;</span>') + '</span></td>' +
+      '<td><span class="editable" onclick="inlineEdit(this,\'wealth\',\'' + esc(r.id) + '\',\'source\')">' + (esc(r.source) || '<span style="color:var(--white-dim)">&#8212;</span>') + '</span></td>' +
+      '<td><span class="editable" onclick="inlineEdit(this,\'wealth\',\'' + esc(r.id) + '\',\'location\')">' + (esc(r.location) || '<span style="color:var(--white-dim)">&#8212;</span>') + '</span></td>' +
+      '<td><span class="editable" onclick="inlineEdit(this,\'wealth\',\'' + esc(r.id) + '\',\'email\')">' + (r.email ? '<a href="mailto:' + esc(r.email) + '" style="color:var(--cyan)">' + esc(r.email) + '</a>' : '<span style="color:var(--white-dim)">&#8212;</span>') + '</span></td>' +
+      '<td><span class="editable" onclick="inlineEdit(this,\'wealth\',\'' + esc(r.id) + '\',\'phone\')">' + (esc(r.phone) || '<span style="color:var(--white-dim)">&#8212;</span>') + '</span></td>' +
+      '<td><div class="status-' + sc + '"><div class="status-wrap"><select class="status-select" onchange="changeStatus(\'wealth\',\'' + esc(r.id) + '\',this.value)">' +
+        statuses.map(s => '<option ' + (s===r.status?'selected':'') + '>' + s + '</option>').join('') +
+      '</select></div></div></td>' +
+      '<td><span class="editable" onclick="inlineEdit(this,\'wealth\',\'' + esc(r.id) + '\',\'lastContact\')">' + (esc(r.lastContact) || '<span style="color:var(--white-dim)">&#8212;</span>') + '</span></td>' +
+      '<td class="notes-cell" title="' + esc(r.notes) + '"><span class="editable" onclick="openNoteModal(\'wealth\',\'' + esc(r.id) + '\')">' + (esc(r.notes ? r.notes.substring(0,40)+(r.notes.length>40?'...':'') : '') || '<span style="color:var(--white-dim)">Click to add</span>') + '</span></td>' +
+      '<td class="actions-cell">' +
+        '<button class="btn btn-ghost btn-sm" onclick="openEditModal(\'wealth\',\'' + esc(r.id) + '\')" title="Edit">[ED]</button>' +
+        '<button class="btn btn-ghost btn-sm" onclick="markContacted(\'wealth\',\'' + esc(r.id) + '\')" title="Mark Contacted">[PH]</button>' +
+        '<button class="btn btn-ghost btn-sm" onclick="openNoteModal(\'wealth\',\'' + esc(r.id) + '\')" title="Add Note">[NT]</button>' +
+        '<button class="btn btn-ghost btn-sm" style="color:var(--red)" onclick="deleteProspect(\'wealth\',\'' + esc(r.id) + '\')" title="Delete">[RM]</button>' +
+      '</td></tr>';
+  }).join('');
+}
+
+// -----------------------------------------
+//  SORT
+// -----------------------------------------
+function sortTable(type, col) {
+  const s = sortState[type];
+  if (s.col === col) s.dir *= -1; else { s.col = col; s.dir = 1; }
+  const table = document.getElementById('table-' + type);
+  table.querySelectorAll('th').forEach(th => {
+    th.classList.remove('sorted');
+    const arrow = th.querySelector('.sort-arrow');
+    if (arrow) arrow.innerHTML = '&#8597;';
+  });
+  table.querySelectorAll('th').forEach(th => {
+    if (th.getAttribute('onclick') && th.getAttribute('onclick').includes("'" + col + "'")) {
+      th.classList.add('sorted');
+      const arrow = th.querySelector('.sort-arrow');
+      if (arrow) arrow.innerHTML = s.dir === 1 ? '&#8593;' : '&#8595;';
+    }
+  });
+  renderTable(type);
+}
+
+// -----------------------------------------
+//  INLINE EDIT
+// -----------------------------------------
+function inlineEdit(el, type, id, field) {
+  if (el.querySelector('input')) return;
+  const currentVal = (() => {
+    const data = loadData(type);
+    const rec = data.find(r => r.id === id);
+    return rec ? (rec[field] || '') : '';
+  })();
+  const input = document.createElement('input');
+  input.className = 'inline-input';
+  input.value = currentVal;
+  el.innerHTML = '';
+  el.appendChild(input);
+  input.focus();
+  input.select();
+  const save = () => {
+    const data = loadData(type);
+    const rec = data.find(r => r.id === id);
+    if (rec) {
+      rec[field] = input.value.trim();
+      rec.updatedAt = new Date().toISOString();
+      saveData(type, data);
+      logActivity('Updated ' + type + ' "' + (rec.company||rec.name||'') + '" -- ' + field, statusColor(rec.status));
+    }
+    renderTable(type);
+    toast(field + ' updated', 'success');
+  };
+  input.addEventListener('blur', save);
+  input.addEventListener('keydown', e => {
+    if (e.key === 'Enter') { input.blur(); }
+    if (e.key === 'Escape') { renderTable(type); }
+  });
+}
+
+// -----------------------------------------
+//  STATUS CHANGE
+// -----------------------------------------
+function changeStatus(type, id, newStatus) {
+  const data = loadData(type);
+  const rec = data.find(r => r.id === id);
+  if (!rec) return;
+  const oldStatus = rec.status;
+  rec.status = newStatus;
+  rec.updatedAt = new Date().toISOString();
+  saveData(type, data);
+  logActivity('Status: "' + (rec.company||rec.name||'') + '" -> ' + newStatus + ' (was ' + oldStatus + ')', statusColor(newStatus));
+  renderTable(type);
+  toast('Status updated to ' + newStatus, 'success');
+}
+
+// -----------------------------------------
+//  MARK CONTACTED
+// -----------------------------------------
+function markContacted(type, id) {
+  const data = loadData(type);
+  const rec = data.find(r => r.id === id);
+  if (!rec) return;
+  rec.status = 'Contacted';
+  rec.updatedAt = new Date().toISOString();
+  if (type === 'individual' || type === 'wealth') rec.lastContact = new Date().toLocaleDateString();
+  saveData(type, data);
+  logActivity('Marked Contacted: "' + (rec.company||rec.name||'') + '"', statusColor('Contacted'));
+  renderTable(type);
+  toast('Marked as Contacted', 'success');
+}
+
+// -----------------------------------------
+//  DELETE
+// -----------------------------------------
+function deleteProspect(type, id) {
+  const data = loadData(type);
+  const rec = data.find(r => r.id === id);
+  if (!rec) return;
+  showConfirm('Delete Prospect', 'Are you sure you want to delete "' + (rec.company||rec.name||'this prospect') + '"? This cannot be undone.', () => {
+    const updated = data.filter(r => r.id !== id);
+    saveData(type, updated);
+    logActivity('Deleted: "' + (rec.company||rec.name||'') + '" from ' + type, '#ff3344');
+    renderTable(type);
+    toast('Prospect deleted', 'error');
+  });
+}
+
+// -----------------------------------------
+//  NOTE MODAL
+// -----------------------------------------
+function openNoteModal(type, id) {
+  const data = loadData(type);
+  const rec = data.find(r => r.id === id);
+  if (!rec) return;
+  noteCtx = { type, id };
+  document.getElementById('note-textarea').value = rec.notes || '';
+  document.getElementById('note-modal-overlay').classList.add('open');
+  setTimeout(() => document.getElementById('note-textarea').focus(), 100);
+}
+
+function closeNoteModal() {
+  document.getElementById('note-modal-overlay').classList.remove('open');
+  noteCtx = { type: null, id: null };
+}
+
+function saveNote() {
+  const { type, id } = noteCtx;
+  if (!type || !id) return;
+  const data = loadData(type);
+  const rec = data.find(r => r.id === id);
+  if (!rec) return;
+  rec.notes = document.getElementById('note-textarea').value.trim();
+  rec.updatedAt = new Date().toISOString();
+  saveData(type, data);
+  logActivity('Note added: "' + (rec.company||rec.name||'') + '"', '#00d4ff');
+  renderTable(type);
+  closeNoteModal();
+  toast('Note saved', 'success');
+}
+
+function closeNoteModalOnBg(e) {
+  if (e.target === document.getElementById('note-modal-overlay')) closeNoteModal();
+}
+
+// -----------------------------------------
+//  ADD / EDIT MODAL FORMS
+// -----------------------------------------
+function openAddModal(type) {
+  modalCtx = { type, id: null };
+  const labels = { employer: 'Add Employer Prospect', individual: 'Add Individual Prospect', wealth: 'Add Wealth Prospect' };
+  document.getElementById('modal-title').textContent = labels[type] || 'Add Prospect';
+  document.getElementById('modal-form-content').innerHTML = buildForm(type, null);
+  document.getElementById('modal-overlay').classList.add('open');
+}
+
+function openEditModal(type, id) {
+  const data = loadData(type);
+  const rec = data.find(r => r.id === id);
+  if (!rec) return;
+  modalCtx = { type, id };
+  document.getElementById('modal-title').textContent = 'Edit: ' + (rec.company||rec.name||'Prospect');
+  document.getElementById('modal-form-content').innerHTML = buildForm(type, rec);
+  document.getElementById('modal-overlay').classList.add('open');
+}
+
+function closeModal() {
+  document.getElementById('modal-overlay').classList.remove('open');
+  modalCtx = { type: null, id: null };
+}
+
+function closeModalOnBg(e) {
+  if (e.target === document.getElementById('modal-overlay')) closeModal();
+}
+
+function buildForm(type, rec) {
+  const v = (field) => esc(rec ? (rec[field]||'') : '');
+  const sel = (field, opts) => opts.map(o => '<option ' + (rec&&rec[field]===o?'selected':'') + '>' + esc(o) + '</option>').join('');
+
+  if (type === 'employer') {
+    const statuses = ['New','Contacted','Follow-Up','Meeting Set','Proposal Sent','Closed Won','Closed Lost'];
+    return '<div class="form-grid">' +
+      '<div class="form-group"><label class="form-label">Company *</label><input class="form-input" id="f-company" value="' + v('company') + '" placeholder="Acme Corp"></div>' +
+      '<div class="form-group"><label class="form-label">Industry</label><input class="form-input" id="f-industry" value="' + v('industry') + '" placeholder="Manufacturing"></div>' +
+      '<div class="form-group"><label class="form-label">Employees</label><input class="form-input" id="f-employees" value="' + v('employees') + '" placeholder="~200"></div>' +
+      '<div class="form-group"><label class="form-label">Location</label><input class="form-input" id="f-location" value="' + v('location') + '" placeholder="City, ST"></div>' +
+      '<div class="form-group full-width"><label class="form-label">Growth Signal</label><input class="form-input" id="f-growthSignal" value="' + v('growthSignal') + '" placeholder="Recent expansion, new facility, award..."></div>' +
+      '<div class="form-group"><label class="form-label">Contact Name</label><input class="form-input" id="f-contactName" value="' + v('contactName') + '" placeholder="Jane Smith"></div>' +
+      '<div class="form-group"><label class="form-label">Title</label><input class="form-input" id="f-title" value="' + v('title') + '" placeholder="HR Director"></div>' +
+      '<div class="form-group"><label class="form-label">Email</label><input class="form-input" id="f-email" type="email" value="' + v('email') + '" placeholder="jane@company.com"></div>' +
+      '<div class="form-group"><label class="form-label">Phone</label><input class="form-input" id="f-phone" value="' + v('phone') + '" placeholder="(555) 000-0000"></div>' +
+      '<div class="form-group"><label class="form-label">Status</label><select class="form-select" id="f-status">' + sel('status',statuses) + '</select></div>' +
+      '<div class="form-group full-width"><label class="form-label">Notes</label><textarea class="form-textarea" id="f-notes">' + v('notes') + '</textarea></div>' +
+      '</div>';
+  }
+
+  if (type === 'individual') {
+    const statuses = ['New','Contacted','Follow-Up','Meeting Set','Proposal Sent','Closed Won','Closed Lost'];
+    const types = ['HENRY','Rollover'];
+    return '<div class="form-grid">' +
+      '<div class="form-group"><label class="form-label">Name *</label><input class="form-input" id="f-name" value="' + v('name') + '" placeholder="John Doe"></div>' +
+      '<div class="form-group"><label class="form-label">Type</label><select class="form-select" id="f-type">' + sel('type',types) + '</select></div>' +
+      '<div class="form-group"><label class="form-label">Job Title</label><input class="form-input" id="f-jobTitle" value="' + v('jobTitle') + '" placeholder="Senior Engineer"></div>' +
+      '<div class="form-group"><label class="form-label">Company</label><input class="form-input" id="f-company" value="' + v('company') + '" placeholder="Tech Corp"></div>' +
+      '<div class="form-group"><label class="form-label">Location</label><input class="form-input" id="f-location" value="' + v('location') + '" placeholder="City, ST"></div>' +
+      '<div class="form-group"><label class="form-label">Email</label><input class="form-input" id="f-email" type="email" value="' + v('email') + '" placeholder="john@email.com"></div>' +
+      '<div class="form-group"><label class="form-label">Phone</label><input class="form-input" id="f-phone" value="' + v('phone') + '" placeholder="(555) 000-0000"></div>' +
+      '<div class="form-group"><label class="form-label">LinkedIn URL</label><input class="form-input" id="f-linkedin" value="' + v('linkedin') + '" placeholder="https://linkedin.com/in/..."></div>' +
+      '<div class="form-group"><label class="form-label">Status</label><select class="form-select" id="f-status">' + sel('status',statuses) + '</select></div>' +
+      '<div class="form-group"><label class="form-label">Last Contact</label><input class="form-input" id="f-lastContact" value="' + v('lastContact') + '" placeholder="MM/DD/YYYY"></div>' +
+      '<div class="form-group full-width"><label class="form-label">Notes</label><textarea class="form-textarea" id="f-notes">' + v('notes') + '</textarea></div>' +
+      '</div>';
+  }
+
+  if (type === 'wealth') {
+    const statuses = ['New','Contacted','Follow-Up','Meeting Set','Proposal Sent','Closed','Lost'];
+    return '<div class="form-grid">' +
+      '<div class="form-group"><label class="form-label">Name *</label><input class="form-input" id="f-name" value="' + v('name') + '" placeholder="John Doe"></div>' +
+      '<div class="form-group"><label class="form-label">Net Worth Est.</label><input class="form-input" id="f-netWorth" value="' + v('netWorth') + '" placeholder="$2M-$5M"></div>' +
+      '<div class="form-group"><label class="form-label">Investable Assets</label><input class="form-input" id="f-investableAssets" value="' + v('investableAssets') + '" placeholder="$500K-$1M"></div>' +
+      '<div class="form-group"><label class="form-label">Source</label><input class="form-input" id="f-source" value="' + v('source') + '" placeholder="Referral, LinkedIn, Event..."></div>' +
+      '<div class="form-group"><label class="form-label">Location</label><input class="form-input" id="f-location" value="' + v('location') + '" placeholder="City, ST"></div>' +
+      '<div class="form-group"><label class="form-label">Email</label><input class="form-input" id="f-email" type="email" value="' + v('email') + '" placeholder="john@email.com"></div>' +
+      '<div class="form-group"><label class="form-label">Phone</label><input class="form-input" id="f-phone" value="' + v('phone') + '" placeholder="(555) 000-0000"></div>' +
+      '<div class="form-group"><label class="form-label">Status</label><select class="form-select" id="f-status">' + sel('status',statuses) + '</select></div>' +
+      '<div class="form-group"><label class="form-label">Last Contact</label><input class="form-input" id="f-lastContact" value="' + v('lastContact') + '" placeholder="MM/DD/YYYY"></div>' +
+      '<div class="form-group full-width"><label class="form-label">Notes</label><textarea class="form-textarea" id="f-notes">' + v('notes') + '</textarea></div>' +
+      '</div>';
+  }
+}
+
+function saveModal() {
+  const { type, id } = modalCtx;
+  if (!type) return;
+  const g = (fid) => { const el = document.getElementById(fid); return el ? el.value.trim() : ''; };
+
+  let rec;
+  if (type === 'employer') {
+    if (!g('f-company')) { toast('Company name is required', 'error'); return; }
+    rec = { company: g('f-company'), industry: g('f-industry'), employees: g('f-employees'), location: g('f-location'), growthSignal: g('f-growthSignal'), contactName: g('f-contactName'), title: g('f-title'), email: g('f-email'), phone: g('f-phone'), status: g('f-status'), notes: g('f-notes') };
+  } else if (type === 'individual') {
+    if (!g('f-name')) { toast('Name is required', 'error'); return; }
+    rec = { name: g('f-name'), type: g('f-type'), jobTitle: g('f-jobTitle'), company: g('f-company'), location: g('f-location'), email: g('f-email'), phone: g('f-phone'), linkedin: g('f-linkedin'), status: g('f-status'), lastContact: g('f-lastContact'), notes: g('f-notes') };
+  } else if (type === 'wealth') {
+    if (!g('f-name')) { toast('Name is required', 'error'); return; }
+    rec = { name: g('f-name'), netWorth: g('f-netWorth'), investableAssets: g('f-investableAssets'), source: g('f-source'), location: g('f-location'), email: g('f-email'), phone: g('f-phone'), status: g('f-status'), lastContact: g('f-lastContact'), notes: g('f-notes') };
+  }
+
+  const data = loadData(type);
+  const now = new Date().toISOString();
+
+  if (id) {
+    const idx = data.findIndex(r => r.id === id);
+    if (idx > -1) {
+      data[idx] = { ...data[idx], ...rec, updatedAt: now };
+      logActivity('Edited: "' + (rec.company||rec.name||'') + '" in ' + type, statusColor(rec.status));
+      toast('Prospect updated', 'success');
+    }
+  } else {
+    data.push({ ...DEFAULTS[type], ...rec, id: uid(), createdAt: now, updatedAt: now });
+    logActivity('Added: "' + (rec.company||rec.name||'') + '" to ' + type, statusColor(rec.status));
+    toast('Prospect added', 'success');
+  }
+
+  saveData(type, data);
+  renderTable(type);
+  closeModal();
+}
+
+// -----------------------------------------
+//  EXPORT CSV
+// -----------------------------------------
+function exportCSV(type) {
+  const data = loadData(type);
+  if (!data.length) { toast('No data to export', 'error'); return; }
+
+  let headers, rows;
+  if (type === 'employer') {
+    headers = ['Company','Industry','Employees','Location','Growth Signal','Contact Name','Title','Email','Phone','Status','Notes'];
+    rows = data.map(r => [r.company,r.industry,r.employees,r.location,r.growthSignal,r.contactName,r.title,r.email,r.phone,r.status,r.notes]);
+  } else if (type === 'individual') {
+    headers = ['Name','Type','Job Title','Company','Location','Email','Phone','LinkedIn','Status','Last Contact','Notes'];
+    rows = data.map(r => [r.name,r.type,r.jobTitle,r.company,r.location,r.email,r.phone,r.linkedin,r.status,r.lastContact,r.notes]);
+  } else {
+    headers = ['Name','Net Worth Est.','Investable Assets','Source','Location','Email','Phone','Status','Last Contact','Notes'];
+    rows = data.map(r => [r.name,r.netWorth,r.investableAssets,r.source,r.location,r.email,r.phone,r.status,r.lastContact,r.notes]);
+  }
+
+  const csvContent = [headers, ...rows].map(row => row.map(cell => '"' + (cell||'').replace(/"/g,'""') + '"').join(',')).join('\n');
+  const blob = new Blob([csvContent], { type: 'text/csv' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'JARVIS_' + type + '_' + new Date().toISOString().slice(0,10) + '.csv';
+  a.click();
+  URL.revokeObjectURL(url);
+  toast('CSV exported (' + data.length + ' records)', 'success');
+}
+
+// -----------------------------------------
+//  PIPELINE SUMMARY
+// -----------------------------------------
+function refreshPipeline() {
+  const emp = loadData('employer');
+  const ind = loadData('individual');
+  const wlth = loadData('wealth');
+  const all = [...emp, ...ind, ...wlth];
+
+  const statsEl = document.getElementById('pipeline-stats');
+  const henrys = ind.filter(r => r.type === 'HENRY').length;
+  const rollovers = ind.filter(r => r.type === 'Rollover').length;
+  const activeAll = all.filter(r => !['Closed Won','Closed Lost','Closed','Lost'].includes(r.status)).length;
+  const wonAll = all.filter(r => ['Closed Won','Closed'].includes(r.status)).length;
+
+  statsEl.innerHTML =
+    '<div class="stat-card">' +
+      '<div class="stat-card-header"><span class="stat-card-title">Employer Prospects</span><span class="stat-card-icon">[CORP]</span></div>' +
+      '<div class="stat-card-value">' + emp.length + '</div>' +
+      '<div class="stat-card-sub">Group WL + SmartStart candidates</div>' +
+    '</div>' +
+    '<div class="stat-card">' +
+      '<div class="stat-card-header"><span class="stat-card-title">Individual Prospects</span><span class="stat-card-icon">[IND]</span></div>' +
+      '<div class="stat-card-value">' + ind.length + '</div>' +
+      '<div class="stat-card-sub">' + henrys + ' HENRY &middot; ' + rollovers + ' Rollover</div>' +
+    '</div>' +
+    '<div class="stat-card">' +
+      '<div class="stat-card-header"><span class="stat-card-title">Wealth Management</span><span class="stat-card-icon">[$$$]</span></div>' +
+      '<div class="stat-card-value">' + wlth.length + '</div>' +
+      '<div class="stat-card-sub">HNW + referral pipeline</div>' +
+    '</div>' +
+    '<div class="stat-card">' +
+      '<div class="stat-card-header"><span class="stat-card-title">Total Prospects</span><span class="stat-card-icon">[ALL]</span></div>' +
+      '<div class="stat-card-value">' + all.length + '</div>' +
+      '<div class="stat-card-sub">' + activeAll + ' active &middot; ' + wonAll + ' closed won</div>' +
+    '</div>';
+
+  // Funnel
+  const stages = [
+    { label: 'New',          cls: 'new',      color: '#0066ff', keys: ['New'] },
+    { label: 'Contacted',    cls: 'contacted', color: '#00ffcc', keys: ['Contacted'] },
+    { label: 'Follow-Up',    cls: 'followup',  color: '#ff8800', keys: ['Follow-Up'] },
+    { label: 'Meeting Set',  cls: 'meeting',   color: '#aa44ff', keys: ['Meeting Set'] },
+    { label: 'Proposal Sent',cls: 'proposal',  color: '#00d4ff', keys: ['Proposal Sent'] },
+    { label: 'Closed Won',   cls: 'won',       color: '#00ff88', keys: ['Closed Won', 'Closed'] },
+    { label: 'Closed Lost',  cls: 'lost',      color: '#ff3344', keys: ['Closed Lost', 'Lost'] }
+  ];
+
+  const counts = stages.map(s => ({ ...s, count: all.filter(r => s.keys.includes(r.status)).length }));
+  const maxCount = Math.max(...counts.map(s => s.count), 1);
+
+  const funnelEl = document.getElementById('pipeline-funnel');
+  funnelEl.innerHTML = counts.map(s => {
+    const pct = Math.max(8, Math.round((s.count / maxCount) * 100));
+    return '<div class="funnel-stage">' +
+      '<div class="funnel-label">' + esc(s.label) + '</div>' +
+      '<div class="funnel-bar-wrap">' +
+        '<div class="funnel-bar fb-' + s.cls + '" style="width:' + pct + '%;background:linear-gradient(90deg,' + s.color + '55,' + s.color + ')">' +
+          (s.count > 0 ? s.count : '') +
+        '</div>' +
+      '</div>' +
+      '<div class="funnel-count">' + s.count + '</div>' +
+    '</div>';
+  }).join('');
+
+  // Category breakdown
+  const breakdownEl = document.getElementById('category-breakdown-content');
+  const categories = [
+    { label: '[CORP] Employer Prospects', data: emp },
+    { label: '[IND] Individual (HENRY)', data: ind.filter(r=>r.type==='HENRY') },
+    { label: '[RLV] Individual (Rollover)', data: ind.filter(r=>r.type==='Rollover') },
+    { label: '[WM] Wealth Management', data: wlth }
+  ];
+
+  breakdownEl.innerHTML = categories.map(cat => {
+    const active = cat.data.filter(r => !['Closed Won','Closed Lost','Closed','Lost'].includes(r.status)).length;
+    const won = cat.data.filter(r => ['Closed Won','Closed'].includes(r.status)).length;
+    return '<div class="breakdown-row">' +
+      '<span class="breakdown-label">' + cat.label + '</span>' +
+      '<div class="breakdown-counts">' +
+        '<span class="badge badge-new" title="Active">' + active + '</span>' +
+        '<span class="badge badge-won" title="Won">' + won + '</span>' +
+        '<span class="breakdown-total">' + cat.data.length + '</span>' +
+      '</div>' +
+    '</div>';
+  }).join('');
+
+  // Activity log
+  const log = loadActivity();
+  const logEl = document.getElementById('activity-log');
+  if (!log.length) {
+    logEl.innerHTML = '<li style="color:var(--white-dim);font-size:12px;font-family:\'Courier New\',monospace;">No activity logged.</li>';
+  } else {
+    logEl.innerHTML = log.slice(0, 10).map(a => {
+      const d = new Date(a.time);
+      const timeStr = isNaN(d) ? '' : d.toLocaleDateString() + ' ' + d.toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
+      return '<li class="activity-item">' +
+        '<div class="activity-dot" style="background:' + (a.color||'#00d4ff') + ';color:' + (a.color||'#00d4ff') + '"></div>' +
+        '<div>' +
+          '<div class="activity-text">' + esc(a.msg) + '</div>' +
+          '<div class="activity-time">' + timeStr + '</div>' +
+        '</div>' +
+      '</li>';
+    }).join('');
+  }
+
+  // Last updated
+  const lastUpdatedRaw = localStorage.getItem('jarvis_lastUpdated');
+  const luDate = lastUpdatedRaw ? new Date(lastUpdatedRaw) : new Date();
+  document.getElementById('last-updated').textContent = 'LAST SYNC: ' + luDate.toLocaleString() + ' // JARVIS v2.0 // AJ DONOFRIO // BARNUM FINANCIAL GROUP';
+}
+
+// -----------------------------------------
+//  HEADER CLOCK
+// -----------------------------------------
+function updateClock() {
+  const now = new Date();
+  const el = document.getElementById('headerTime');
+  if (el) {
+    el.innerHTML =
+      now.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric',year:'numeric'}).toUpperCase() +
+      '<br>' +
+      now.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
+  }
+}
+
+// -----------------------------------------
+//  KEYBOARD SHORTCUTS
+// -----------------------------------------
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    closeModal();
+    closeNoteModal();
+    closeConfirm();
+  }
+  if (e.ctrlKey && e.key === '1') { e.preventDefault(); switchTab('employer'); }
+  if (e.ctrlKey && e.key === '2') { e.preventDefault(); switchTab('individual'); }
+  if (e.ctrlKey && e.key === '3') { e.preventDefault(); switchTab('wealth'); }
+  if (e.ctrlKey && e.key === '4') { e.preventDefault(); switchTab('pipeline'); }
+});
+
+// -----------------------------------------
+//  INIT
+// -----------------------------------------
+(function init() {
+  seedIfEmpty();
+  updateTabCounts();
+  renderTable('employer');
+  updateClock();
+  setInterval(updateClock, 1000);
+})();
+</script>
+</body>
+</html>
